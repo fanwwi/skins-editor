@@ -9,6 +9,9 @@ import deleteIcon from "../img/delete-icon.png";
 import exitIcon from "../img/icon-exit.png";
 import settingsIcon from "../img/icon-settings.png";
 import Loader from "../components/Loader";
+import { useAppDispatch } from "../store/store";
+import { useSelector } from "react-redux";
+import { getCurrentUser } from "../store/actions/user.action";
 
 const UserProfile = () => {
   const [isLoading, setIsLoading] = useState(true);
@@ -16,12 +19,20 @@ const UserProfile = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const modalRef = useRef(null);
 
+  const currentUser: any = useSelector<any>((state) => state.currentUser);
+
   useEffect(() => {
     setTimeout(() => {
       setAccounts([]);
       setIsLoading(false);
     }, 2000);
   }, []);
+
+  const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    dispatch(getCurrentUser());
+  }, [dispatch]);
 
   const handleProfileClick = () => {
     setIsModalOpen(!isModalOpen);
@@ -104,8 +115,8 @@ const UserProfile = () => {
             <div className="modal-top">
               <img src={userIcon} alt="" style={{ width: "50px" }} />
               <div className="modal-top__name">
-                <span>Никнэйм</span>
-                <span style={{fontSize: "12px"}}>email</span>
+                <span>{currentUser.nickname}</span>
+                <span style={{ fontSize: "12px" }}>{currentUser.email}</span>
               </div>
             </div>
             <div className="profile-icon">

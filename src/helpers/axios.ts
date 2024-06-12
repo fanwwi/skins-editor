@@ -4,7 +4,7 @@ export const $axios = axios.create();
 
 $axios.interceptors.request.use(async (config) => {
   config.baseURL =
-    "https://stoplight.io/mocks/inventory-card/account-skins-card/3478289/";
+    "http://localhost:3000";
   const tokens = JSON.parse(localStorage.getItem("tokens") as string);
   if (tokens) {
     config.headers.Authorization = `Bearer ${tokens.access}`;

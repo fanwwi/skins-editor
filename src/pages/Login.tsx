@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { useAppDispatch } from "../store/store";
+import { Link, useNavigate } from "react-router-dom";
 import logo from "../img/logo.png";
 import CheckAnimation from "../components/Checkbox";
 import Loader from "../components/Loader";
+import { Login as loginAction } from "../store/actions/user.action";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -12,6 +14,9 @@ const Login = () => {
   const [showCheckAnimation, setShowCheckAnimation] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [errorMessage, setErrorMessage] = useState("");
+
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const timeout = setTimeout(() => {
@@ -29,10 +34,20 @@ const Login = () => {
       setErrors(validationErrors);
       setErrorMessage("Неверный email или пароль");
     } else {
-      // Simulate authentication logic here
       setErrors({ email: false, password: false });
       setErrorMessage("");
-      // Navigate to the desired page or handle successful login
+
+      const loginData = { email, password };
+
+      dispatch(
+        loginAction({
+          data: loginData,
+          navigate,
+        })
+      ).catch((error: any) => {
+        setErrorMessage("Ошибка входа. Попробуйте снова.");
+        console.log(error);
+      });
     }
   };
 
@@ -94,7 +109,7 @@ const Login = () => {
               </span>
             )}
             <p>Еще не зарегистрированы?</p>
-            <Link to="/user/registration/" style={{ marginTop: "-20px" }}>
+            <Link to="/user/register/" style={{ marginTop: "-20px" }}>
               Зарегистрироваться
             </Link>
           </form>

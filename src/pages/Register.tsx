@@ -4,7 +4,7 @@ import { useAppDispatch } from "../store/store";
 import logo from "../img/logo.png";
 import CheckAnimation from "../components/Checkbox";
 import Loader from "../components/Loader";
-import { RegisterType } from "../types";
+import { NewUser, RegisterType } from "../types";
 import { Register } from "../store/actions/user.action";
 
 const RegisterComponent = () => {
@@ -12,22 +12,21 @@ const RegisterComponent = () => {
   const [nickname, setNickname] = useState("");
   const [password, setPassword] = useState("");
   const [passwordRepeat, setConfirmPassword] = useState("");
+  const [showCheckAnimation, setShowCheckAnimation] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const [errors, setErrors] = useState({
     email: false,
     nickname: false,
     password: false,
     passwordRepeat: false,
   });
-  const [errorMessage, setErrorMessage] = useState("");
-  const [isChecked, setIsChecked] = useState(false);
-  const [showCheckAnimation, setShowCheckAnimation] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
 
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-
     switch (name) {
       case "email":
         setEmail(value);
@@ -56,37 +55,35 @@ const RegisterComponent = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    const validationErrors = {
+
+    const newErrors = {
       email: email === "",
       nickname: nickname === "",
       password: password === "",
       passwordRepeat: passwordRepeat === "",
     };
 
-    setErrors(validationErrors);
-
     if (password !== passwordRepeat) {
-      validationErrors.password = true;
-      validationErrors.passwordRepeat = true;
-      setErrorMessage("Пароли не совпадают");
-    } else if (Object.values(validationErrors).some((error) => error)) {
-      setErrorMessage("Заполните все поля");
-    } else {
-      setErrorMessage("");
+      newErrors.password = true;
+      newErrors.passwordRepeat = true;
+    }
 
-      const userData: RegisterType = {
+    setErrors(newErrors);
+
+    if (!Object.values(newErrors).some((error) => error)) {
+      const userData: NewUser = {
         email,
         nickname,
         password,
-        passwordRepeat,
+        id: Number(""),
       };
 
-      dispatch(Register({ data: userData }));
+      dispatch(Register({ data: userData, navigate }));
+      navigate("/isregistered");
     }
   };
 
   const handleCheckboxChange = () => {
-    setIsChecked(!isChecked);
     setShowCheckAnimation(true);
 
     setTimeout(() => {
@@ -141,9 +138,7 @@ const RegisterComponent = () => {
               name="passwordRepeat"
               value={passwordRepeat}
               onChange={handleChange}
-              style={{
-                borderColor: errors.passwordRepeat ? "red" : "#c6c6c6",
-              }}
+              style={{ borderColor: errors.passwordRepeat ? "red" : "#c6c6c6" }}
             />
 
             <div className="auth-checkbox">
@@ -151,7 +146,6 @@ const RegisterComponent = () => {
                 <input
                   type="checkbox"
                   id="checkbox"
-                  checked={isChecked}
                   onChange={handleCheckboxChange}
                 />
                 <label htmlFor="checkbox">Я не робот</label>
@@ -164,7 +158,6 @@ const RegisterComponent = () => {
                 <input
                   type="checkbox"
                   id="checkbox-agreement"
-                  checked={isChecked}
                   style={{ marginLeft: "143px" }}
                   onChange={handleCheckboxChange}
                 />
@@ -180,11 +173,23 @@ const RegisterComponent = () => {
             <button type="submit" className="auth-btn">
               Зарегистрироваться
             </button>
-            {errorMessage && (
-              <span style={{ color: "red", fontSize: "12px" }}>
-                {errorMessage}
+
+            {errors.email ||
+            errors.nickname ||
+            errors.password ||
+            errors.passwordRepeat ? (
+              <span style={{ fontSize: "12px", color: "red" }}>
+                {errors.email ||
+                errors.nickname ||
+                errors.passwordRepeat ||
+                errors.password
+                  ? "Что-то не так"
+                  : errors.password || errors.passwordRepeat
+                  ? ""
+                  : "Что то не так"}
               </span>
-            )}
+            ) : null}
+
             <p>Уже зарегистрированы?</p>
             <Link to="/" style={{ marginTop: "-20px" }}>
               Войти

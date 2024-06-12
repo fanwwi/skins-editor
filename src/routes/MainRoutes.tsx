@@ -11,7 +11,7 @@ const MainRoutes = () => {
   return (
     <Routes>
       <Route path="/" element={<Login />} />
-      <Route path="/user/registration" element={<Register />} />
+      <Route path="/user/register" element={<Register />} />
       <Route path="/isregistered" element={<IsRegistered />} />
       <Route path="/forgot" element={<ForgotPassword />} />
       <Route path="/result" element={<ResultPassword />} />
