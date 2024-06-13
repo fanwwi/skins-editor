@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, Profiler } from "react";
 import logo from "../img/logo.png";
 import userIcon from "../img/user-image.jpg";
 import editIcon from "../img/edit-icon.png";
@@ -19,7 +19,8 @@ const UserProfile = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const modalRef = useRef(null);
 
-  const currentUser: any = useSelector<any>((state) => state.currentUser);
+  const nickname = localStorage.getItem("nickname");
+  const email = localStorage.getItem("email");
 
   useEffect(() => {
     setTimeout(() => {
@@ -31,7 +32,7 @@ const UserProfile = () => {
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    dispatch(getCurrentUser());
+    // dispatch(getCurrentUser(id</ProfileData>));
   }, [dispatch]);
 
   const handleProfileClick = () => {
@@ -115,8 +116,8 @@ const UserProfile = () => {
             <div className="modal-top">
               <img src={userIcon} alt="" style={{ width: "50px" }} />
               <div className="modal-top__name">
-                <span>{currentUser.nickname}</span>
-                <span style={{ fontSize: "12px" }}>{currentUser.email}</span>
+                <span>{nickname}</span>
+                <span style={{ fontSize: "10px" }}>{email}</span>
               </div>
             </div>
             <div className="profile-icon">

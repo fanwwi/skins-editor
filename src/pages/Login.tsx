@@ -4,7 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 import logo from "../img/logo.png";
 import CheckAnimation from "../components/Checkbox";
 import Loader from "../components/Loader";
-import { Login as loginAction } from "../store/actions/user.action";
+import { checkUserExists } from "../store/actions/user.action";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -26,7 +26,7 @@ const Login = () => {
     return () => clearTimeout(timeout);
   }, []);
 
-  const handleSubmit = (e: any) => {
+  const handleSubmit = async (e: any) => {
     e.preventDefault();
     const validationErrors = { email: email === "", password: password === "" };
 
@@ -37,17 +37,15 @@ const Login = () => {
       setErrors({ email: false, password: false });
       setErrorMessage("");
 
-      const loginData = { email, password };
+      try {
+        const userExists = await checkUserExists(email);
 
-      dispatch(
-        loginAction({
-          data: loginData,
-          navigate,
-        })
-      ).catch((error: any) => {
-        setErrorMessage("Ошибка входа. Попробуйте снова.");
-        console.log(error);
-      });
+        if (userExists) {
+          navigate("/profile");
+        } else {
+          navigate("/error/login");
+        }
+      } catch (error) {}
     }
   };
 
