@@ -4,6 +4,7 @@ import emailIcon from "../img/email-icon.png";
 import { Link } from "react-router-dom";
 
 const IsRegistered = () => {
+  const id = localStorage.getItem("currentUser");
   return (
     <div className="auth">
       <img src={logo} alt="" className="logo" style={{ marginLeft: "-30px" }} />
@@ -15,7 +16,7 @@ const IsRegistered = () => {
       <span style={{ fontSize: "15px", marginTop: "-40px" }}>
         Письмо может быть в спаме
       </span>
-      <Link to="/profile">
+      <Link to={`/${id}/profile`}>
         <button className="auth-btn">Смотреть профиль</button>
       </Link>
     </div>

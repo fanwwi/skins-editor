@@ -4,13 +4,8 @@
       "email": "farangiz.anvarjanova553@gmail.com",
       "nickname": "fanwwi",
       "password": "12345678",
-      "id": 0
-    },
-    {
-      "email": "makers.frontend@gmail.com",
-      "nickname": "makers",
-      "password": "12345678",
-      "id": 1
+      "accounts": [],
+      "id": "1718285981896"
     }
   ]
 }

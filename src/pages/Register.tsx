@@ -24,7 +24,6 @@ const RegisterComponent = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
-
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     switch (name) {
@@ -76,6 +75,7 @@ const RegisterComponent = () => {
         nickname,
         password,
         id: Number(""),
+        accounts: [],
       };
 
       dispatch(Register({ data: userData, navigate }));

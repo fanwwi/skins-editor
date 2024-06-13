@@ -6,6 +6,10 @@ import IsRegistered from "../pages/IsRegistered";
 import ForgotPassword from "../pages/ForgotPassword";
 import ResultPassword from "../pages/ResultPassword";
 import UserProfile from "../pages/UserProfile";
+import ErrorRegisterPage from "../pages/ErrorRegisterPage";
+import ErrorLoginPage from "../pages/ErrorLoginPage";
+import NotFoundPage from "../pages/NotFoundPage";
+import AccountActivate from "../pages/AccountActivate";
 
 const MainRoutes = () => {
   return (
@@ -15,7 +19,11 @@ const MainRoutes = () => {
       <Route path="/isregistered" element={<IsRegistered />} />
       <Route path="/forgot" element={<ForgotPassword />} />
       <Route path="/result" element={<ResultPassword />} />
-      <Route path="/profile" element={<UserProfile />} />
+      <Route path="/:id/profile" element={<UserProfile />} />
+      <Route path="/error/login" element={<ErrorLoginPage />} />
+      <Route path="/error/register" element={<ErrorRegisterPage />} />
+      <Route path="/account/activate" element={<AccountActivate />} />
+      <Route path="/*" element={<NotFoundPage />} />
     </Routes>
   );
 };

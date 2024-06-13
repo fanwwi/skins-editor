@@ -1,5 +1,5 @@
 import { createAsyncThunk, current } from "@reduxjs/toolkit";
-import { LoginType, NewUser } from "../../types";
+import { LoginType, NewUser, ProfileData } from "../../types";
 import axios from "axios";
 
 export const Register = createAsyncThunk(
@@ -15,8 +15,10 @@ export const Register = createAsyncThunk(
       email: data.email,
       nickname: data.nickname,
       password: data.password,
-      id: Number(data.id),
+      accounts: data.accounts,
+      id: Date.now().toString(),
     };
+    localStorage.setItem("currentUser", JSON.stringify(userData.id));
     console.log(userData);
     try {
       const response = await axios.post(
@@ -24,18 +26,19 @@ export const Register = createAsyncThunk(
         userData
       );
       navigate("/isregistered");
-      localStorage.setItem("userEmail", JSON.stringify(userData.email));
       return response;
     } catch (error) {
-      console.log(error);
+      navigate("/error/register")
     }
   }
 );
 
-export const checkUserExists = async (email: string): Promise<boolean> => {
+export const checkUserExists = async (
+  id: string | number
+): Promise<boolean> => {
   try {
     const response = await axios.get(
-      `http://localhost:8000/users/?email=${email}`
+      `http://localhost:8000/users/?email=${id}`
     );
     return response.data.length > 0;
   } catch (error) {
@@ -45,12 +48,10 @@ export const checkUserExists = async (email: string): Promise<boolean> => {
 
 export const getCurrentUser = createAsyncThunk(
   "users/getCurrentUser",
-  async (id: string | number) => {
+  async (id: string) => {
     try {
-      const { data } = await axios.get(`http://localhost:8000/users}/${id}`);
+      const { data } = await axios.get(`http://localhost:8000/users/${id}`);
       return data;
-    } catch (error) {
-      console.log(error);
-    }
+    } catch (error) {}
   }
 );

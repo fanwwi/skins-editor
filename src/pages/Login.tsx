@@ -4,7 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 import logo from "../img/logo.png";
 import CheckAnimation from "../components/Checkbox";
 import Loader from "../components/Loader";
-import { checkUserExists } from "../store/actions/user.action";
+import { checkUserExists, getCurrentUser } from "../store/actions/user.action";
 
 const Login = () => {
   const [email, setEmail] = useState("");

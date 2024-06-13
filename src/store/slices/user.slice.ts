@@ -29,10 +29,6 @@ export const usersSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      .addCase(getCurrentUser.pending, (state) => {
-        state.loading = true;
-        state.error = null;
-      })
       .addCase(getCurrentUser.fulfilled, (state, action) => {
         state.loading = false;
         state.currentUser = action.payload;

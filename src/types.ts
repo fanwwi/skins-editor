@@ -3,6 +3,7 @@ export type RegisterType = {
   nickname: string;
   password: string;
   passwordRepeat: string;
+  accounts: [];
 };
 
 export type LoginType = {
@@ -15,10 +16,13 @@ export type NewUser = {
   nickname: string;
   password: string;
   id: number;
+  accounts: [];
 };
 
 export type ProfileData = {
   email: string;
   nickname: string;
   image: string;
+  id: string;
+  accounts: [];
 };
