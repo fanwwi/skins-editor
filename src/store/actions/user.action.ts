@@ -1,6 +1,8 @@
 import { createAsyncThunk, current } from "@reduxjs/toolkit";
 import { LoginType, NewUser, ProfileData } from "../../types";
 import axios from "axios";
+import { $axios } from "../../helpers/axios";
+
 
 export const Register = createAsyncThunk(
   "user/register",
@@ -48,10 +50,17 @@ export const checkUserExists = async (
 
 export const getCurrentUser = createAsyncThunk(
   "users/getCurrentUser",
-  async (id: string) => {
+  async (id: string, { rejectWithValue }) => {
     try {
-      const { data } = await axios.get(`http://localhost:8000/users/${id}`);
+      const { data } = await axios.get<ProfileData>(`http://localhost:8000/users/${id}`);
       return data;
-    } catch (error) {}
+    } catch (error) {
+      console.error(error);
+      if (axios.isAxiosError(error) && error.response) {
+        return rejectWithValue(error.response.data);
+      } else {
+        return rejectWithValue("Ошибка полуучения пользователя");
+      }
+    }
   }
 );

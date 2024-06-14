@@ -1,6 +1,8 @@
-import { createSlice } from "@reduxjs/toolkit";
-import { getCurrentUser } from "../actions/user.action";
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import axios from "axios";
 import { NewUser, ProfileData } from "../../types";
+import { getCurrentUser } from "../actions/user.action";
+
 
 type StatesType = {
   error: null | string;
@@ -18,6 +20,7 @@ const INIT_STATE: StatesType = {
   currentUser: null,
 };
 
+
 export const usersSlice = createSlice({
   name: "users",
   initialState: INIT_STATE,
@@ -25,6 +28,7 @@ export const usersSlice = createSlice({
     logout: (state) => {
       localStorage.removeItem("tokens");
       state.user = null;
+      state.currentUser = null;
     },
   },
   extraReducers: (builder) => {
@@ -35,11 +39,14 @@ export const usersSlice = createSlice({
       })
       .addCase(getCurrentUser.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.error.message || "Failed to fetch user";
+        state.error = action.payload as string;
+      })
+      .addCase(getCurrentUser.pending, (state) => {
+        state.loading = true;
+        state.error = null;
       });
   },
 });
 
 export const { logout } = usersSlice.actions;
-
 export default usersSlice.reducer;
