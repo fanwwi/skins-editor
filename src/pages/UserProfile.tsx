@@ -9,7 +9,7 @@ import deleteIcon from "../img/delete-icon.png";
 import exitIcon from "../img/icon-exit.png";
 import settingsIcon from "../img/icon-settings.png";
 import Loader from "../components/Loader";
-import { useAppDispatch } from "../store/store";
+import { useAppDispatch, useAppSelector } from "../store/store";
 import { useSelector } from "react-redux";
 import { getCurrentUser } from "../store/actions/user.action";
 
@@ -18,22 +18,28 @@ const UserProfile = () => {
   const [accounts, setAccounts] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const modalRef = useRef(null);
-
-  const nickname = localStorage.getItem("nickname");
+  const dispatch = useAppDispatch();
+  const { currentUser } = useAppSelector((item) => item.users);
+  const id = localStorage.getItem("currentUser")?.replace(/"/g, "");
   const email = localStorage.getItem("email");
 
-  useEffect(() => {
-    setTimeout(() => {
-      setAccounts([]);
-      setIsLoading(false);
-    }, 2000);
-  }, []);
-
-  const dispatch = useAppDispatch();
+  // useEffect(() => {
+  //   setTimeout(() => {
+  //     setAccounts([]);
+  //     setIsLoading(false);
+  //   }, 2000);
+  // }, []);
 
   useEffect(() => {
-    // dispatch(getCurrentUser(id</ProfileData>));
-  }, [dispatch]);
+    if (id) {
+      console.log(id.toString());
+      dispatch(getCurrentUser(id.toString()));
+    }
+  }, [dispatch, id]);
+
+  if (currentUser) {
+    console.log(currentUser);
+  }
 
   const handleProfileClick = () => {
     setIsModalOpen(!isModalOpen);
@@ -47,9 +53,9 @@ const UserProfile = () => {
     e.stopPropagation();
   };
 
-  if (isLoading) {
-    return <Loader />;
-  }
+  // if (isLoading) {
+  //   return <Loader />;
+  // }
 
   return (
     <div className="profile">
@@ -103,10 +109,7 @@ const UserProfile = () => {
         )}
       </div>
       <div>
-        <button
-          className="auth-btn"
-          style={{ marginTop: "30px", marginLeft: "650px" }}
-        >
+        <button className="auth-btn" style={{ marginTop: "30px", marginLeft: "650px" }}>
           + Добавить аккаунт
         </button>
       </div>
@@ -116,7 +119,7 @@ const UserProfile = () => {
             <div className="modal-top">
               <img src={userIcon} alt="" style={{ width: "50px" }} />
               <div className="modal-top__name">
-                <span>{nickname}</span>
+                {/* <span>{nickname}</span> */}
                 <span style={{ fontSize: "10px" }}>{email}</span>
               </div>
             </div>
