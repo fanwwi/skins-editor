@@ -4,9 +4,11 @@ import { Link, useNavigate } from "react-router-dom";
 import logo from "../img/logo.png";
 import CheckAnimation from "../components/Checkbox";
 import Loader from "../components/Loader";
-import { checkUserExists, getCurrentUser } from "../store/actions/user.action";
+import { checkUserExists } from "../store/actions/user.action";
 
 const Login = () => {
+  const id = localStorage.getItem("currentUser");
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errors, setErrors] = useState({ email: false, password: false });
@@ -98,9 +100,11 @@ const Login = () => {
                 {showCheckAnimation && <CheckAnimation />}
               </div>
             </div>
-            <button type="submit" className="auth-btn">
-              Войти
-            </button>
+            <Link to={`/${id}/profile`}>
+              <button type="submit" className="auth-btn">
+                Войти
+              </button>
+            </Link>
             {errorMessage && (
               <span style={{ color: "red", fontSize: "12px" }}>
                 {errorMessage}
