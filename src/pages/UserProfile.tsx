@@ -119,8 +119,8 @@ const UserProfile = () => {
             <div className="modal-top">
               <img src={userIcon} alt="" style={{ width: "50px" }} />
               <div className="modal-top__name">
-                {/* <span>{nickname}</span> */}
-                <span style={{ fontSize: "10px" }}>{email}</span>
+                <span>Никнэйм</span>
+                <span style={{ fontSize: "10px" }}>Имэйл</span>
               </div>
             </div>
             <div className="profile-icon">
