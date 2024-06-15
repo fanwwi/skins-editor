@@ -26,3 +26,13 @@ export type ProfileData = {
   id: string;
   accounts: [];
 };
+
+export type AccountType = {
+  game: string;
+  gameId: string;
+  gameNickname: string;
+  gameServer: string;
+  gameAccount: string;
+  author: string
+  id: string
+};

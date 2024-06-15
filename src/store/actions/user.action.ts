@@ -1,8 +1,6 @@
-import { createAsyncThunk, current } from "@reduxjs/toolkit";
-import { LoginType, NewUser, ProfileData } from "../../types";
+import { createAsyncThunk } from "@reduxjs/toolkit";
+import { NewUser, ProfileData } from "../../types";
 import axios from "axios";
-import { $axios } from "../../helpers/axios";
-
 
 export const Register = createAsyncThunk(
   "user/register",
@@ -17,20 +15,20 @@ export const Register = createAsyncThunk(
       email: data.email,
       nickname: data.nickname,
       password: data.password,
-      accounts: data.accounts,
       id: Date.now().toString(),
     };
-    localStorage.setItem("currentUser", JSON.stringify(userData.id));
-    console.log(userData);
+
     try {
       const response = await axios.post(
         "http://localhost:8000/users/",
         userData
       );
+      localStorage.setItem("currentUser", JSON.stringify(userData.id));
+
       navigate("/isregistered");
       return response;
     } catch (error) {
-      navigate("/error/register")
+      navigate("/error/register");
     }
   }
 );
@@ -52,7 +50,9 @@ export const getCurrentUser = createAsyncThunk(
   "users/getCurrentUser",
   async (id: string, { rejectWithValue }) => {
     try {
-      const { data } = await axios.get<ProfileData>(`http://localhost:8000/users/${id}`);
+      const { data } = await axios.get<ProfileData>(
+        `http://localhost:8000/users/${id}`
+      );
       return data;
     } catch (error) {
       console.error(error);

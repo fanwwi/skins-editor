@@ -1,18 +1,27 @@
 {
   "users": [
     {
-      "email": "farangiz.anvarjanova553@gmail.com",
-      "nickname": "fanwwi",
-      "password": "12345678",
-      "accounts": [],
-      "id": "1718285981896"
-    },
-    {
       "email": "daniarmakyev10@gmail.com",
       "nickname": "BURN",
       "password": "12345678",
-      "accounts": [],
       "id": "1718361546427"
+    },
+    {
+      "email": "farangiz.anvarjanova553@gmail.com",
+      "nickname": "fanwwi",
+      "password": "12345678",
+      "id": "1718441497986"
+    }
+  ],
+  "accounts": [
+    {
+      "game": "ConterStrike",
+      "gameId": "98875678345671",
+      "gameNickname": "fanwwi",
+      "gameserver": "Server",
+      "gameAccount": "fanwwi_the_best",
+      "author": "\"1718441497986\"",
+      "id": 1
     }
   ]
 }

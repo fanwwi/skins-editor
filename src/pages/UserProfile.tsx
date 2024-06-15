@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, Profiler } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import logo from "../img/logo.png";
 import userIcon from "../img/user-image.jpg";
 import editIcon from "../img/edit-icon.png";
@@ -8,54 +8,57 @@ import cardIcon from "../img/image-icon.png";
 import deleteIcon from "../img/delete-icon.png";
 import exitIcon from "../img/icon-exit.png";
 import settingsIcon from "../img/icon-settings.png";
-import Loader from "../components/Loader";
 import { useAppDispatch, useAppSelector } from "../store/store";
-import { useSelector } from "react-redux";
 import { getCurrentUser } from "../store/actions/user.action";
+import { Link } from "react-router-dom";
+import { getAccounts, copyAccount } from "../store/actions/account.action";
+import { AccountType } from "../types";
 
 const UserProfile = () => {
-  const [isLoading, setIsLoading] = useState(true);
-  const [accounts, setAccounts] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const modalRef = useRef(null);
   const dispatch = useAppDispatch();
-  const { currentUser } = useAppSelector((item) => item.users);
+  const { currentUser } = useAppSelector((state) => state.users);
+  const { allAccounts, loading, error } = useAppSelector(
+    (state) => state.accounts
+  );
   const id = localStorage.getItem("currentUser")?.replace(/"/g, "");
-  const email = localStorage.getItem("email");
-
-  // useEffect(() => {
-  //   setTimeout(() => {
-  //     setAccounts([]);
-  //     setIsLoading(false);
-  //   }, 2000);
-  // }, []);
 
   useEffect(() => {
     if (id) {
-      console.log(id.toString());
-      dispatch(getCurrentUser(id.toString()));
+      dispatch(getCurrentUser(id));
     }
   }, [dispatch, id]);
 
-  if (currentUser) {
-    console.log(currentUser);
-  }
+  useEffect(() => {
+    if (id) {
+      dispatch(getAccounts());
+    }
+  }, [dispatch, id]);
+
+  const filteredAccounts =
+    allAccounts?.filter(
+      (account: AccountType) => account.author === `\"${id}\"`
+    ) || [];
 
   const handleProfileClick = () => {
     setIsModalOpen(!isModalOpen);
-  };
-
-  const handleCloseModal = () => {
-    setIsModalOpen(false);
   };
 
   const handleModalClick = (e: any) => {
     e.stopPropagation();
   };
 
-  // if (isLoading) {
-  //   return <Loader />;
-  // }
+  const handleCopyAccount = (accountId: string) => {
+    dispatch(copyAccount(accountId))
+      .unwrap()
+      .then((copiedAccount: AccountType) => {
+        console.log("Аккаунт скопирован:", copiedAccount);
+      })
+      .catch((error) => {
+        console.error("Ошибка при копировании аккаунта:", error);
+      });
+  };
 
   return (
     <div className="profile">
@@ -70,48 +73,62 @@ const UserProfile = () => {
       </div>
       <hr />
       <div className="container">
-        {accounts.length === 0 ? (
-          <>
-            <h1
-              style={{
-                marginTop: "150px",
-                marginLeft: "500px",
-                color: "#8c8c8c",
-              }}
-            >
-              Список аккаунтов пуст
-            </h1>
-          </>
+        {loading ? (
+          <p>Загрузка...</p>
+        ) : error ? (
+          <p>{error}</p>
+        ) : filteredAccounts.length === 0 ? (
+          <h1
+            style={{
+              marginTop: "150px",
+              marginLeft: "500px",
+              color: "#8c8c8c",
+            }}
+          >
+            Список аккаунтов пуст
+          </h1>
         ) : (
           <>
             <h1 style={{ marginTop: "30px" }}>Список аккаунтов</h1>
             <div className="all-accs">
-              {accounts.map((account, index) => (
-                <div className="one-acc" key={index}>
-                  <div className="acc-names">
-                    <h4>account.name</h4>
-                    <span>account.game</span>
-                    <span>account.id</span>
-                    <span>account.nickname</span>
-                    <span>account.server</span>
+              {filteredAccounts
+                .map((account: AccountType, index: any) => (
+                  <div className="one-acc" key={index}>
+                    <div className="acc-names">
+                      <h4>{account.game}</h4>
+                      <span>{account.gameId}</span>
+                      <span>{account.gameNickname}</span>
+                      <span>{account.gameServer}</span>
+                      <span>{account.gameAccount}</span>
+                    </div>
+                    <div className="acc-icons">
+                      <img src={editIcon} alt="edit" />
+                      <img
+                        src={copyIcon}
+                        alt="copy"
+                        onClick={() => handleCopyAccount(account.id)}
+                        style={{ cursor: "pointer" }}
+                      />
+                      <img src={downloadIcon} alt="download" />
+                      <img src={cardIcon} alt="card" />
+                      <img src={deleteIcon} alt="delete" />
+                    </div>
                   </div>
-                  <div className="acc-icons">
-                    <img src={editIcon} alt="edit" />
-                    <img src={copyIcon} alt="copy" />
-                    <img src={downloadIcon} alt="download" />
-                    <img src={cardIcon} alt="card" />
-                    <img src={deleteIcon} alt="delete" />
-                  </div>
-                </div>
-              ))}
+                ))
+                .reverse()}
             </div>
           </>
         )}
       </div>
       <div>
-        <button className="auth-btn" style={{ marginTop: "30px", marginLeft: "650px" }}>
-          + Добавить аккаунт
-        </button>
+        <Link to="/add-page/add-account">
+          <button
+            className="auth-btn"
+            style={{ marginTop: "30px", marginLeft: "650px" }}
+          >
+            + Добавить аккаунт
+          </button>
+        </Link>
       </div>
       {isModalOpen && (
         <div className="modal-style" ref={modalRef} onClick={handleModalClick}>
@@ -119,7 +136,9 @@ const UserProfile = () => {
             <div className="modal-top">
               <img src={userIcon} alt="" style={{ width: "50px" }} />
               <div className="modal-top__name">
-                <span>{currentUser ? currentUser.nickname : "Ошибка сети!"}</span>
+                <span>
+                  {currentUser ? currentUser.nickname : "Ошибка сети!"}
+                </span>
                 <span style={{ fontSize: "10px" }}>
                   {currentUser ? currentUser.email : "Ошибка сети!"}
                 </span>

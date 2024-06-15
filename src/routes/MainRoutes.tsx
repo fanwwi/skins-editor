@@ -10,6 +10,7 @@ import ErrorRegisterPage from "../pages/ErrorRegisterPage";
 import ErrorLoginPage from "../pages/ErrorLoginPage";
 import NotFoundPage from "../pages/NotFoundPage";
 import AccountActivate from "../pages/AccountActivate";
+import AddPage from "../pages/AddPage";
 
 const MainRoutes = () => {
   return (
@@ -23,6 +24,7 @@ const MainRoutes = () => {
       <Route path="/error/login" element={<ErrorLoginPage />} />
       <Route path="/error/register" element={<ErrorRegisterPage />} />
       <Route path="/account/activate" element={<AccountActivate />} />
+      <Route path="/add-page/add-account" element={<AddPage />} />
       <Route path="/*" element={<NotFoundPage />} />
     </Routes>
   );
