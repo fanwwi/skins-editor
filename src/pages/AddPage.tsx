@@ -7,7 +7,7 @@ import { createAccount } from "../store/actions/account.action";
 import { AccountType } from "../types";
 
 const AddPage: React.FC = () => {
-  const id = localStorage.getItem("currentUser");
+  const id = localStorage.getItem("currentUser")?.replace(/"/g, "");
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
@@ -73,6 +73,7 @@ const AddPage: React.FC = () => {
           style={{ width: "70px", cursor: "pointer" }}
         />
       </div>
+
       <form className="auth-form" onSubmit={handleSubmit}>
         <h2>Добавить аккаунт</h2>
         <label htmlFor="game" className="label-input">

@@ -11,6 +11,8 @@ import ErrorLoginPage from "../pages/ErrorLoginPage";
 import NotFoundPage from "../pages/NotFoundPage";
 import AccountActivate from "../pages/AccountActivate";
 import AddPage from "../pages/AddPage";
+import Settings from "../pages/Settings";
+import EditPage from "../pages/EditPage";
 
 const MainRoutes = () => {
   return (
@@ -21,10 +23,12 @@ const MainRoutes = () => {
       <Route path="/forgot" element={<ForgotPassword />} />
       <Route path="/result" element={<ResultPassword />} />
       <Route path="/:id/profile" element={<UserProfile />} />
+      <Route path="/:id/settings" element={<Settings />} />
       <Route path="/error/login" element={<ErrorLoginPage />} />
       <Route path="/error/register" element={<ErrorRegisterPage />} />
       <Route path="/account/activate" element={<AccountActivate />} />
       <Route path="/add-page/add-account" element={<AddPage />} />
+      <Route path="/edit/:accountId" element={<EditPage />} />
       <Route path="/*" element={<NotFoundPage />} />
     </Routes>
   );

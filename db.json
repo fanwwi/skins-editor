@@ -11,6 +11,12 @@
       "nickname": "fanwwi",
       "password": "12345678",
       "id": "1718441497986"
+    },
+    {
+      "email": "makers.frontend@gmail.com",
+      "nickname": "makers",
+      "password": "12345678",
+      "id": "1718536228536"
     }
   ],
   "accounts": [
@@ -23,5 +29,6 @@
       "author": "\"1718441497986\"",
       "id": 1
     }
-  ]
+  ],
+  "details": []
 }

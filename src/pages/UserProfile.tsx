@@ -11,8 +11,13 @@ import settingsIcon from "../img/icon-settings.png";
 import { useAppDispatch, useAppSelector } from "../store/store";
 import { getCurrentUser } from "../store/actions/user.action";
 import { Link } from "react-router-dom";
-import { getAccounts, copyAccount } from "../store/actions/account.action";
+import {
+  getAccounts,
+  copyAccount,
+  deleteAccount,
+} from "../store/actions/account.action";
 import { AccountType } from "../types";
+import Loader from "../components/Loader";
 
 const UserProfile = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -60,6 +65,19 @@ const UserProfile = () => {
       });
   };
 
+  const handleDeleteAccount = (accountId: string) => {
+    if (window.confirm("Вы уверены, что хотите удалить этот аккаунт?")) {
+      dispatch(deleteAccount(accountId))
+        .unwrap()
+        .then(() => {
+          console.log("Аккаунт удален");
+        })
+        .catch((error) => {
+          console.error("Ошибка при удалении аккаунта:", error);
+        });
+    }
+  };
+
   return (
     <div className="profile">
       <div className="profile-header">
@@ -74,7 +92,7 @@ const UserProfile = () => {
       <hr />
       <div className="container">
         {loading ? (
-          <p>Загрузка...</p>
+          <Loader />
         ) : error ? (
           <p>{error}</p>
         ) : filteredAccounts.length === 0 ? (
@@ -102,7 +120,9 @@ const UserProfile = () => {
                       <span>{account.gameAccount}</span>
                     </div>
                     <div className="acc-icons">
-                      <img src={editIcon} alt="edit" />
+                      <Link to={`/edit/${account.id}/`}>
+                        <img src={editIcon} alt="edit" />
+                      </Link>
                       <img
                         src={copyIcon}
                         alt="copy"
@@ -111,7 +131,12 @@ const UserProfile = () => {
                       />
                       <img src={downloadIcon} alt="download" />
                       <img src={cardIcon} alt="card" />
-                      <img src={deleteIcon} alt="delete" />
+                      <img
+                        src={deleteIcon}
+                        alt="delete"
+                        onClick={() => handleDeleteAccount(account.id)}
+                        style={{ cursor: "pointer" }}
+                      />
                     </div>
                   </div>
                 ))
@@ -144,14 +169,19 @@ const UserProfile = () => {
                 </span>
               </div>
             </div>
-            <div className="profile-icon">
-              <img src={exitIcon} alt="" />
-              <p>Выход</p>
-            </div>
-            <div className="profile-icon">
-              <img src={settingsIcon} alt="" />
-              <p>Настройки</p>
-            </div>
+            <Link to="/" style={{ all: "unset" }}>
+              <div className="profile-icon">
+                <img src={exitIcon} alt="" />
+                <p>Выход</p>
+              </div>
+            </Link>
+
+            <Link to={`/${id}/settings`} style={{ all: "unset" }}>
+              <div className="profile-icon">
+                <img src={settingsIcon} alt="" />
+                <p>Настройки</p>
+              </div>
+            </Link>
           </div>
         </div>
       )}

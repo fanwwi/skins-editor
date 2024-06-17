@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { AccountType } from "../../types";
-import { getAccounts, getCurrentAccount } from "../actions/account.action";
+import { getAccounts } from "../actions/account.action";
 
 type StatesType = {
   error: null | string;

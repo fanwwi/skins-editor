@@ -4,7 +4,7 @@ import emailIcon from "../img/email-icon.png";
 import { Link } from "react-router-dom";
 
 const IsRegistered = () => {
-  const id = localStorage.getItem("currentUser");
+  const id = localStorage.getItem("currentUser")?.replace(/"/g, "");
   return (
     <div className="auth">
       <img src={logo} alt="" className="logo" style={{ marginLeft: "-30px" }} />

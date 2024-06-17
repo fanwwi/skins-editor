@@ -1,5 +1,5 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { NewUser, ProfileData } from "../../types";
+import { NewUser, ProfileData, RegisterType } from "../../types";
 import axios from "axios";
 
 export const Register = createAsyncThunk(
@@ -33,16 +33,24 @@ export const Register = createAsyncThunk(
   }
 );
 
-export const checkUserExists = async (
-  id: string | number
-): Promise<boolean> => {
+export const checkUserExistsAndPassword = async (
+  email: string,
+  password: string
+): Promise<{ exists: boolean; passwordMatch: boolean; userId?: string }> => {
   try {
     const response = await axios.get(
-      `http://localhost:8000/users/?email=${id}`
+      `http://localhost:8000/users/?email=${email}`
     );
-    return response.data.length > 0;
+    if (response.data.length > 0) {
+      const user = response.data[0];
+      const passwordMatch = user.password === password;
+      return { exists: true, passwordMatch, userId: user.id };
+    } else {
+      return { exists: false, passwordMatch: false };
+    }
   } catch (error) {
-    return false;
+    console.error(error);
+    return { exists: false, passwordMatch: false };
   }
 };
 
@@ -60,6 +68,41 @@ export const getCurrentUser = createAsyncThunk(
         return rejectWithValue(error.response.data);
       } else {
         return rejectWithValue("Ошибка полуучения пользователя");
+      }
+    }
+  }
+);
+
+export const changePassword = createAsyncThunk(
+  "users/changePassword",
+  async (
+    {
+      userId,
+      oldPassword,
+      newPassword,
+    }: { userId: string; oldPassword: string; newPassword: string },
+    { rejectWithValue }
+  ) => {
+    try {
+      const { data: user } = await axios.get<RegisterType>(
+        `http://localhost:8000/users/${userId}`
+      );
+
+      if (user.password !== oldPassword) {
+        return rejectWithValue("Старый пароль неверен");
+      }
+
+      await axios.patch(`http://localhost:8000/users/${userId}`, {
+        password: newPassword,
+      });
+
+      return { ...user, password: newPassword };
+    } catch (error) {
+      console.error(error);
+      if (axios.isAxiosError(error) && error.response) {
+        return rejectWithValue(error.response.data);
+      } else {
+        return rejectWithValue("Ошибка смены пароля");
       }
     }
   }

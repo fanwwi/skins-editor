@@ -43,25 +43,6 @@ export const getAccounts = createAsyncThunk(
   }
 );
 
-export const getCurrentAccount = createAsyncThunk(
-  "accounts/getCurrentAccount",
-  async (id: string, { rejectWithValue }) => {
-    try {
-      const { data } = await axios.get<AccountType>(
-        `http://localhost:8000/accounts/${id}`
-      );
-      return data;
-    } catch (error) {
-      console.error(error);
-      if (axios.isAxiosError(error) && error.response) {
-        return rejectWithValue(error.response.data);
-      } else {
-        return rejectWithValue("Ошибка получения аккаунта!");
-      }
-    }
-  }
-);
-
 export const copyAccount = createAsyncThunk(
   "accounts/copyAccount",
   async (id: string, { rejectWithValue }) => {
@@ -82,6 +63,24 @@ export const copyAccount = createAsyncThunk(
         return rejectWithValue(error.response.data);
       } else {
         return rejectWithValue("Ошибка копирования аккаунта!");
+      }
+    }
+  }
+);
+
+export const deleteAccount = createAsyncThunk(
+  "accounts/deleteAccount",
+  async (id: string, { rejectWithValue }) => {
+    try {
+      await axios.delete(`http://localhost:8000/accounts/${id}`);
+      window.location.reload();
+      return id;
+    } catch (error) {
+      console.error(error);
+      if (axios.isAxiosError(error) && error.response) {
+        return rejectWithValue(error.response.data);
+      } else {
+        return rejectWithValue("Ошибка удаления аккаунта!");
       }
     }
   }
