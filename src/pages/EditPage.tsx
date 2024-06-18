@@ -2,32 +2,61 @@ import React, { useEffect, useState } from "react";
 import logo from "../img/logo.png";
 import { Link, useParams } from "react-router-dom";
 import userIcon from "../img/user-image.jpg";
-import editIcon from "../img/edit-icon.png";
+import editIcon from "../img/edit-icon2.png";
+import { useAppDispatch, useAppSelector } from "../store/store";
+import { getOneAccount, updateAccount } from "../store/actions/account.action";
 import iconCircle from "../img/small-circle-icon.png";
 import iconPazzle from "../img/small-pazzle-icon.png";
 import iconBrilliant from "../img/small-brilliant-icon.png";
-import { useAppDispatch, useAppSelector } from "../store/store";
-import { getAccounts, getOneAccount } from "../store/actions/account.action";
-import { log } from "console";
-
 const EditPage = () => {
   const id = localStorage.getItem("currentUser")?.replace(/"/g, "");
   const [activeTab, setActiveTab] = useState("accountData");
+  const [isEditing, setIsEditing] = useState(false);
+  const [formData, setFormData] = useState({
+    game: "",
+    gameId: "",
+    gameNickname: "",
+  });
+  const [gameAccount, setGameAccount] = useState("");
+  const { account } = useAppSelector((state) => state.accounts);
+  const dispatch = useAppDispatch();
+  const { accountId } = useParams();
   const [dmmState, setDmmState] = useState(null);
   const [transferState, setTransferState] = useState(null);
   const [emailState, setEmailState] = useState(null);
-  const { account } = useAppSelector((item) => item.accounts);
-  const dispatch = useAppDispatch();
-  const { accountId } = useParams();
-  // console.log(accountId);
 
   useEffect(() => {
     dispatch(getOneAccount(accountId + ""));
-  }, []);
+  }, [dispatch, accountId]);
 
-  // if (account) {
-  //   console.log(account);
-  // }
+  useEffect(() => {
+    if (account) {
+      setFormData({
+        game: account.game || "",
+        gameId: account.gameId || "",
+        gameNickname: account.gameNickname || "",
+      });
+      setGameAccount(account.gameAccount || "");
+    }
+  }, [account]);
+
+  const handleEditClick = () => {
+    setIsEditing(true);
+  };
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    if (name === "accountName") {
+      setGameAccount(value);
+    } else {
+      setFormData({ ...formData, [name]: value });
+    }
+  };
+
+  const handleSaveClick = async () => {
+    await dispatch(updateAccount(accountId!, { ...formData, gameAccount }));
+    setIsEditing(false);
+  };
 
   const toggleState = (state: any, setState: any) => {
     if (state === null) {
@@ -60,29 +89,86 @@ const EditPage = () => {
       >
         <div className="profile-left">
           <img src={logo} alt="" style={{ width: "70px" }} />
-          <Link to={`/${id}/profile`} style={{ fontSize: "18px", color: "#6232ff" }}>
+          <Link
+            to={`/${id}/profile`}
+            style={{ fontSize: "18px", color: "#6232ff" }}
+          >
             Мои аккаунты
           </Link>
         </div>
-        <img src={userIcon} alt="userIcon" style={{ width: "70px", cursor: "pointer" }} />
+        <img
+          src={userIcon}
+          alt="userIcon"
+          style={{ width: "70px", cursor: "pointer" }}
+        />
       </div>
       <hr />
       <div className="container">
         <div className="details-block">
           <div className="right">
             <div className="text-block">
-              <h2>
-                Детали аккаунта - <span className="blue-text">Имя аккаунта</span>
-              </h2>
+              <div className="account-name">
+                {!isEditing ? (
+                  <h2>
+                    Детали аккаунта -{" "}
+                    <span className="blue-text">
+                      {gameAccount || "Ошибка сети"}
+                    </span>
+                  </h2>
+                ) : (
+                  <h2>
+                    Детали аккаунта -{" "}
+                    <input
+                      type="text"
+                      name="accountName"
+                      value={gameAccount}
+                      className="auth__input"
+                      onChange={handleInputChange}
+                    />
+                  </h2>
+                )}
+              </div>
               <p>В этой форме вы редактируете аккаунт</p>
-              <span>{account?.game ? account.game : "Ошибка сети"}</span>
-              <span>{account?.gameId ? account.gameId : "Ошибка сети"}</span>
-              <span>{account?.gameNickname ? account.gameNickname : "Ошибка сети"}</span>
-              <button>Сохранить</button>
+              {!isEditing ? (
+                <>
+                  <span>{account?.game || "Ошибка сети"}</span>
+                  <span>{account?.gameId || "Ошибка сети"}</span>
+                  <span>{account?.gameNickname || "Ошибка сети"}</span>
+                  <button onClick={handleEditClick}>
+                    <img src={editIcon} alt="" />
+                  </button>
+                </>
+              ) : (
+                <>
+                  <input
+                    type="text"
+                    name="game"
+                    value={formData.game}
+                    className="auth__input"
+                    onChange={handleInputChange}
+                  />
+                  <input
+                    type="text"
+                    name="gameId"
+                    value={formData.gameId}
+                    className="auth__input"
+                    onChange={handleInputChange}
+                  />
+                  <input
+                    type="text"
+                    name="gameNickname"
+                    value={formData.gameNickname}
+                    className="auth__input"
+                    onChange={handleInputChange}
+                  />
+                  <button onClick={handleSaveClick}>Сохранить</button>
+                </>
+              )}
             </div>
-            <img src={editIcon} alt="" />
           </div>
-          <div className="visual-card">Создать визуальную карточку аккаунта</div>
+          <div className="visual-card">
+            Создать визуальную карточку аккаунта
+          </div>
         </div>
         <div className="main-header">
           <div
@@ -139,9 +225,15 @@ const EditPage = () => {
                   <div className="block-left">
                     <div
                       className={`toggle-container ${
-                        transferState === null ? "null" : transferState ? "true" : "false"
+                        transferState === null
+                          ? "null"
+                          : transferState
+                          ? "true"
+                          : "false"
                       }`}
-                      onClick={() => toggleState(transferState, setTransferState)}
+                      onClick={() =>
+                        toggleState(transferState, setTransferState)
+                      }
                     >
                       <div className="toggle-circle" />
                     </div>
@@ -154,7 +246,11 @@ const EditPage = () => {
                   <div className="block-left">
                     <div
                       className={`toggle-container ${
-                        emailState === null ? "null" : emailState ? "true" : "false"
+                        emailState === null
+                          ? "null"
+                          : emailState
+                          ? "true"
+                          : "false"
                       }`}
                       onClick={() => toggleState(emailState, setEmailState)}
                     >

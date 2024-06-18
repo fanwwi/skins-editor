@@ -1,5 +1,5 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { AccountType } from "../../types";
+import { AccountChange, AccountType } from "../../types";
 import axios from "axios";
 
 export const createAccount = createAsyncThunk(
@@ -47,9 +47,7 @@ export const getOneAccount = createAsyncThunk(
   "accounts/getOneAccount",
   async (id: string, { rejectWithValue }) => {
     try {
-      const { data } = await axios.get(
-        `http://localhost:8000/accounts/${id}`
-      );
+      const { data } = await axios.get(`http://localhost:8000/accounts/${id}`);
       return data;
     } catch (error) {
       console.error(error);
@@ -104,3 +102,17 @@ export const deleteAccount = createAsyncThunk(
     }
   }
 );
+
+export const updateAccount =
+  (accountId: string | number, formData: any) => async () => {
+    try {
+      const response = await axios.patch(
+        `http://localhost:8000/accounts/${accountId}`,
+        formData
+      );
+      window.location.reload();
+      return response.data;
+    } catch (error) {
+      console.log(error);
+    }
+  };

@@ -33,6 +33,13 @@ export type AccountType = {
   gameNickname: string;
   gameServer: string;
   gameAccount: string;
-  author: string
-  id: string
+  author: string;
+  id: string;
+};
+
+export type AccountChange = {
+  game: string;
+  gameId: string;
+  gameNickname: string;
+  gameAccount: string;
 };
