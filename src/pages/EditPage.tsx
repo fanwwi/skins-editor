@@ -9,10 +9,12 @@ import iconBrilliant from "../img/small-brilliant-icon.png";
 
 const EditPage = () => {
   const id = localStorage.getItem("currentUser")?.replace(/"/g, "");
+  const [activeTab, setActiveTab] = useState("accountData");
+  const [dmmState, setDmmState] = useState(null);
+  const [transferState, setTransferState] = useState(null);
+  const [emailState, setEmailState] = useState(null);
 
-  const [state, setState] = useState<any>(null);
-
-  const toggleState = () => {
+  const toggleState = (state: any, setState: any) => {
     if (state === null) {
       setState(true);
     } else if (state === true) {
@@ -22,7 +24,7 @@ const EditPage = () => {
     }
   };
 
-  const getStateLabel = () => {
+  const getStateLabel = (state: any) => {
     if (state === null) {
       return "Null";
     } else if (state === true) {
@@ -77,129 +79,158 @@ const EditPage = () => {
             Создать визуальную карточку аккаунта
           </div>
         </div>
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "center",
-            gap: "50px",
-            marginTop: "30px",
-          }}
-        >
-          <div className="main-header">
-            <h3 style={{ fontWeight: "400", color: "#3c00ff" }}>
-              Данные аккаунта
-            </h3>
-            <hr />
+        <div className="main-header">
+          <div
+            onClick={() => setActiveTab("accountData")}
+            style={{
+              fontWeight: activeTab === "accountData" ? "700" : "400",
+              color: activeTab === "accountData" ? "#3c00ff" : "black",
+              cursor: "pointer",
+            }}
+          >
+            <h3>Данные аккаунта</h3>
+            {activeTab === "accountData" && <hr />}
           </div>
-          <h3 style={{ fontWeight: "400" }}>Содержание аккаунта</h3>
+          <div
+            onClick={() => setActiveTab("accountContent")}
+            style={{
+              fontWeight: activeTab === "accountContent" ? "700" : "400",
+              color: activeTab === "accountContent" ? "#3c00ff" : "black",
+              cursor: "pointer",
+            }}
+          >
+            <h3>Содержание аккаунта</h3>
+            {activeTab === "accountContent" && <hr />}
+          </div>
         </div>
 
-        <div className="technical-block">
-          <h2>Технические данные</h2>
-          <select>
-            <option>Операционная система</option>
-            <option>IOS</option>
-            <option>Android</option>
-          </select>
+        {activeTab === "accountData" && (
+          <>
+            <div className="technical-block">
+              <h2>Технические данные</h2>
+              <select>
+                <option>Операционная система</option>
+                <option>IOS</option>
+                <option>Android</option>
+              </select>
 
-          <div className="main-toggle">
-            <div className="toggle">
-              <div className="block-left">
-                <div
-                  className={`toggle-container ${
-                    state === null ? "null" : state ? "true" : "false"
-                  }`}
-                  onClick={toggleState}
-                >
-                  <div className="toggle-circle" />
+              <div className="main-toggle">
+                <div className="toggle">
+                  <div className="block-left">
+                    <div
+                      className={`toggle-container ${
+                        dmmState === null ? "null" : dmmState ? "true" : "false"
+                      }`}
+                      onClick={() => toggleState(dmmState, setDmmState)}
+                    >
+                      <div className="toggle-circle" />
+                    </div>
+                    <span>DMM</span>
+                  </div>
+                  <p>Пояснение в переключатель</p>
                 </div>
-                <span>DMM</span>
-              </div>
-              <p>Пояснение в переключатель</p>
-            </div>
 
-            <div className="toggle">
-              <div className="block-left">
-                <div
-                  className={`toggle-container ${
-                    state === null ? "null" : state ? "true" : "false"
-                  }`}
-                  onClick={toggleState}
-                >
-                  <div className="toggle-circle" />
+                <div className="toggle">
+                  <div className="block-left">
+                    <div
+                      className={`toggle-container ${
+                        transferState === null
+                          ? "null"
+                          : transferState
+                          ? "true"
+                          : "false"
+                      }`}
+                      onClick={() =>
+                        toggleState(transferState, setTransferState)
+                      }
+                    >
+                      <div className="toggle-circle" />
+                    </div>
+                    <span>Transfer</span>
+                  </div>
+                  <p>Пояснение в переключатель</p>
                 </div>
-                <span>Transfer</span>
-              </div>
-              <p>Пояснение в переключатель</p>
-            </div>
 
-            <div className="toggle">
-              <div className="block-left">
-                <div
-                  className={`toggle-container ${
-                    state === null ? "null" : state ? "true" : "false"
-                  }`}
-                  onClick={toggleState}
-                >
-                  <div className="toggle-circle" />
+                <div className="toggle">
+                  <div className="block-left">
+                    <div
+                      className={`toggle-container ${
+                        emailState === null
+                          ? "null"
+                          : emailState
+                          ? "true"
+                          : "false"
+                      }`}
+                      onClick={() => toggleState(emailState, setEmailState)}
+                    >
+                      <div className="toggle-circle" />
+                    </div>
+                    <span>Email</span>
+                  </div>
+                  <p>Пояснение в переключатель</p>
                 </div>
-                <span>Email</span>
               </div>
-              <p>Пояснение в переключатель</p>
             </div>
+
+            <div className="owners">
+              <h2>Владельцы</h2>
+              <div className="owners-input-block">
+                <h5>Количество владельцев</h5>
+                <input type="text" id="owners-inp" />
+              </div>
+            </div>
+
+            <div className="play-coin">
+              <h2>Игровая валюта</h2>
+              <div className="wrapper">
+                <div className="wrapp">
+                  <div className="header-wrapper">
+                    <h6>Печать</h6>
+                    <img src={iconCircle} alt="" />
+                  </div>
+                  <input type="text" />
+                </div>
+
+                <div className="wrapp">
+                  <div className="header-wrapper">
+                    <h6>Пазлы</h6>
+                    <img src={iconPazzle} alt="" />
+                  </div>
+                  <input type="text" />
+                </div>
+
+                <div className="wrapp">
+                  <div className="header-wrapper">
+                    <h6>Кристаллы</h6>
+                    <img src={iconBrilliant} alt="" />
+                  </div>
+                  <input type="text" />
+                </div>
+
+                <div className="wrapp">
+                  <div className="header-wrapper">
+                    <h6>Анлок карты S</h6>
+                  </div>
+                  <input type="text" />
+                </div>
+
+                <div className="wrapp">
+                  <div className="header-wrapper">
+                    <h6>Анлок карты A</h6>
+                  </div>
+                  <input type="text" />
+                </div>
+              </div>
+            </div>
+          </>
+        )}
+
+        {activeTab === "accountContent" && (
+          <div>
+            <h2>Содержание аккаунта</h2>
+            <p>Здесь будет содержание аккаунта...</p>
           </div>
-        </div>
-
-        <div className="owners">
-          <h2>Владельцы</h2>
-          <div className="owners-input-block">
-            <h5>Количество владельцев</h5>
-            <input type="text" id="owners-inp" />
-          </div>
-        </div>
-
-        <div className="play-coin">
-          <h2>Игровая валюта</h2>
-          <div className="wrapper">
-            <div className="wrapp">
-              <div className="header-wrapper">
-                <h6>Печать</h6>
-                <img src={iconCircle} alt="" />
-              </div>
-              <input type="text" />
-            </div>
-
-            <div className="wrapp">
-              <div className="header-wrapper">
-                <h6>Пазлы</h6>
-                <img src={iconPazzle} alt="" />
-              </div>
-              <input type="text" />
-            </div>
-
-            <div className="wrapp">
-              <div className="header-wrapper">
-                <h6>Кристаллы</h6>
-                <img src={iconBrilliant} alt="" />
-              </div>
-              <input type="text" />
-            </div>
-
-            <div className="wrapp">
-              <div className="header-wrapper">
-                <h6>Анлок карты S</h6>
-              </div>
-              <input type="text" />
-            </div>
-
-            <div className="wrapp">
-              <div className="header-wrapper">
-                <h6>Анлок карты A</h6>
-              </div>
-              <input type="text" />
-            </div>
-          </div>
-        </div>
+        )}
       </div>
     </div>
   );

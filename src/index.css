@@ -278,8 +278,9 @@
 
 .main-header {
   display: flex;
-  flex-direction: column;
-  gap: 10px;
+  gap: 50px;
+  margin-top: 30px;
+  justify-content: center;
 }
 
 .main-header hr {
@@ -287,6 +288,7 @@
   background-color: #6232ff;
   height: 3px;
   margin-bottom: 30px;
+  margin-top: 10px;
 }
 
 /*! btn toggle  */
