@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { AccountType } from "../../types";
-import { getAccounts } from "../actions/account.action";
+import { getAccounts, getOneAccount } from "../actions/account.action";
 
 type StatesType = {
   error: null | string;
@@ -28,9 +28,20 @@ export const accountsSlice = createSlice({
       })
       .addCase(getAccounts.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.error.message ?? "Ошибка загрузки аккаунтов";
+        state.error = action.error.message ?? "Ошибка при загрузки аккаунтов";
       })
       .addCase(getAccounts.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      }).addCase(getOneAccount.fulfilled, (state, action) => {
+        state.loading = false;
+        state.account = action.payload;
+      })
+      .addCase(getOneAccount.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error.message ?? "Ошибка при загрузки аккаунтa";
+      })
+      .addCase(getOneAccount.pending, (state) => {
         state.loading = true;
         state.error = null;
       });

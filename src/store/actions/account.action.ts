@@ -43,6 +43,25 @@ export const getAccounts = createAsyncThunk(
   }
 );
 
+export const getOneAccount = createAsyncThunk(
+  "accounts/getOneAccount",
+  async (id: string, { rejectWithValue }) => {
+    try {
+      const { data } = await axios.get(
+        `http://localhost:8000/accounts/${id}`
+      );
+      return data;
+    } catch (error) {
+      console.error(error);
+      if (axios.isAxiosError(error) && error.response) {
+        return rejectWithValue(error.response.data);
+      } else {
+        return rejectWithValue("Ошибка получения пользователя");
+      }
+    }
+  }
+);
+
 export const copyAccount = createAsyncThunk(
   "accounts/copyAccount",
   async (id: string, { rejectWithValue }) => {

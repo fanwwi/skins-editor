@@ -27,7 +27,16 @@
       "gameserver": "Server",
       "gameAccount": "fanwwi_the_best",
       "author": "\"1718441497986\"",
-      "id": 1
+      "id": "1"
+    },
+    {
+      "id": "2bd7",
+      "game": "DOTA2",
+      "gameId": "1",
+      "gameNickname": "BURN",
+      "gameserver": "VALVE",
+      "gameAccount": "burn",
+      "author": "\"1718361546427\""
     }
   ],
   "details": []
