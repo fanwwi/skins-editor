@@ -11,12 +11,6 @@
       "nickname": "fanwwi",
       "password": "12345678",
       "id": "1718441497986"
-    },
-    {
-      "email": "makers.frontend@gmail.com",
-      "nickname": "makers",
-      "password": "12345678",
-      "id": "1718536228536"
     }
   ],
   "accounts": [
@@ -24,7 +18,7 @@
       "game": "ConterStrike",
       "gameId": "98875678345671",
       "gameNickname": "fanwwi",
-      "gameserver": "Server",
+      "gameServer": "Server",
       "gameAccount": "fanwwi_the_best",
       "author": "\"1718441497986\"",
       "id": "1"
@@ -34,21 +28,10 @@
       "game": "DOTA2",
       "gameId": "1",
       "gameNickname": "BURN",
-      "gameserver": "VALVE",
+      "gameServer": "VALVE",
       "gameAccount": "burn",
       "author": "\"1718361546427\""
     }
   ],
-  "details": [
-    {
-      "owners": "12345",
-      "seal": "rty",
-      "puzzle": "cq",
-      "crystals": "cq",
-      "unlockS": "cq",
-      "unlockA": "cq",
-      "author": "1",
-      "id": 1
-    }
-  ]
+  "details": []
 }
