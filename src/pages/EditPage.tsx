@@ -1,32 +1,57 @@
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import logo from "../img/logo.png";
 import { Link, useParams } from "react-router-dom";
 import userIcon from "../img/user-image.jpg";
 import editIcon from "../img/edit-icon2.png";
 import { useAppDispatch, useAppSelector } from "../store/store";
-import { getOneAccount, updateAccount } from "../store/actions/account.action";
+import {
+  accountDetails,
+  getOneAccount,
+  updateAccount,
+} from "../store/actions/account.action";
 import iconCircle from "../img/small-circle-icon.png";
 import iconPazzle from "../img/small-pazzle-icon.png";
 import iconBrilliant from "../img/small-brilliant-icon.png";
+import { AccountChange, DetailsType } from "../types";
+
 const EditPage = () => {
   const id = localStorage.getItem("currentUser")?.replace(/"/g, "");
   const [activeTab, setActiveTab] = useState("accountData");
   const [isEditing, setIsEditing] = useState(false);
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<AccountChange>({
     game: "",
     gameId: "",
     gameNickname: "",
+    gameAccount: "",
   });
   const [gameAccount, setGameAccount] = useState("");
   const { account } = useAppSelector((state) => state.accounts);
+  const { details } = useAppSelector((state) => state.accounts);
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+
   const { accountId } = useParams();
   const [dmmState, setDmmState] = useState(null);
   const [transferState, setTransferState] = useState(null);
   const [emailState, setEmailState] = useState(null);
 
+  const [newData, setNewData] = useState<DetailsType>({
+    owners: "",
+    seal: "",
+    puzzle: "",
+    crystals: "",
+    unlockS: "",
+    unlockA: "",
+    author: "",
+  });
+
+  const [isInputActive, setIsInputActive] = useState(false);
+
   useEffect(() => {
-    dispatch(getOneAccount(accountId + ""));
+    if (accountId) {
+      dispatch(getOneAccount(accountId));
+    }
   }, [dispatch, accountId]);
 
   useEffect(() => {
@@ -35,10 +60,22 @@ const EditPage = () => {
         game: account.game || "",
         gameId: account.gameId || "",
         gameNickname: account.gameNickname || "",
+        gameAccount: account.gameAccount || "",
       });
+
+      setNewData({
+        owners: details?.owners || "",
+        seal: details?.seal || "",
+        puzzle: details?.puzzle || "",
+        crystals: details?.crystals || "",
+        unlockS: details?.unlockS || "",
+        unlockA: details?.unlockA || "",
+        author: account.id || "",
+      });
+
       setGameAccount(account.gameAccount || "");
     }
-  }, [account]);
+  }, [account, details]);
 
   const handleEditClick = () => {
     setIsEditing(true);
@@ -46,16 +83,42 @@ const EditPage = () => {
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    if (name === "accountName") {
+    if (name === "gameAccount") {
       setGameAccount(value);
     } else {
       setFormData({ ...formData, [name]: value });
     }
   };
 
+  const handleNewDataChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setNewData({ ...newData, [name]: value });
+
+    setIsInputActive(true);
+  };
+
   const handleSaveClick = async () => {
-    await dispatch(updateAccount(accountId!, { ...formData, gameAccount }));
-    setIsEditing(false);
+    if (accountId) {
+      await dispatch(updateAccount(accountId, { ...formData, gameAccount }));
+      setIsEditing(false);
+    }
+  };
+
+  const handleDetailsSubmit = async () => {
+    if (accountId && account) {
+      await dispatch(accountDetails({ data: newData, account }));
+      setIsInputActive(false);
+
+      setNewData({
+        owners: "",
+        seal: "",
+        puzzle: "",
+        crystals: "",
+        unlockS: "",
+        unlockA: "",
+        author: "",
+      });
+    }
   };
 
   const toggleState = (state: any, setState: any) => {
@@ -76,6 +139,10 @@ const EditPage = () => {
     } else {
       return "False";
     }
+  };
+
+  const navigateToProfile = () => {
+    navigate(`${id}/profile`);
   };
 
   return (
@@ -120,7 +187,7 @@ const EditPage = () => {
                     Детали аккаунта -{" "}
                     <input
                       type="text"
-                      name="accountName"
+                      name="gameAccount"
                       value={gameAccount}
                       className="auth__input"
                       onChange={handleInputChange}
@@ -267,7 +334,12 @@ const EditPage = () => {
               <h2>Владельцы</h2>
               <div className="owners-input-block">
                 <h5>Количество владельцев</h5>
-                <input type="text" id="owners-inp" />
+                <input
+                  type="text"
+                  name="owners"
+                  value={newData.owners}
+                  onChange={handleNewDataChange}
+                />
               </div>
             </div>
 
@@ -277,42 +349,68 @@ const EditPage = () => {
                 <div className="wrapp">
                   <div className="header-wrapper">
                     <h6>Печать</h6>
-                    <img src={iconCircle} alt="" />
                   </div>
-                  <input type="text" />
+                  <input
+                    type="text"
+                    name="seal"
+                    value={newData.seal}
+                    onChange={handleNewDataChange}
+                  />
                 </div>
 
                 <div className="wrapp">
                   <div className="header-wrapper">
                     <h6>Пазлы</h6>
-                    <img src={iconPazzle} alt="" />
                   </div>
-                  <input type="text" />
+                  <input
+                    type="text"
+                    name="puzzle"
+                    value={newData.puzzle}
+                    onChange={handleNewDataChange}
+                  />
                 </div>
 
                 <div className="wrapp">
                   <div className="header-wrapper">
                     <h6>Кристаллы</h6>
-                    <img src={iconBrilliant} alt="" />
                   </div>
-                  <input type="text" />
+                  <input
+                    type="text"
+                    name="crystals"
+                    value={newData.crystals}
+                    onChange={handleNewDataChange}
+                  />
                 </div>
 
                 <div className="wrapp">
                   <div className="header-wrapper">
                     <h6>Анлок карты S</h6>
                   </div>
-                  <input type="text" />
+                  <input
+                    type="text"
+                    name="unlockS"
+                    value={newData.unlockS}
+                    onChange={handleNewDataChange}
+                  />
                 </div>
 
                 <div className="wrapp">
                   <div className="header-wrapper">
                     <h6>Анлок карты A</h6>
                   </div>
-                  <input type="text" />
+                  <input
+                    type="text"
+                    name="unlockA"
+                    value={newData.unlockA}
+                    onChange={handleNewDataChange}
+                  />
                 </div>
               </div>
             </div>
+
+            {isInputActive && (
+              <button onClick={handleDetailsSubmit}>Отправить детали</button>
+            )}
           </>
         )}
 

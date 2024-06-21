@@ -43,3 +43,13 @@ export type AccountChange = {
   gameNickname: string;
   gameAccount: string;
 };
+
+export type DetailsType = {
+  owners: string;
+  seal: string;
+  puzzle: string;
+  crystals: string;
+  unlockS: string;
+  unlockA: string;
+  author: string;
+};

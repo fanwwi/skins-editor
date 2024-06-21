@@ -39,5 +39,16 @@
       "author": "\"1718361546427\""
     }
   ],
-  "details": []
+  "details": [
+    {
+      "owners": "12345",
+      "seal": "rty",
+      "puzzle": "cq",
+      "crystals": "cq",
+      "unlockS": "cq",
+      "unlockA": "cq",
+      "author": "1",
+      "id": 1
+    }
+  ]
 }

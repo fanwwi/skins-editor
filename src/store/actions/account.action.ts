@@ -1,5 +1,5 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { AccountChange, AccountType } from "../../types";
+import { AccountChange, AccountType, DetailsType } from "../../types";
 import axios from "axios";
 
 export const createAccount = createAsyncThunk(
@@ -116,3 +116,46 @@ export const updateAccount =
       console.log(error);
     }
   };
+
+export const accountDetails = createAsyncThunk(
+  "account/accountDetails",
+  async ({ data, account }: { data: DetailsType; account: AccountType }) => {
+    const formData = {
+      owners: data.owners,
+      seal: data.seal,
+      puzzle: data.puzzle,
+      crystals: data.crystals,
+      unlockS: data.unlockS,
+      unlockA: data.unlockA,
+      author: account.id,
+    };
+    try {
+      const { response }: any = await axios.post(
+        "http://localhost:8000/details",
+        formData
+      );
+      return response;
+    } catch (error) {
+      console.log(error);
+    }
+  }
+);
+
+export const getAccountDetails = createAsyncThunk(
+  "accounts/getAccountDetails",
+  async (accountId: string, { rejectWithValue }) => {
+    try {
+      const response = await axios.get(
+        `http://localhost:8000/details/${accountId}`
+      );
+      return response.data;
+    } catch (error) {
+      console.error(error);
+      if (axios.isAxiosError(error) && error.response) {
+        return rejectWithValue(error.response.data);
+      } else {
+        return rejectWithValue("Ошибка получения деталей аккаунта");
+      }
+    }
+  }
+);
