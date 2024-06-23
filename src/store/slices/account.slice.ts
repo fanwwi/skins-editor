@@ -1,8 +1,9 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { AccountType, DetailsType } from "../../types";
+import { AccountType, CostumesType, DetailsType } from "../../types";
 import {
   accountDetails,
   getAccounts,
+  getCostume,
   getOneAccount,
 } from "../actions/account.action";
 
@@ -12,6 +13,7 @@ type StatesType = {
   allAccounts: AccountType[] | null;
   account: AccountType | null;
   details: DetailsType | null;
+  costume: [] | null;
 };
 
 const INIT_STATE: StatesType = {
@@ -20,6 +22,7 @@ const INIT_STATE: StatesType = {
   allAccounts: null,
   account: null,
   details: null,
+  costume: null,
 };
 
 export const accountsSlice = createSlice({
@@ -63,6 +66,19 @@ export const accountsSlice = createSlice({
       .addCase(accountDetails.pending, (state) => {
         state.loading = true;
         state.error = null;
+      })
+      .addCase(getCostume.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(getCostume.fulfilled, (state, action) => {
+        state.loading = false;
+        state.error = null;
+        state.costume = action.payload;
+      })
+      .addCase(getCostume.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload as string;
       });
   },
 });

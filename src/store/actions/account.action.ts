@@ -1,5 +1,10 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { AccountChange, AccountType, DetailsType } from "../../types";
+import {
+  AccountChange,
+  AccountType,
+  CostumesType,
+  DetailsType,
+} from "../../types";
 import axios from "axios";
 
 export const createAccount = createAsyncThunk(
@@ -156,6 +161,48 @@ export const getAccountDetails = createAsyncThunk(
       } else {
         return rejectWithValue("Ошибка получения деталей аккаунта");
       }
+    }
+  }
+);
+
+export const addCostume = createAsyncThunk(
+  "account/addCostume",
+  async ({
+    data,
+    navigate,
+  }: {
+    data: CostumesType;
+    navigate: (path: string) => void;
+  }) => {
+    const newData = {
+      costume: data.costume,
+      author: data.author,
+    };
+
+    try {
+      const { data } = await axios.post(
+        "http://localhost:8000/costumes",
+        newData
+      );
+      return data;
+    } catch (error) {
+      console.log(error);
+    }
+  }
+);
+
+export const getCostume = createAsyncThunk(
+  "accounts/getCostume",
+  async (account: AccountType) => {
+    try {
+      const author = account.id;
+      const response = await axios.get("http://localhost:8000/costumes");
+      const filteredCostumes = response.data.filter(
+        (costume: any) => costume.author === author
+      );
+      return filteredCostumes;
+    } catch (error) {
+      console.log(error);
     }
   }
 );

@@ -7,13 +7,15 @@ import editIcon from "../img/edit-icon2.png";
 import { useAppDispatch, useAppSelector } from "../store/store";
 import {
   accountDetails,
+  addCostume,
+  getCostume,
   getOneAccount,
   updateAccount,
 } from "../store/actions/account.action";
 import iconCircle from "../img/small-circle-icon.png";
 import iconPazzle from "../img/small-pazzle-icon.png";
 import iconBrilliant from "../img/small-brilliant-icon.png";
-import { AccountChange, DetailsType } from "../types";
+import { AccountChange, CostumesType, DetailsType } from "../types";
 
 const EditPage = () => {
   const id = localStorage.getItem("currentUser")?.replace(/"/g, "");
@@ -36,6 +38,10 @@ const EditPage = () => {
   const [transferState, setTransferState] = useState(null);
   const [emailState, setEmailState] = useState(null);
 
+  const [costumes, setCostumes] = useState<CostumesType>({
+    author: account? account!.id : "",
+    costume: "",
+  });
   const [newData, setNewData] = useState<DetailsType>({
     owners: "",
     seal: "",
@@ -89,6 +95,52 @@ const EditPage = () => {
       setFormData({ ...formData, [name]: value });
     }
   };
+
+  const handleInputCostumeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setCostumes({ ...costumes, [name]: value });
+  };
+
+  const handleCostumeSubmit = async () => {
+    if (costumes) {
+      await dispatch(addCostume({ data: costumes, navigate }));
+    }
+
+    setCostumes({
+      author: account!.id,
+      costume: "",
+    });
+    window.location.reload();
+  };
+
+  useEffect(() => {
+    if (account) {
+      dispatch(getCostume(account));
+    }
+  }, [dispatch, account]);
+
+  useEffect(() => {
+    if (account) {
+      setFormData({
+        game: account.game || "",
+        gameId: account.gameId || "",
+        gameNickname: account.gameNickname || "",
+        gameAccount: account.gameAccount || "",
+      });
+
+      setNewData({
+        owners: details?.owners || "",
+        seal: details?.seal || "",
+        puzzle: details?.puzzle || "",
+        crystals: details?.crystals || "",
+        unlockS: details?.unlockS || "",
+        unlockA: details?.unlockA || "",
+        author: account.id || "",
+      });
+
+      setGameAccount(account.gameAccount || "");
+    }
+  }, [account, details]);
 
   const handleNewDataChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -349,6 +401,7 @@ const EditPage = () => {
                 <div className="wrapp">
                   <div className="header-wrapper">
                     <h6>Печать</h6>
+                    <img src={iconCircle} alt="" />
                   </div>
                   <input
                     type="text"
@@ -361,6 +414,7 @@ const EditPage = () => {
                 <div className="wrapp">
                   <div className="header-wrapper">
                     <h6>Пазлы</h6>
+                    <img src={iconPazzle} alt="" />
                   </div>
                   <input
                     type="text"
@@ -373,6 +427,7 @@ const EditPage = () => {
                 <div className="wrapp">
                   <div className="header-wrapper">
                     <h6>Кристаллы</h6>
+                    <img src={iconBrilliant} alt="" />
                   </div>
                   <input
                     type="text"
@@ -414,10 +469,80 @@ const EditPage = () => {
           </>
         )}
 
-        {activeTab === "accountContent" && (
+        {account && activeTab === "accountContent" && (
           <div>
-            <h2>Содержание аккаунта</h2>
-            <p>Здесь будет содержание аккаунта...</p>
+            <label
+              htmlFor=""
+              className="label-input"
+              style={{ fontSize: "16px" }}
+            >
+              Добавление костюма по параметрам
+            </label>
+            <br />
+            <br />
+            <input
+              type="text"
+              className="auth__input"
+              style={{ width: "1400px" }}
+              placeholder="Поиск..."
+            />
+
+            <div className="all-costumes">
+              <div className="costume">
+                <h3>Костюмы SS</h3>
+
+                <div className="costs">
+                  <input
+                    type="text"
+                    className="auth__input"
+                    placeholder="Ссылка на костюм..."
+                    name="costume"
+                    onChange={handleInputCostumeChange}
+                  />
+                  <br />
+                  <button className="auth-btn" onClick={handleCostumeSubmit}>
+                    Отправить
+                  </button>
+                  <div className="costume-images"></div>
+                </div>
+              </div>
+
+              <div className="costume">
+                <h3>Костюмы S</h3>
+                <div className="costs">
+                  <input
+                    type="text"
+                    className="auth__input"
+                    placeholder="Ссылка на костюм..."
+                    name="costume"
+                    onChange={handleInputCostumeChange}
+                  />
+                  <br />
+                  <button className="auth-btn" onClick={handleCostumeSubmit}>
+                    Отправить
+                  </button>
+                  <div className="costume-images"></div>
+                </div>
+              </div>
+
+              <div className="costume">
+                <h3>Костюмы A</h3>
+                <div className="costs">
+                  <input
+                    type="text"
+                    className="auth__input"
+                    placeholder="Ссылка на костюм..."
+                    name="costume"
+                    onChange={handleInputCostumeChange}
+                  />
+                  <br />
+                  <button className="auth-btn" onClick={handleCostumeSubmit}>
+                    Отправить
+                  </button>
+                  <div className="costume-images"></div>
+                </div>
+              </div>
+            </div>
           </div>
         )}
       </div>

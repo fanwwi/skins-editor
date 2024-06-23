@@ -435,3 +435,27 @@ select {
   padding: 5px 10px;
   margin-top: 5px;
 }
+
+/*! costumes  */
+
+.all-costumes {
+  display: flex;
+  flex-direction: column;
+  gap: 50px;
+  margin-top: 50px;
+  margin-bottom: 50px;
+}
+
+.costume {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  border: 1px solid #000;
+  padding: 20px;
+}
+
+.costs {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}

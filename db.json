@@ -33,5 +33,12 @@
       "author": "\"1718361546427\""
     }
   ],
-  "details": []
+  "details": [],
+  "costumes": [
+    {
+      "costume": "https://i.pinimg.com/originals/dc/f3/2b/dcf32bcdfe204bfe62ba6f35f668bd0a.png",
+      "author": "1",
+      "id": 1
+    }
+  ]
 }

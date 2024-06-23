@@ -53,3 +53,8 @@ export type DetailsType = {
   unlockA: string;
   author: string;
 };
+
+export type CostumesType = {
+  costume: string;
+  author: string;
+};
