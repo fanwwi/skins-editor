@@ -174,12 +174,12 @@ export const addCostume = createAsyncThunk(
   }: {
     data: CostumesType;
     navigate: (path: string) => void;
-    id: string
+    id: string;
   }) => {
     const newData = {
       costume: data.costume,
       author: id,
-      category: data.category
+      category: data.category,
     };
 
     try {
@@ -206,6 +206,24 @@ export const getCostume = createAsyncThunk(
       return filteredCostumes;
     } catch (error) {
       console.log(error);
+    }
+  }
+);
+
+export const deleteOneCostume = createAsyncThunk(
+  "accounts/deleteAccount",
+  async (id: string, { rejectWithValue }) => {
+    try {
+      await axios.delete(`http://localhost:8000/costumes/${id}`);
+      window.location.reload();
+      return id;
+    } catch (error) {
+      console.error(error);
+      if (axios.isAxiosError(error) && error.response) {
+        return rejectWithValue(error.response.data);
+      } else {
+        return rejectWithValue("Ошибка удаления костюма!");
+      }
     }
   }
 );
