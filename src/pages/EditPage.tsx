@@ -38,9 +38,13 @@ const EditPage = () => {
   const [transferState, setTransferState] = useState(null);
   const [emailState, setEmailState] = useState(null);
 
+  const { allCostumes } = useAppSelector((state) => state.accounts);
+
   const [costumes, setCostumes] = useState<CostumesType>({
-    author: account? account!.id : "",
+    author: account ? account!.id : "",
     costume: "",
+    category: "",
+    id: "",
   });
   const [newData, setNewData] = useState<DetailsType>({
     owners: "",
@@ -103,12 +107,16 @@ const EditPage = () => {
 
   const handleCostumeSubmit = async () => {
     if (costumes) {
-      await dispatch(addCostume({ data: costumes, navigate }));
+      await dispatch(
+        addCostume({ data: costumes, navigate, id: account!.id })
+      );
     }
 
     setCostumes({
       author: account!.id,
       costume: "",
+      category: "",
+      id: "",
     });
     window.location.reload();
   };
@@ -488,59 +496,35 @@ const EditPage = () => {
             />
 
             <div className="all-costumes">
-              <div className="costume">
-                <h3>Костюмы SS</h3>
-
-                <div className="costs">
-                  <input
-                    type="text"
-                    className="auth__input"
-                    placeholder="Ссылка на костюм..."
-                    name="costume"
-                    onChange={handleInputCostumeChange}
-                  />
-                  <br />
-                  <button className="auth-btn" onClick={handleCostumeSubmit}>
-                    Отправить
-                  </button>
-                  <div className="costume-images"></div>
-                </div>
+              <div className="input-block">
+                <h2>Все костюмы</h2>
+                <input
+                  type="text"
+                  className="auth__input"
+                  value={costumes.costume}
+                  name="costume"
+                  onChange={handleInputCostumeChange}
+                  placeholder="Ссылка на изображение..."
+                />
+                <input
+                  type="text"
+                  name="category"
+                  className="auth__input"
+                  value={costumes.category}
+                  onChange={handleInputCostumeChange}
+                  placeholder="Категория"
+                />
+                <button className="auth-btn" onClick={handleCostumeSubmit}>
+                  Добавить костюм
+                </button>
               </div>
-
-              <div className="costume">
-                <h3>Костюмы S</h3>
-                <div className="costs">
-                  <input
-                    type="text"
-                    className="auth__input"
-                    placeholder="Ссылка на костюм..."
-                    name="costume"
-                    onChange={handleInputCostumeChange}
-                  />
-                  <br />
-                  <button className="auth-btn" onClick={handleCostumeSubmit}>
-                    Отправить
-                  </button>
-                  <div className="costume-images"></div>
-                </div>
-              </div>
-
-              <div className="costume">
-                <h3>Костюмы A</h3>
-                <div className="costs">
-                  <input
-                    type="text"
-                    className="auth__input"
-                    placeholder="Ссылка на костюм..."
-                    name="costume"
-                    onChange={handleInputCostumeChange}
-                  />
-                  <br />
-                  <button className="auth-btn" onClick={handleCostumeSubmit}>
-                    Отправить
-                  </button>
-                  <div className="costume-images"></div>
-                </div>
+              <div className="costumes">
+                {allCostumes?.map((costume: CostumesType) => (
+                  <div className="one-costume" key={costume.id}>
+                    <img src={costume.costume} alt="" />
+                    <span>{costume.category}</span>
+                  </div>
+                ))}
               </div>
             </div>
           </div>

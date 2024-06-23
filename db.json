@@ -38,7 +38,20 @@
     {
       "costume": "https://i.pinimg.com/originals/dc/f3/2b/dcf32bcdfe204bfe62ba6f35f668bd0a.png",
       "author": "1",
+      "category": "ss",
       "id": 1
+    },
+    {
+      "costume": "https://i.pinimg.com/originals/dc/f3/2b/dcf32bcdfe204bfe62ba6f35f668bd0a.png",
+      "author": "1",
+      "category": "ss",
+      "id": 2
+    },
+    {
+      "costume": "https://i.pinimg.com/originals/dc/f3/2b/dcf32bcdfe204bfe62ba6f35f668bd0a.png",
+      "author": "1",
+      "category": "S",
+      "id": 3
     }
   ]
 }

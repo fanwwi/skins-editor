@@ -169,14 +169,17 @@ export const addCostume = createAsyncThunk(
   "account/addCostume",
   async ({
     data,
+    id,
     navigate,
   }: {
     data: CostumesType;
     navigate: (path: string) => void;
+    id: string
   }) => {
     const newData = {
       costume: data.costume,
-      author: data.author,
+      author: id,
+      category: data.category
     };
 
     try {

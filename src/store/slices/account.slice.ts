@@ -13,7 +13,7 @@ type StatesType = {
   allAccounts: AccountType[] | null;
   account: AccountType | null;
   details: DetailsType | null;
-  costume: [] | null;
+  allCostumes: [] | null;
 };
 
 const INIT_STATE: StatesType = {
@@ -22,7 +22,7 @@ const INIT_STATE: StatesType = {
   allAccounts: null,
   account: null,
   details: null,
-  costume: null,
+  allCostumes: null,
 };
 
 export const accountsSlice = createSlice({
@@ -74,7 +74,7 @@ export const accountsSlice = createSlice({
       .addCase(getCostume.fulfilled, (state, action) => {
         state.loading = false;
         state.error = null;
-        state.costume = action.payload;
+        state.allCostumes = action.payload;
       })
       .addCase(getCostume.rejected, (state, action) => {
         state.loading = false;

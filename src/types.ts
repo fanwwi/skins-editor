@@ -57,4 +57,6 @@ export type DetailsType = {
 export type CostumesType = {
   costume: string;
   author: string;
+  category: string
+  id: string
 };
