@@ -16,6 +16,7 @@ import iconCircle from "../img/small-circle-icon.png";
 import iconPazzle from "../img/small-pazzle-icon.png";
 import iconBrilliant from "../img/small-brilliant-icon.png";
 import { AccountChange, CostumesType, DetailsType } from "../types";
+import del from "../img/delete-icon.png"
 
 const EditPage = () => {
   const id = localStorage.getItem("currentUser")?.replace(/"/g, "");
@@ -523,6 +524,7 @@ const EditPage = () => {
                   <div className="one-costume" key={costume.id}>
                     <img src={costume.costume} alt="" />
                     <span>{costume.category}</span>
+                    <img src={del} alt="" className="delete" style={{height: "20px"}} />
                   </div>
                 ))}
               </div>
