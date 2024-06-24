@@ -13,7 +13,7 @@ type StatesType = {
   allAccounts: AccountType[] | null;
   account: AccountType | null;
   details: DetailsType | null;
-  allCostumes: [] | null;
+  allCostumes: CostumesType[] | null;
 };
 
 const INIT_STATE: StatesType = {
