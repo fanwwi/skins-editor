@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { ChangeEvent, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import logo from "../img/logo.png";
 import { Link, useParams } from "react-router-dom";
@@ -18,6 +18,7 @@ import iconPazzle from "../img/small-pazzle-icon.png";
 import iconBrilliant from "../img/small-brilliant-icon.png";
 import { AccountChange, CostumesType, DetailsType } from "../types";
 import del from "../img/delete-icon.png";
+import { getCurrentUser } from "../store/actions/user.action";
 
 const EditPage = () => {
   const id = localStorage.getItem("currentUser")?.replace(/"/g, "");
@@ -215,6 +216,37 @@ const EditPage = () => {
     }
   };
 
+  const [isActive, setIsActive] = useState(false);
+  const [searchData, setSearchData] = useState("");
+
+  useEffect(() => {
+    if (id) {
+      dispatch(getCurrentUser(id));
+    }
+    if (account) {
+      dispatch(getCostume(account));
+    }
+  }, [dispatch]);
+
+  const searchValueChange = (event: ChangeEvent<HTMLInputElement>) => {
+    setSearchData(event.target.value);
+  };
+
+  const handleFocus = () => {
+    setIsActive(true);
+  };
+
+  const handleBlur = () => {
+    setIsActive(false);
+  };
+  const filteredCostumes = allCostumes
+    ? allCostumes.filter((costume) =>
+        costume.category.toLowerCase().includes(searchData.toLowerCase())
+      )
+    : [];
+
+  const hasResults = filteredCostumes.length > 0 && searchData.trim() !== "";
+
   return (
     <div>
       <div
@@ -226,18 +258,11 @@ const EditPage = () => {
       >
         <div className="profile-left">
           <img src={logo} alt="" style={{ width: "70px" }} />
-          <Link
-            to={`/${id}/profile`}
-            style={{ fontSize: "18px", color: "#6232ff" }}
-          >
+          <Link to={`/${id}/profile`} style={{ fontSize: "18px", color: "#6232ff" }}>
             Мои аккаунты
           </Link>
         </div>
-        <img
-          src={userIcon}
-          alt="userIcon"
-          style={{ width: "70px", cursor: "pointer" }}
-        />
+        <img src={userIcon} alt="userIcon" style={{ width: "70px", cursor: "pointer" }} />
       </div>
       <hr />
       <div className="container">
@@ -248,9 +273,7 @@ const EditPage = () => {
                 {!isEditing ? (
                   <h2>
                     Детали аккаунта -{" "}
-                    <span className="blue-text">
-                      {gameAccount || "Ошибка сети"}
-                    </span>
+                    <span className="blue-text">{gameAccount || "Ошибка сети"}</span>
                   </h2>
                 ) : (
                   <h2>
@@ -303,9 +326,7 @@ const EditPage = () => {
               )}
             </div>
           </div>
-          <div className="visual-card">
-            Создать визуальную карточку аккаунта
-          </div>
+          <div className="visual-card">Создать визуальную карточку аккаунта</div>
         </div>
         <div className="main-header">
           <div
@@ -362,15 +383,9 @@ const EditPage = () => {
                   <div className="block-left">
                     <div
                       className={`toggle-container ${
-                        transferState === null
-                          ? "null"
-                          : transferState
-                          ? "true"
-                          : "false"
+                        transferState === null ? "null" : transferState ? "true" : "false"
                       }`}
-                      onClick={() =>
-                        toggleState(transferState, setTransferState)
-                      }
+                      onClick={() => toggleState(transferState, setTransferState)}
                     >
                       <div className="toggle-circle" />
                     </div>
@@ -383,11 +398,7 @@ const EditPage = () => {
                   <div className="block-left">
                     <div
                       className={`toggle-container ${
-                        emailState === null
-                          ? "null"
-                          : emailState
-                          ? "true"
-                          : "false"
+                        emailState === null ? "null" : emailState ? "true" : "false"
                       }`}
                       onClick={() => toggleState(emailState, setEmailState)}
                     >
@@ -489,11 +500,7 @@ const EditPage = () => {
 
         {account && activeTab === "accountContent" && (
           <div>
-            <label
-              htmlFor=""
-              className="label-input"
-              style={{ fontSize: "16px" }}
-            >
+            <label htmlFor="" className="label-input" style={{ fontSize: "16px" }}>
               Добавление костюма по параметрам
             </label>
             <br />
@@ -501,9 +508,22 @@ const EditPage = () => {
             <input
               type="text"
               className="auth__input"
+              value={searchData}
+              onChange={searchValueChange}
+              placeholder="Search..."
               style={{ width: "1400px" }}
-              placeholder="Поиск..."
             />
+
+            {hasResults ? (
+              filteredCostumes.map((item) => (
+                <div key={item.id} className="costumes__search__modal">
+                  <img src={item.costume} alt={`Costume ${item.id}`} />
+                  <h6>{item.category}</h6>
+                </div>
+              ))
+            ) : (
+              <h4>No results found</h4>
+            )}
 
             <div className="all-costumes">
               <div className="input-block">
