@@ -210,6 +210,15 @@ export const getCostume = createAsyncThunk(
   }
 );
 
+export const getChars = createAsyncThunk("account/getChars", async () => {
+  try {
+    const { data } = await axios.get("http://localhost:8000/characters");
+    return data;
+  } catch (error) {
+    console.log(error);
+  }
+});
+
 export const deleteOneCostume = createAsyncThunk(
   "accounts/deleteAccount",
   async (id: string, { rejectWithValue }) => {

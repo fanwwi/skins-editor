@@ -57,6 +57,11 @@ export type DetailsType = {
 export type CostumesType = {
   costume: string;
   author: string;
-  category: string
-  id: string
+  category: string;
+  id: string;
+};
+
+export type CharactersType = {
+  name: string;
+  id: string;
 };

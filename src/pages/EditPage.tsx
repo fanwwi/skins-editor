@@ -19,6 +19,8 @@ import iconBrilliant from "../img/small-brilliant-icon.png";
 import { AccountChange, CostumesType, DetailsType } from "../types";
 import del from "../img/delete-icon.png";
 import { getCurrentUser } from "../store/actions/user.action";
+import axios from "axios";
+import Modal from "../components/Modal";
 
 const EditPage = () => {
   const id = localStorage.getItem("currentUser")?.replace(/"/g, "");
@@ -33,6 +35,13 @@ const EditPage = () => {
   const [gameAccount, setGameAccount] = useState("");
   const { account } = useAppSelector((state) => state.accounts);
   const { details } = useAppSelector((state) => state.accounts);
+  const { allCostumes } = useAppSelector((state) => state.accounts);
+  const { allChars } = useAppSelector((state) => state.accounts);
+
+  const [searchQuery, setSearchQuery] = useState<string>("");
+  const [foundCostumes, setFoundCostumes] = useState<any[]>([]);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [filteredCostumes, setFilteredCostumes] = useState<CostumesType[]>([]);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
@@ -40,8 +49,6 @@ const EditPage = () => {
   const [dmmState, setDmmState] = useState(null);
   const [transferState, setTransferState] = useState(null);
   const [emailState, setEmailState] = useState(null);
-
-  const { allCostumes } = useAppSelector((state) => state.accounts);
 
   const [costumes, setCostumes] = useState<CostumesType>({
     author: account ? account!.id : "",
@@ -215,37 +222,38 @@ const EditPage = () => {
         });
     }
   };
-
-  const [isActive, setIsActive] = useState(false);
-  const [searchData, setSearchData] = useState("");
-
   useEffect(() => {
     if (id) {
       dispatch(getCurrentUser(id));
     }
-    if (account) {
-      dispatch(getCostume(account));
-    }
   }, [dispatch]);
 
-  const searchValueChange = (event: ChangeEvent<HTMLInputElement>) => {
-    setSearchData(event.target.value);
-  };
+  const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const { value } = event.target;
+    setSearchQuery(value);
 
-  const handleFocus = () => {
-    setIsActive(true);
-  };
+    if (value) {
+      const character = allChars?.find(
+        (char) => char.name.toLowerCase() === value.toLowerCase()
+      );
 
-  const handleBlur = () => {
-    setIsActive(false);
+      if (character) {
+        const filteredCostumes = allCostumes
+          ? allCostumes.filter(
+              (costume: CostumesType) => costume.author === character.name
+            )
+          : [];
+        setFilteredCostumes(filteredCostumes);
+        setIsModalOpen(true); // Open the modal
+      } else {
+        setFilteredCostumes([]);
+        setIsModalOpen(false); // Close the modal if no character is found
+      }
+    } else {
+      setFilteredCostumes([]);
+      setIsModalOpen(false); // Close the modal if the search query is empty
+    }
   };
-  const filteredCostumes = allCostumes
-    ? allCostumes.filter((costume) =>
-        costume.category.toLowerCase().includes(searchData.toLowerCase())
-      )
-    : [];
-
-  const hasResults = filteredCostumes.length > 0 && searchData.trim() !== "";
 
   return (
     <div>
@@ -258,11 +266,18 @@ const EditPage = () => {
       >
         <div className="profile-left">
           <img src={logo} alt="" style={{ width: "70px" }} />
-          <Link to={`/${id}/profile`} style={{ fontSize: "18px", color: "#6232ff" }}>
+          <Link
+            to={`/${id}/profile`}
+            style={{ fontSize: "18px", color: "#6232ff" }}
+          >
             Мои аккаунты
           </Link>
         </div>
-        <img src={userIcon} alt="userIcon" style={{ width: "70px", cursor: "pointer" }} />
+        <img
+          src={userIcon}
+          alt="userIcon"
+          style={{ width: "70px", cursor: "pointer" }}
+        />
       </div>
       <hr />
       <div className="container">
@@ -273,7 +288,9 @@ const EditPage = () => {
                 {!isEditing ? (
                   <h2>
                     Детали аккаунта -{" "}
-                    <span className="blue-text">{gameAccount || "Ошибка сети"}</span>
+                    <span className="blue-text">
+                      {gameAccount || "Ошибка сети"}
+                    </span>
                   </h2>
                 ) : (
                   <h2>
@@ -326,7 +343,9 @@ const EditPage = () => {
               )}
             </div>
           </div>
-          <div className="visual-card">Создать визуальную карточку аккаунта</div>
+          <div className="visual-card">
+            Создать визуальную карточку аккаунта
+          </div>
         </div>
         <div className="main-header">
           <div
@@ -383,9 +402,15 @@ const EditPage = () => {
                   <div className="block-left">
                     <div
                       className={`toggle-container ${
-                        transferState === null ? "null" : transferState ? "true" : "false"
+                        transferState === null
+                          ? "null"
+                          : transferState
+                          ? "true"
+                          : "false"
                       }`}
-                      onClick={() => toggleState(transferState, setTransferState)}
+                      onClick={() =>
+                        toggleState(transferState, setTransferState)
+                      }
                     >
                       <div className="toggle-circle" />
                     </div>
@@ -398,7 +423,11 @@ const EditPage = () => {
                   <div className="block-left">
                     <div
                       className={`toggle-container ${
-                        emailState === null ? "null" : emailState ? "true" : "false"
+                        emailState === null
+                          ? "null"
+                          : emailState
+                          ? "true"
+                          : "false"
                       }`}
                       onClick={() => toggleState(emailState, setEmailState)}
                     >
@@ -500,7 +529,11 @@ const EditPage = () => {
 
         {account && activeTab === "accountContent" && (
           <div>
-            <label htmlFor="" className="label-input" style={{ fontSize: "16px" }}>
+            <label
+              htmlFor=""
+              className="label-input"
+              style={{ fontSize: "16px" }}
+            >
               Добавление костюма по параметрам
             </label>
             <br />
@@ -508,23 +541,25 @@ const EditPage = () => {
             <input
               type="text"
               className="auth__input"
-              value={searchData}
-              onChange={searchValueChange}
+              value={searchQuery}
+              onChange={handleSearch}
               placeholder="Search..."
               style={{ width: "1400px" }}
             />
 
-            {hasResults ? (
-              filteredCostumes.map((item) => (
-                <div key={item.id} className="costumes__search__modal">
-                  <img src={item.costume} alt={`Costume ${item.id}`} />
-                  <h6>{item.category}</h6>
-                </div>
-              ))
-            ) : (
-              <h4>No results found</h4>
-            )}
-
+            <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
+              <div className="search-results">
+                <h2>Found Costumes</h2>
+                <ul>
+                  {filteredCostumes.map((costume: CostumesType) => (
+                    <li key={costume.id}>
+                      <img src={costume.costume} alt={costume.author} />
+                      <p>{costume.category}</p>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </Modal>
             <div className="all-costumes">
               <div className="input-block">
                 <h2>Все костюмы</h2>

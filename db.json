@@ -37,21 +37,39 @@
   "costumes": [
     {
       "costume": "https://i.pinimg.com/originals/dc/f3/2b/dcf32bcdfe204bfe62ba6f35f668bd0a.png",
-      "author": "1",
-      "category": "ss",
-      "id": 2
+      "author": "Егерь",
+      "category": "SS",
+      "id": 1
     },
     {
       "costume": "https://i.pinimg.com/originals/dc/f3/2b/dcf32bcdfe204bfe62ba6f35f668bd0a.png",
-      "author": "1",
+      "author": "Егерь",
+      "category": "SS",
+      "id": 1
+    },
+    {
+      "costume": "https://i.pinimg.com/originals/dc/f3/2b/dcf32bcdfe204bfe62ba6f35f668bd0a.png",
+      "author": "Егерь",
+      "category": "SS",
+      "id": 1
+    },
+    {
+      "costume": "https://i.pinimg.com/originals/dc/f3/2b/dcf32bcdfe204bfe62ba6f35f668bd0a.png",
+      "author": "Егерь",
+      "category": "SS",
+      "id": 1
+    },
+    {
+      "costume": "https://freefiremobile-a.akamaihd.net/common/web_event/official2.ff.garena.all/img/20228/6188da437e7431dd5deec6daa07325db.png",
+      "author": "Воин",
       "category": "S",
-      "id": 3
-    },
+      "id": 2
+    }
+  ],
+  "characters": [
     {
-      "costume": "https://i.pinimg.com/originals/dc/f3/2b/dcf32bcdfe204bfe62ba6f35f668bd0a.png",
-      "author": "2bd7",
-      "category": "Тварь на поиске",
-      "id": 3
+      "name": "Егерь",
+      "id": 1
     }
   ]
 }
