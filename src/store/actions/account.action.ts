@@ -196,14 +196,10 @@ export const addCostume = createAsyncThunk(
 
 export const getCostume = createAsyncThunk(
   "accounts/getCostume",
-  async (account: AccountType) => {
+  async () => {
     try {
-      const author = account.id;
       const response = await axios.get("http://localhost:8000/costumes");
-      const filteredCostumes = response.data.filter(
-        (costume: any) => costume.author === author
-      );
-      return filteredCostumes;
+      return response.data;
     } catch (error) {
       console.log(error);
     }

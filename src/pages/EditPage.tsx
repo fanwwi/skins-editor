@@ -16,16 +16,9 @@ import {
 import iconCircle from "../img/small-circle-icon.png";
 import iconPazzle from "../img/small-pazzle-icon.png";
 import iconBrilliant from "../img/small-brilliant-icon.png";
-import {
-  AccountChange,
-  CharactersType,
-  CostumesType,
-  DetailsType,
-} from "../types";
+import { AccountChange, CostumesType, DetailsType } from "../types";
 import del from "../img/delete-icon.png";
 import { getCurrentUser } from "../store/actions/user.action";
-import axios from "axios";
-import Modal from "../components/Modal";
 
 const EditPage = () => {
   const id = localStorage.getItem("currentUser")?.replace(/"/g, "");
@@ -40,13 +33,6 @@ const EditPage = () => {
   const [gameAccount, setGameAccount] = useState("");
   const { account } = useAppSelector((state) => state.accounts);
   const { details } = useAppSelector((state) => state.accounts);
-  const { allCostumes } = useAppSelector((state) => state.accounts);
-  const { allChars } = useAppSelector((state) => state.accounts);
-
-  const [searchQuery, setSearchQuery] = useState<string>("");
-  const [foundCostumes, setFoundCostumes] = useState<any[]>([]);
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [filteredCostumes, setFilteredCostumes] = useState<CostumesType[]>([]);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
@@ -54,6 +40,8 @@ const EditPage = () => {
   const [dmmState, setDmmState] = useState(null);
   const [transferState, setTransferState] = useState(null);
   const [emailState, setEmailState] = useState(null);
+
+  const { allCostumes } = useAppSelector((state) => state.accounts);
 
   const [costumes, setCostumes] = useState<CostumesType>({
     author: account ? account!.id : "",
@@ -136,7 +124,7 @@ const EditPage = () => {
 
   useEffect(() => {
     if (account) {
-      dispatch(getCostume(account));
+      dispatch(getCostume());
     }
   }, [dispatch, account]);
 
@@ -227,40 +215,50 @@ const EditPage = () => {
         });
     }
   };
+
+  const [isActive, setIsActive] = useState(false);
+  const [searchData, setSearchData] = useState("");
+
   useEffect(() => {
     if (id) {
       dispatch(getCurrentUser(id));
     }
+    if (account) {
+      dispatch(getCostume());
+    }
   }, [dispatch]);
 
-  const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const { value } = event.target;
-    setSearchQuery(value);
-    console.log(value);
+  const searchValueChange = (event: ChangeEvent<HTMLInputElement>) => {
+    setSearchData(event.target.value);
+  };
 
-    if (value) {
-      const character = allChars?.filter(
-        (char) => char.name.toLowerCase() === value.toLowerCase()
-      );
+  const handleFocus = () => {
+    setIsActive(true);
+  };
 
-      const charName: any = allChars?.filter((char) => char.name);
+  const handleBlur = () => {
+    setIsActive(false);
+  };
+  const filteredCostumes = allCostumes
+    ? allCostumes.filter((costume) =>
+        costume.author.toLowerCase().includes(searchData.toLowerCase())
+      )
+    : [];
 
-      if (character) {
-        const filteredCostumes = allCostumes
-          ? allCostumes.filter(
-              (costume: CostumesType) => costume.author === charName
-            )
-          : [];
-        setFilteredCostumes(filteredCostumes);
-        setIsModalOpen(true);
-      } else {
-        setFilteredCostumes([]);
-        setIsModalOpen(false);
-      }
-    } else {
-      setFilteredCostumes([]);
-      setIsModalOpen(false);
-    }
+  const hasResults = filteredCostumes.length > 0 && searchData.trim() !== "";
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+  };
+  const [inputStyle, setInputStyle] = useState({});
+
+  const handleInputClick = () => {
+    setIsModalOpen(true);
+    setInputStyle({
+      display: "none",
+    });
   };
 
   return (
@@ -537,61 +535,69 @@ const EditPage = () => {
 
         {account && activeTab === "accountContent" && (
           <div>
-            <label
-              htmlFor=""
-              className="label-input"
-              style={{ fontSize: "16px" }}
-            >
-              Добавление костюма по параметрам
-            </label>
-            <br />
-            <br />
-            <input
-              type="text"
-              className="auth__input"
-              value={searchQuery}
-              onChange={handleSearch}
-              placeholder="Search..."
-              style={{ width: "1400px" }}
-            />
+            {!isModalOpen && (
+              <>
+                <label
+                  htmlFor=""
+                  className="label-input"
+                  style={{ fontSize: "16px" }}
+                >
+                  Добавление костюма по параметрам
+                </label>
+                <br />
+                <br />
+                <input
+                  type="text"
+                  className="auth__input"
+                  value={searchData}
+                  onChange={searchValueChange}
+                  placeholder="Search..."
+                  style={{ width: "1400px" }}
+                  onClick={handleInputClick}
+                />
+              </>
+            )}
 
-            <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
-              <div className="search-results">
-                <h2>Found Costumes</h2>
-                <ul>
-                  {filteredCostumes.map((costume: CostumesType) => (
-                    <li key={costume.id}>
-                      <img src={costume.costume} alt={costume.author} />
-                      <p>{costume.category}</p>
-                    </li>
-                  ))}
-                </ul>
+            {isModalOpen && (
+              <div className="modal-overlay" onClick={handleCloseModal}>
+                <div className="modal">
+                  <div
+                    className="modal-content"
+                    onClick={(e) => e.stopPropagation()}
+                  >
+                    <input
+                      type="text"
+                      className="auth__input"
+                      value={searchData}
+                      onChange={searchValueChange}
+                      placeholder="Поиск..."
+                      onClick={(e) => e.stopPropagation()}
+                      id="search"
+                    />
+                  </div>
+                  <div className="results">
+                    {hasResults
+                      ? filteredCostumes.map((item) => (
+                          <div key={item.id} className="cost">
+                            <img
+                              src={item.costume}
+                              alt={`Costume ${item.id}`}
+                            />
+                            <span>Персонаж: {item.author}</span>
+                            <p>Категория: {item.category}</p>
+                          </div>
+                        ))
+                      : ""}
+                  </div>
+                </div>
               </div>
-            </Modal>
+            )}
+
             <div className="all-costumes">
               <div className="input-block">
-                <h2>Все костюмы</h2>
-                <input
-                  type="text"
-                  className="auth__input"
-                  value={costumes.costume}
-                  name="costume"
-                  onChange={handleInputCostumeChange}
-                  placeholder="Ссылка на изображение..."
-                />
-                <input
-                  type="text"
-                  name="category"
-                  className="auth__input"
-                  value={costumes.category}
-                  onChange={handleInputCostumeChange}
-                  placeholder="Категория"
-                />
-                <button className="auth-btn" onClick={handleCostumeSubmit}>
-                  Добавить костюм
-                </button>
+                <h2>Ваши костюмы:</h2>
               </div>
-              <div className="costumes">
+              {/* <div className="costumes">
                 {allCostumes?.map((costume: CostumesType) => (
                   <div className="one-costume" key={costume.id}>
                     <img src={costume.costume} alt="" />
@@ -605,7 +611,7 @@ const EditPage = () => {
                     />
                   </div>
                 ))}
-              </div>
+              </div> */}
             </div>
           </div>
         )}
