@@ -16,7 +16,12 @@ import {
 import iconCircle from "../img/small-circle-icon.png";
 import iconPazzle from "../img/small-pazzle-icon.png";
 import iconBrilliant from "../img/small-brilliant-icon.png";
-import { AccountChange, CostumesType, DetailsType } from "../types";
+import {
+  AccountChange,
+  CharactersType,
+  CostumesType,
+  DetailsType,
+} from "../types";
 import del from "../img/delete-icon.png";
 import { getCurrentUser } from "../store/actions/user.action";
 import axios from "axios";
@@ -231,27 +236,30 @@ const EditPage = () => {
   const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = event.target;
     setSearchQuery(value);
+    console.log(value);
 
     if (value) {
-      const character = allChars?.find(
+      const character = allChars?.filter(
         (char) => char.name.toLowerCase() === value.toLowerCase()
       );
+
+      const charName: any = allChars?.filter((char) => char.name);
 
       if (character) {
         const filteredCostumes = allCostumes
           ? allCostumes.filter(
-              (costume: CostumesType) => costume.author === character.name
+              (costume: CostumesType) => costume.author === charName
             )
           : [];
         setFilteredCostumes(filteredCostumes);
-        setIsModalOpen(true); // Open the modal
+        setIsModalOpen(true);
       } else {
         setFilteredCostumes([]);
-        setIsModalOpen(false); // Close the modal if no character is found
+        setIsModalOpen(false);
       }
     } else {
       setFilteredCostumes([]);
-      setIsModalOpen(false); // Close the modal if the search query is empty
+      setIsModalOpen(false);
     }
   };
 
