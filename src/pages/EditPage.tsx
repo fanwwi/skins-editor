@@ -261,7 +261,13 @@ const EditPage = () => {
   };
 
   const [clickedItem, setClickedItem] = useState<CostumesType>();
-  const [selectedItem, setSelectedItem] = useState<CostumesType>();
+  const [selectedItem, setSelectedItem] = useState<CostumesType>({
+    author: "",
+    costume: "",
+    category: "",
+    bigAuthor: "",
+    id: "",
+  });
 
   const handleItemClick = (item: CostumesType) => {
     const selectedItem = {
@@ -624,7 +630,10 @@ const EditPage = () => {
                     src={addCostumeImg}
                     alt=""
                     className="addIcon"
-                    onClick={() => setIsBigModalOpen(true)}
+                    onClick={() => {
+                      setIsBigModalOpen(true);
+                      setSelectedItem({ ...selectedItem, category: "SS" });
+                    }}
                   />
                   {userCostumes
                     ?.filter((cost) => cost.category === "SS")
@@ -652,7 +661,10 @@ const EditPage = () => {
                     src={addCostumeImg}
                     alt=""
                     className="addIcon"
-                    onClick={() => setIsBigModalOpen(true)}
+                    onClick={() => {
+                      setIsBigModalOpen(true);
+                      setSelectedItem({ ...selectedItem, category: "S" });
+                    }}
                   />
                   {userCostumes
                     ?.filter((cost) => cost.category === "S")
@@ -680,7 +692,10 @@ const EditPage = () => {
                     src={addCostumeImg}
                     alt=""
                     className="addIcon"
-                    onClick={() => setIsBigModalOpen(true)}
+                    onClick={() => {
+                      setIsBigModalOpen(true);
+                      setSelectedItem({ ...selectedItem, category: "A" });
+                    }}
                   />
                   {userCostumes
                     ?.filter((cost) => cost.category === "A")
@@ -708,20 +723,24 @@ const EditPage = () => {
       {isBigModalOpen && (
         <div className="modal-overlay" onClick={handleCloseModal}>
           <div className="modal">
-            <h2>Выберите костюм:</h2>
+            <h2>{`Выберите костюм из категории ${selectedItem.category}:`}</h2>
             <div className="results">
               {allCostumes
-                ? allCostumes.map((item) => (
-                    <div
-                      key={item.id}
-                      className="cost"
-                      onClick={() => handleItemClick(item)}
-                    >
-                      <img src={item.costume} alt={`Costume ${item.id}`} />
-                      <span>Персонаж: {item.author}</span>
-                      <p>Категория: {item.category}</p>
-                    </div>
-                  ))
+                ? allCostumes
+                    .filter(
+                      (costume) => costume.category === selectedItem?.category
+                    )
+                    .map((item) => (
+                      <div
+                        key={item.id}
+                        className="cost"
+                        onClick={() => handleItemClick(item)}
+                      >
+                        <img src={item.costume} alt={`Costume ${item.id}`} />
+                        <span>Персонаж: {item.author}</span>
+                        <p>Категория: {item.category}</p>
+                      </div>
+                    ))
                 : ""}
             </div>
           </div>
