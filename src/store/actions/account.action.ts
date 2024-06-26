@@ -165,26 +165,19 @@ export const getAccountDetails = createAsyncThunk(
   }
 );
 
-export const addCostume = createAsyncThunk(
+export const addUserCostume = createAsyncThunk(
   "account/addCostume",
-  async ({
-    data,
-    id,
-    navigate,
-  }: {
-    data: CostumesType;
-    navigate: (path: string) => void;
-    id: string;
-  }) => {
+  async ({ data, id }: { data: CostumesType; id: string }) => {
     const newData = {
       costume: data.costume,
-      author: id,
       category: data.category,
+      author: data.author,
+      bigAuthor: id,
     };
 
     try {
       const { data } = await axios.post(
-        "http://localhost:8000/costumes",
+        "http://localhost:8000/userCostumes",
         newData
       );
       return data;
@@ -194,17 +187,14 @@ export const addCostume = createAsyncThunk(
   }
 );
 
-export const getCostume = createAsyncThunk(
-  "accounts/getCostume",
-  async () => {
-    try {
-      const response = await axios.get("http://localhost:8000/costumes");
-      return response.data;
-    } catch (error) {
-      console.log(error);
-    }
+export const getCostume = createAsyncThunk("accounts/getCostume", async () => {
+  try {
+    const response = await axios.get("http://localhost:8000/costumes");
+    return response.data;
+  } catch (error) {
+    console.log(error);
   }
-);
+});
 
 export const getChars = createAsyncThunk("account/getChars", async () => {
   try {
@@ -229,6 +219,23 @@ export const deleteOneCostume = createAsyncThunk(
       } else {
         return rejectWithValue("Ошибка удаления костюма!");
       }
+    }
+  }
+);
+
+export const getUserCostumes = createAsyncThunk(
+  "account/getUserCostumes",
+  async (accountId: string) => {
+    try {
+      const { data } = await axios.get("http://localhost:8000/userCostumes");
+
+      const filteredData = data.filter((costume: CostumesType) => {
+        return costume.bigAuthor === accountId;
+      });
+      console.log("Отфильтрованные данные:", filteredData);
+      return filteredData;
+    } catch (error) {
+      console.log("Ошибка при получении данных:", error);
     }
   }
 );

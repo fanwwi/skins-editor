@@ -11,6 +11,7 @@ import {
   getChars,
   getCostume,
   getOneAccount,
+  getUserCostumes,
 } from "../actions/account.action";
 
 type StatesType = {
@@ -21,6 +22,7 @@ type StatesType = {
   details: DetailsType | null;
   allCostumes: CostumesType[] | null;
   allChars: CharactersType[] | null;
+  userCostumes: CostumesType[] | null;
 };
 
 const INIT_STATE: StatesType = {
@@ -31,6 +33,7 @@ const INIT_STATE: StatesType = {
   details: null,
   allCostumes: null,
   allChars: null,
+  userCostumes: null,
 };
 
 export const accountsSlice = createSlice({
@@ -96,6 +99,17 @@ export const accountsSlice = createSlice({
         state.allChars = payload;
       })
       .addCase(getChars.rejected, (state) => {
+        state.loading = false;
+        console.log(state.error);
+      })
+      .addCase(getUserCostumes.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(getUserCostumes.fulfilled, (state, { payload }) => {
+        state.loading = true;
+        state.userCostumes = payload;
+      })
+      .addCase(getUserCostumes.rejected, (state) => {
         state.loading = false;
         console.log(state.error);
       });

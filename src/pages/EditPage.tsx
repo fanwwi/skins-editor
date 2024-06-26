@@ -7,10 +7,11 @@ import editIcon from "../img/edit-icon2.png";
 import { useAppDispatch, useAppSelector } from "../store/store";
 import {
   accountDetails,
-  addCostume,
+  addUserCostume,
   deleteOneCostume,
   getCostume,
   getOneAccount,
+  getUserCostumes,
   updateAccount,
 } from "../store/actions/account.action";
 import iconCircle from "../img/small-circle-icon.png";
@@ -19,6 +20,7 @@ import iconBrilliant from "../img/small-brilliant-icon.png";
 import { AccountChange, CostumesType, DetailsType } from "../types";
 import del from "../img/delete-icon.png";
 import { getCurrentUser } from "../store/actions/user.action";
+import addCostumeImg from "../img/add-icon.png";
 
 const EditPage = () => {
   const id = localStorage.getItem("currentUser")?.replace(/"/g, "");
@@ -42,11 +44,13 @@ const EditPage = () => {
   const [emailState, setEmailState] = useState(null);
 
   const { allCostumes } = useAppSelector((state) => state.accounts);
+  const { userCostumes } = useAppSelector((state) => state.accounts);
 
   const [costumes, setCostumes] = useState<CostumesType>({
     author: account ? account!.id : "",
     costume: "",
     category: "",
+    bigAuthor: "",
     id: "",
   });
   const [newData, setNewData] = useState<DetailsType>({
@@ -110,13 +114,13 @@ const EditPage = () => {
 
   const handleCostumeSubmit = async () => {
     if (costumes) {
-      await dispatch(addCostume({ data: costumes, navigate, id: account!.id }));
     }
 
     setCostumes({
       author: account!.id,
       costume: "",
       category: "",
+      bigAuthor: "",
       id: "",
     });
     window.location.reload();
@@ -248,9 +252,12 @@ const EditPage = () => {
   const hasResults = filteredCostumes.length > 0 && searchData.trim() !== "";
 
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isBigModalOpen, setIsBigModalOpen] = useState(false);
 
   const handleCloseModal = () => {
     setIsModalOpen(false);
+    setIsBigModalOpen(false)
+    window.location.reload()
   };
   const [inputStyle, setInputStyle] = useState({});
 
@@ -261,6 +268,27 @@ const EditPage = () => {
     });
   };
 
+  const [clickedItem, setClickedItem] = useState<CostumesType>();
+  const [selectedItem, setSelectedItem] = useState<CostumesType>();
+
+  const handleItemClick = (item: CostumesType) => {
+    const selectedItem = {
+      costume: item.costume,
+      author: item.author,
+      bigAuthor: item.bigAuthor,
+      category: item.category,
+      id: item.id,
+    };
+    dispatch(addUserCostume({ data: selectedItem, id: account!.id }));
+    setClickedItem(selectedItem);
+    console.log(selectedItem);
+  };
+
+  useEffect(() => {
+    if (account) {
+      dispatch(getUserCostumes(account.id));
+    }
+  }, [dispatch, account]);
   return (
     <div>
       <div
@@ -550,7 +578,6 @@ const EditPage = () => {
                   type="text"
                   className="auth__input"
                   value={searchData}
-                  onChange={searchValueChange}
                   placeholder="Search..."
                   style={{ width: "1400px" }}
                   onClick={handleInputClick}
@@ -578,7 +605,11 @@ const EditPage = () => {
                   <div className="results">
                     {hasResults
                       ? filteredCostumes.map((item) => (
-                          <div key={item.id} className="cost">
+                          <div
+                            key={item.id}
+                            className="cost"
+                            onClick={() => handleItemClick(item)}
+                          >
                             <img
                               src={item.costume}
                               alt={`Costume ${item.id}`}
@@ -594,28 +625,58 @@ const EditPage = () => {
             )}
 
             <div className="all-costumes">
-              <div className="input-block">
-                <h2>Ваши костюмы:</h2>
+              <h2>Ваши костюмы:</h2>
+              <div className="costumes">
+                <img
+                  src={addCostumeImg}
+                  alt=""
+                  className="addIcon"
+                  onClick={() => setIsBigModalOpen(true)}
+                />
+                {userCostumes
+                  ?.map((costume) => (
+                    <div key={costume.id} className="one-costume">
+                      <img src={costume.costume} alt="Costume" />
+                      <span>Персонаж: {costume.author}</span>
+                      <p>Категория: {costume.category}</p>
+                      <img
+                        src={del}
+                        className="delete"
+                        alt="Delete"
+                        style={{ height: "30px" }}
+                        onClick={() => handleDeleteAccount(costume.id)}
+                      />
+                    </div>
+                  ))
+                  .reverse()}
               </div>
-              {/* <div className="costumes">
-                {allCostumes?.map((costume: CostumesType) => (
-                  <div className="one-costume" key={costume.id}>
-                    <img src={costume.costume} alt="" />
-                    <span>{costume.category}</span>
-                    <img
-                      src={del}
-                      alt=""
-                      className="delete"
-                      style={{ height: "20px" }}
-                      onClick={() => handleDeleteAccount(costume.id)}
-                    />
-                  </div>
-                ))}
-              </div> */}
             </div>
           </div>
         )}
       </div>
+
+      {isBigModalOpen && (
+        <div className="modal-overlay" onClick={handleCloseModal}>
+          <div className="modal">
+            <h2>Выберите костюм:</h2>
+            <div className="results">
+              {allCostumes
+                ? allCostumes.map((item) => (
+                    <div
+                      key={item.id}
+                      className="cost"
+                      onClick={() => handleItemClick(item)}
+                    >
+                      <img src={item.costume} alt={`Costume ${item.id}`} />
+                      <span>Персонаж: {item.author}</span>
+                      <p>Категория: {item.category}</p>
+                    </div>
+                  ))
+                : ""}
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
