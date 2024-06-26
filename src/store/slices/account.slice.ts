@@ -8,10 +8,14 @@ import {
 import {
   accountDetails,
   getAccounts,
-  getChars,
-  getCostume,
   getOneAccount,
-  getUserCostumes,
+  getUserCostumeS,
+  getUserCostumeSS,
+  getUserCostumeA,
+  getCostumeS,
+  getCostumeSS,
+  getCostumeA,
+  getCostume,
 } from "../actions/account.action";
 
 type StatesType = {
@@ -20,9 +24,13 @@ type StatesType = {
   allAccounts: AccountType[] | null;
   account: AccountType | null;
   details: DetailsType | null;
+  userCostumeS: CostumesType[] | null;
+  userCostumeSS: CostumesType[] | null;
+  userCostumeA: CostumesType[] | null;
+  costumeS: CostumesType[] | null;
+  costumeSS: CostumesType[] | null;
+  costumeA: CostumesType[] | null;
   allCostumes: CostumesType[] | null;
-  allChars: CharactersType[] | null;
-  userCostumes: CostumesType[] | null;
 };
 
 const INIT_STATE: StatesType = {
@@ -31,9 +39,13 @@ const INIT_STATE: StatesType = {
   allAccounts: null,
   account: null,
   details: null,
+  userCostumeS: null,
+  userCostumeSS: null,
+  userCostumeA: null,
+  costumeS: null,
+  costumeSS: null,
+  costumeA: null,
   allCostumes: null,
-  allChars: null,
-  userCostumes: null,
 };
 
 export const accountsSlice = createSlice({
@@ -78,40 +90,89 @@ export const accountsSlice = createSlice({
         state.loading = true;
         state.error = null;
       })
-      .addCase(getCostume.pending, (state) => {
+      .addCase(getCostumeS.fulfilled, (state, action) => {
+        state.loading = false;
+        state.costumeS = action.payload;
+      })
+      .addCase(getCostumeS.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error.message ?? "Ошибка при загрузки аккаунтa";
+      })
+      .addCase(getCostumeS.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(getCostumeSS.fulfilled, (state, action) => {
+        state.loading = false;
+        state.costumeSS = action.payload;
+      })
+      .addCase(getCostumeSS.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error.message ?? "Ошибка при загрузки аккаунтa";
+      })
+      .addCase(getCostumeSS.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(getCostumeA.fulfilled, (state, action) => {
+        state.loading = false;
+        state.costumeA = action.payload;
+      })
+      .addCase(getCostumeA.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error.message ?? "Ошибка при загрузки аккаунтa";
+      })
+      .addCase(getCostumeA.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(getUserCostumeA.fulfilled, (state, action) => {
+        state.loading = false;
+        state.userCostumeA = action.payload;
+      })
+      .addCase(getUserCostumeA.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error.message ?? "Ошибка при загрузки аккаунтa";
+      })
+      .addCase(getUserCostumeA.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(getUserCostumeSS.fulfilled, (state, action) => {
+        state.loading = false;
+        state.userCostumeSS = action.payload;
+      })
+      .addCase(getUserCostumeSS.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error.message ?? "Ошибка при загрузки аккаунтa";
+      })
+      .addCase(getUserCostumeSS.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(getUserCostumeS.fulfilled, (state, action) => {
+        state.loading = false;
+        state.userCostumeS = action.payload;
+      })
+      .addCase(getUserCostumeS.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error.message ?? "Ошибка при загрузки аккаунтa";
+      })
+      .addCase(getUserCostumeS.pending, (state) => {
         state.loading = true;
         state.error = null;
       })
       .addCase(getCostume.fulfilled, (state, action) => {
         state.loading = false;
-        state.error = null;
         state.allCostumes = action.payload;
       })
       .addCase(getCostume.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload as string;
+        state.error = action.error.message ?? "Ошибка при загрузки аккаунтa";
       })
-      .addCase(getChars.pending, (state) => {
+      .addCase(getCostume.pending, (state) => {
         state.loading = true;
-      })
-      .addCase(getChars.fulfilled, (state, { payload }) => {
-        state.loading = true;
-        state.allChars = payload;
-      })
-      .addCase(getChars.rejected, (state) => {
-        state.loading = false;
-        console.log(state.error);
-      })
-      .addCase(getUserCostumes.pending, (state) => {
-        state.loading = true;
-      })
-      .addCase(getUserCostumes.fulfilled, (state, { payload }) => {
-        state.loading = true;
-        state.userCostumes = payload;
-      })
-      .addCase(getUserCostumes.rejected, (state) => {
-        state.loading = false;
-        console.log(state.error);
+        state.error = null;
       });
   },
 });

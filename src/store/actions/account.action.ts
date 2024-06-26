@@ -190,16 +190,37 @@ export const addUserCostume = createAsyncThunk(
 export const getCostume = createAsyncThunk("accounts/getCostume", async () => {
   try {
     const response = await axios.get("http://localhost:8000/costumes");
-    return response.data;
+    return response.data
   } catch (error) {
     console.log(error);
   }
 });
 
-export const getChars = createAsyncThunk("account/getChars", async () => {
+export const getCostumeS = createAsyncThunk("accounts/getCostume", async () => {
   try {
-    const { data } = await axios.get("http://localhost:8000/characters");
-    return data;
+    const response = await axios.get("http://localhost:8000/costume-s");
+    const filteredCostumes = response.data.filter((cost: CostumesType) => cost.category === "S")
+    return filteredCostumes
+  } catch (error) {
+    console.log(error);
+  }
+});
+
+export const getCostumeSS = createAsyncThunk("accounts/getCostume", async () => {
+  try {
+    const response = await axios.get("http://localhost:8000/costume-ss");
+    const filteredCostumes = response.data.filter((cost: CostumesType) => cost.category === "SS")
+    return filteredCostumes
+  } catch (error) {
+    console.log(error);
+  }
+});
+
+export const getCostumeA = createAsyncThunk("accounts/getCostume", async () => {
+  try {
+    const response = await axios.get("http://localhost:8000/costume-a");
+    const filteredCostumes = response.data.filter((cost: CostumesType) => cost.category === "A")
+    return filteredCostumes
   } catch (error) {
     console.log(error);
   }
@@ -209,7 +230,7 @@ export const deleteOneCostume = createAsyncThunk(
   "accounts/deleteAccount",
   async (id: string, { rejectWithValue }) => {
     try {
-      await axios.delete(`http://localhost:8000/costumes/${id}`);
+      await axios.delete(`http://localhost:8000/userCostumes/${id}`);
       window.location.reload();
       return id;
     } catch (error) {
@@ -223,14 +244,48 @@ export const deleteOneCostume = createAsyncThunk(
   }
 );
 
-export const getUserCostumes = createAsyncThunk(
+export const getUserCostumeS = createAsyncThunk(
   "account/getUserCostumes",
   async (accountId: string) => {
     try {
-      const { data } = await axios.get("http://localhost:8000/userCostumes");
+      const { data } = await axios.get("http://localhost:8000/userCostumes-s");
 
       const filteredData = data.filter((costume: CostumesType) => {
-        return costume.bigAuthor === accountId;
+        return costume.bigAuthor === accountId && costume.category === "S"
+      });
+      console.log("Отфильтрованные данные:", filteredData);
+      return filteredData;
+    } catch (error) {
+      console.log("Ошибка при получении данных:", error);
+    }
+  }
+);
+
+export const getUserCostumeSS = createAsyncThunk(
+  "account/getUserCostumes",
+  async (accountId: string) => {
+    try {
+      const { data } = await axios.get("http://localhost:8000/userCostumes-ss");
+
+      const filteredData = data.filter((costume: CostumesType) => {
+        return costume.bigAuthor === accountId && costume.category === "SS";
+      });
+      console.log("Отфильтрованные данные:", filteredData);
+      return filteredData;
+    } catch (error) {
+      console.log("Ошибка при получении данных:", error);
+    }
+  }
+);
+
+export const getUserCostumeA = createAsyncThunk(
+  "account/getUserCostumes",
+  async (accountId: string) => {
+    try {
+      const { data } = await axios.get("http://localhost:8000/userCostumes-a");
+
+      const filteredData = data.filter((costume: CostumesType) => {
+        return costume.bigAuthor === accountId && costume.category === "A";
       });
       console.log("Отфильтрованные данные:", filteredData);
       return filteredData;
