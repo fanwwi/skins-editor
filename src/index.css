@@ -441,34 +441,46 @@ select {
 .all-costumes {
   display: flex;
   flex-direction: column;
-  gap: 50px;
+  gap: 100px;
   margin-bottom: 50px;
   margin-top: 50px;
-  border: 1px solid #000;
-  padding: 30px;
   flex-wrap: wrap;
 }
 .costumes {
   display: flex;
-  flex-wrap: wrap;
-  height: 400px;
+  flex-direction: column;
+  height: 550px;
   overflow: scroll;
   gap: 50px;
+  padding: 30px;
   margin-top: -20px;
   width: 1350px;
+  border: 1px solid #000;
+}
+
+.res {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 50px;
+}
+
+.costumes h2 {
+  font-size: 27px;
 }
 
 .one-costume {
   display: flex;
   flex-direction: column;
   gap: 10px;
+  border: 1px solid #000;
   position: relative;
   height: 340px;
   border: 1px solid #000;
   border-radius: 10px;
-  padding: 10px;
+  padding: 20px;
   margin-bottom: 40px;  
   background-color: #fff;
+  align-items: center;
 }
 
 .one-costume img {
@@ -485,7 +497,7 @@ select {
 
 .addIcon {
   height: 340px;
-  width: 180px;
+  width: 200px;
   border-radius: 10px;
   cursor: pointer;
 }
@@ -553,7 +565,8 @@ select {
   border-radius: 10px;
   cursor: pointer;
   background-color: #fff;
-  height: 340px;
+  height: 320px;
+  align-items: center;
 }
 
 .cost:hover {
@@ -564,7 +577,7 @@ select {
   height: 260px;
   display: block;
   margin-bottom: 10px;
-  width: 150px;
+  width: 180px;
 }
 
 .costumes__search__modal span,

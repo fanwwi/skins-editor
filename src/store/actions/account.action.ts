@@ -180,6 +180,7 @@ export const addUserCostume = createAsyncThunk(
         "http://localhost:8000/userCostumes",
         newData
       );
+      window.location.reload()
       return data;
     } catch (error) {
       console.log(error);
@@ -196,20 +197,12 @@ export const getCostume = createAsyncThunk("accounts/getCostume", async () => {
   }
 });
 
-export const getChars = createAsyncThunk("account/getChars", async () => {
-  try {
-    const { data } = await axios.get("http://localhost:8000/characters");
-    return data;
-  } catch (error) {
-    console.log(error);
-  }
-});
 
 export const deleteOneCostume = createAsyncThunk(
   "accounts/deleteAccount",
   async (id: string, { rejectWithValue }) => {
     try {
-      await axios.delete(`http://localhost:8000/costumes/${id}`);
+      await axios.delete(`http://localhost:8000/userCostumes/${id}`);
       window.location.reload();
       return id;
     } catch (error) {

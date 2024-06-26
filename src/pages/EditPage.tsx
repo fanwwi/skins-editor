@@ -236,13 +236,6 @@ const EditPage = () => {
     setSearchData(event.target.value);
   };
 
-  const handleFocus = () => {
-    setIsActive(true);
-  };
-
-  const handleBlur = () => {
-    setIsActive(false);
-  };
   const filteredCostumes = allCostumes
     ? allCostumes.filter((costume) =>
         costume.author.toLowerCase().includes(searchData.toLowerCase())
@@ -257,7 +250,6 @@ const EditPage = () => {
   const handleCloseModal = () => {
     setIsModalOpen(false);
     setIsBigModalOpen(false);
-    window.location.reload();
   };
   const [inputStyle, setInputStyle] = useState({});
 
@@ -615,7 +607,7 @@ const EditPage = () => {
                               alt={`Costume ${item.id}`}
                             />
                             <span>Персонаж: {item.author}</span>
-                            <p>Категория: {item.category}</p>
+                            <span>Категория: {item.category}</span>
                           </div>
                         ))
                       : ""}
@@ -625,30 +617,88 @@ const EditPage = () => {
             )}
 
             <div className="all-costumes">
-              <h2>Ваши костюмы:</h2>
               <div className="costumes">
-                <img
-                  src={addCostumeImg}
-                  alt=""
-                  className="addIcon"
-                  onClick={() => setIsBigModalOpen(true)}
-                />
-                {userCostumes
-                  ?.map((costume) => (
-                    <div key={costume.id} className="one-costume">
-                      <img src={costume.costume} alt="Costume" />
-                      <span>Персонаж: {costume.author}</span>
-                      <p>Категория: {costume.category}</p>
-                      <img
-                        src={del}
-                        className="delete"
-                        alt="Delete"
-                        style={{ height: "30px" }}
-                        onClick={() => handleDeleteAccount(costume.id)}
-                      />
-                    </div>
-                  ))
-                  .reverse()}
+                <h2>Костюмы SS</h2>
+                <div className="res">
+                  <img
+                    src={addCostumeImg}
+                    alt=""
+                    className="addIcon"
+                    onClick={() => setIsBigModalOpen(true)}
+                  />
+                  {userCostumes
+                    ?.filter((cost) => cost.category === "SS")
+                    ?.map((costume) => (
+                      <div key={costume.id} className="one-costume">
+                        <img src={costume.costume} alt="Costume" />
+                        <span>Персонаж: {costume.author}</span>
+                        <img
+                          src={del}
+                          className="delete"
+                          alt="Delete"
+                          style={{ height: "30px" }}
+                          onClick={() => handleDeleteAccount(costume.id)}
+                        />
+                      </div>
+                    ))
+                    .reverse()}
+                </div>
+              </div>
+
+              <div className="costumes">
+                <h2>Костюмы S</h2>
+                <div className="res">
+                  <img
+                    src={addCostumeImg}
+                    alt=""
+                    className="addIcon"
+                    onClick={() => setIsBigModalOpen(true)}
+                  />
+                  {userCostumes
+                    ?.filter((cost) => cost.category === "S")
+                    ?.map((costume) => (
+                      <div key={costume.id} className="one-costume">
+                        <img src={costume.costume} alt="Costume" />
+                        <span>Персонаж: {costume.author}</span>
+                        <img
+                          src={del}
+                          className="delete"
+                          alt="Delete"
+                          style={{ height: "30px" }}
+                          onClick={() => handleDeleteAccount(costume.id)}
+                        />
+                      </div>
+                    ))
+                    .reverse()}
+                </div>
+              </div>
+
+              <div className="costumes">
+                <h2>Костюмы A</h2>
+                <div className="res">
+                  <img
+                    src={addCostumeImg}
+                    alt=""
+                    className="addIcon"
+                    onClick={() => setIsBigModalOpen(true)}
+                  />
+                  {userCostumes
+                    ?.filter((cost) => cost.category === "A")
+                    ?.map((costume) => (
+                      <div key={costume.id} className="one-costume">
+                        <img src={costume.costume} alt="Costume" />
+                        <span>Персонаж: {costume.author}</span>
+                        <img
+                          src={del}
+                          className="delete"
+                          alt="Delete"
+                          style={{ height: "30px" }}
+                          onClick={() => handleDeleteAccount(costume.id)}
+                        />
+                      </div>
+                    ))
+                    .reverse()}
+                </div>
               </div>
             </div>
           </div>
