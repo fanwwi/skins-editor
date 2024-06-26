@@ -256,8 +256,8 @@ const EditPage = () => {
 
   const handleCloseModal = () => {
     setIsModalOpen(false);
-    setIsBigModalOpen(false)
-    window.location.reload()
+    setIsBigModalOpen(false);
+    window.location.reload();
   };
   const [inputStyle, setInputStyle] = useState({});
 
