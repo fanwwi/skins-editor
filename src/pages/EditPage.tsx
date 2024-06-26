@@ -376,7 +376,9 @@ const EditPage = () => {
             </div>
           </div>
           <div className="visual-card">
-            Создать визуальную карточку аккаунта
+            <Link to={`/editor/${account?.id}`} style={{all: "unset"}}>
+              Создать визуальную карточку аккаунта
+            </Link>
           </div>
         </div>
         <div className="main-header">

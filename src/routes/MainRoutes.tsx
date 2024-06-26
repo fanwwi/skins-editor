@@ -13,6 +13,7 @@ import AccountActivate from "../pages/AccountActivate";
 import AddPage from "../pages/AddPage";
 import Settings from "../pages/Settings";
 import EditPage from "../pages/EditPage";
+import Editor from "../pages/EditorPage";
 
 const MainRoutes = () => {
   return (
@@ -29,6 +30,7 @@ const MainRoutes = () => {
       <Route path="/account/activate" element={<AccountActivate />} />
       <Route path="/add-page/add-account" element={<AddPage />} />
       <Route path="/edit/:accountId" element={<EditPage />} />
+      <Route path="/editor/:id" element={<Editor />} />
       <Route path="/*" element={<NotFoundPage />} />
     </Routes>
   );

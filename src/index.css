@@ -478,7 +478,7 @@ select {
   border: 1px solid #000;
   border-radius: 10px;
   padding: 20px;
-  margin-bottom: 40px;  
+  margin-bottom: 40px;
   background-color: #fff;
   align-items: center;
 }
@@ -503,7 +503,7 @@ select {
 }
 
 .addIcon:hover {
-  filter: brightness(90%)
+  filter: brightness(90%);
 }
 
 .one-costume:hover {
@@ -588,4 +588,140 @@ select {
 
 #search {
   width: 1350px;
+}
+/*! editor  */
+
+.editor-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  height: 728px;
+  background-color: #e9e3e3;
+  justify-content: center;
+  align-items: center;
+}
+
+.options-bar {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 200px;
+  margin-bottom: 10px;
+  position: fixed;
+  background-color: #fff;
+  padding: 30px;
+  gap: 20px;
+}
+
+.all-options {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 10px;
+}
+
+.option {
+  margin: 0 10px;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+#inp {
+  background-color: #fff;
+}
+
+.option button {
+  padding: 10px 20px;
+  background-color: #54b2ff;
+  border: none;
+  border-radius: 7px;
+  color: #fff;
+  cursor: pointer;
+}
+
+.option input {
+  padding: 5px 5px;
+  outline: none;
+  border: 1px solid #54b2ff;
+  border-radius: 5px;
+  background-color: #54b2ff;
+}
+
+.canvas {
+  position: relative;
+  width: 600px;
+  height: 500px;
+  background-color: #54b2ff;
+  border: 2px dashed #54b2ff;
+  margin-top: 200px;
+}
+
+.text-box {
+  position: absolute;
+  display: flex;
+  align-items: center;
+}
+
+.text-content {
+  padding: 5px;
+  border: 1px solid transparent;
+}
+
+.text-box textarea {
+  width: 100%;
+  height: 100%;
+  font-size: inherit;
+  border: none;
+  outline: none;
+  resize: none;
+  background: none;
+}
+
+.text-input {
+  padding: 5px 7px;
+  outline: none;
+  border: 1px solid #54b2ff;
+  border-radius: 5px;
+}
+
+.resize-handle {
+  width: 10px;
+  height: 10px;
+  background-color: blue;
+  cursor: nwse-resize;
+  position: absolute;
+  bottom: -5px;
+  right: -5px;
+}
+
+.editor-container2 {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  height: 728px;
+  background-color: #e9e3e3;
+  justify-content: center;
+}
+.costumes-editor {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  position: absolute;
+  top: 260px;
+  left: 0;
+  width: 250px;
+  align-items: center;
+}
+
+.costumes-editor h3 {
+  padding: 30px;
+  background-color: #fff;
+  text-align: center;
+  width: 250px;
+  cursor: pointer;
 }

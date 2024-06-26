@@ -88,6 +88,105 @@
       "author": "Егерь",
       "bigAuthor": "1",
       "id": 6
+    },
+    {
+      "costume": "https://i.pinimg.com/originals/dc/f3/2b/dcf32bcdfe204bfe62ba6f35f668bd0a.png",
+      "category": "A",
+      "author": "Егерь",
+      "bigAuthor": "1",
+      "id": 7
+    }
+  ],
+  "cards": [
+    {
+      "background": "",
+      "backgroundColor": "#ffffff",
+      "text": "",
+      "id": 1
+    },
+    {
+      "background": "",
+      "backgroundColor": "#ffffff",
+      "text": "",
+      "id": 2
+    },
+    {
+      "background": "",
+      "backgroundColor": "#ffffff",
+      "text": "",
+      "id": 3
+    },
+    {
+      "background": "",
+      "backgroundColor": "#ffffff",
+      "text": "",
+      "id": 4
+    },
+    {
+      "background": "",
+      "backgroundColor": "#ffffff",
+      "text": "",
+      "id": 5
+    },
+    {
+      "background": "",
+      "backgroundColor": "#ffffff",
+      "text": "",
+      "id": 6
+    },
+    {
+      "background": "",
+      "backgroundColor": "#ffffff",
+      "text": "",
+      "id": 7
+    },
+    {
+      "background": "",
+      "backgroundColor": "#ffffff",
+      "text": "",
+      "id": 8
+    },
+    {
+      "background": "",
+      "backgroundColor": "#ffffff",
+      "text": "",
+      "id": 9
+    },
+    {
+      "background": "",
+      "backgroundColor": "#ffffff",
+      "text": "",
+      "id": 10
+    },
+    {
+      "background": "",
+      "backgroundColor": "#ffffff",
+      "text": "",
+      "id": 11
+    },
+    {
+      "background": "",
+      "backgroundColor": "#ffffff",
+      "text": "",
+      "id": 12
+    },
+    {
+      "background": "",
+      "backgroundColor": "#ffffff",
+      "text": "",
+      "id": 13
+    },
+    {
+      "background": "",
+      "backgroundColor": "#ffffff",
+      "text": "",
+      "id": 14
+    },
+    {
+      "background": "",
+      "backgroundColor": "#ffffff",
+      "text": "",
+      "id": 15
     }
   ]
 }
