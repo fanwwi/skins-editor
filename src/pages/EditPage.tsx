@@ -9,13 +9,9 @@ import {
   accountDetails,
   addUserCostume,
   deleteOneCostume,
-  getCostumeS,
-  getCostumeSS,
-  getCostumeA,
+  getCostume,
   getOneAccount,
-  getUserCostumeSS,
-  getUserCostumeS,
-  getUserCostumeA,
+  getUserCostumes,
   updateAccount,
 } from "../store/actions/account.action";
 import iconCircle from "../img/small-circle-icon.png";
@@ -48,12 +44,7 @@ const EditPage = () => {
   const [emailState, setEmailState] = useState(null);
 
   const { allCostumes } = useAppSelector((state) => state.accounts);
-  const { costumeS } = useAppSelector((state) => state.accounts);
-  const { costumeSS } = useAppSelector((state) => state.accounts);
-  const { costumeA } = useAppSelector((state) => state.accounts);
-  const { userCostumeS } = useAppSelector((state) => state.accounts);
-  const { userCostumeSS } = useAppSelector((state) => state.accounts);
-  const { userCostumeA } = useAppSelector((state) => state.accounts);
+  const { userCostumes } = useAppSelector((state) => state.accounts);
 
   const [costumes, setCostumes] = useState<CostumesType>({
     author: account ? account!.id : "",
@@ -137,9 +128,7 @@ const EditPage = () => {
 
   useEffect(() => {
     if (account) {
-      dispatch(getCostumeS());
-      dispatch(getCostumeSS());
-      dispatch(getCostumeA());
+      dispatch(getCostume());
     }
   }, [dispatch, account]);
 
@@ -239,9 +228,7 @@ const EditPage = () => {
       dispatch(getCurrentUser(id));
     }
     if (account) {
-      dispatch(getCostumeS());
-      dispatch(getCostumeSS());
-      dispatch(getCostumeA());
+      dispatch(getCostume());
     }
   }, [dispatch]);
 
@@ -269,8 +256,8 @@ const EditPage = () => {
 
   const handleCloseModal = () => {
     setIsModalOpen(false);
-    setIsBigModalOpen(false);
-    window.location.reload();
+    setIsBigModalOpen(false)
+    window.location.reload()
   };
   const [inputStyle, setInputStyle] = useState({});
 
@@ -299,9 +286,7 @@ const EditPage = () => {
 
   useEffect(() => {
     if (account) {
-      dispatch(getUserCostumeS(account.id));
-      dispatch(getUserCostumeSS(account.id));
-      dispatch(getUserCostumeA(account.id));
+      dispatch(getUserCostumes(account.id));
     }
   }, [dispatch, account]);
   return (
@@ -640,88 +625,30 @@ const EditPage = () => {
             )}
 
             <div className="all-costumes">
+              <h2>Ваши костюмы:</h2>
               <div className="costumes">
-                <h2>Костюмы S</h2>
-                <div className="res">
-                  <img
-                    src={addCostumeImg}
-                    alt=""
-                    className="addIcon"
-                    onClick={() => setIsBigModalOpen(true)}
-                  />
-                  {userCostumeS
-                    ?.map((costume) => (
-                      <div key={costume.id} className="one-costume">
-                        <img src={costume.costume} alt="Costume" />
-                        <span>Персонаж: {costume.author}</span>
-                        <p>Категория: {costume.category}</p>
-                        <img
-                          src={del}
-                          className="delete"
-                          alt="Delete"
-                          style={{ height: "30px" }}
-                          onClick={() => handleDeleteAccount(costume.id)}
-                        />
-                      </div>
-                    ))
-                    .reverse()}
-                </div>
-              </div>
-
-              <div className="costumes">
-                <div className="res">
-                  <h2>Костюмы SS</h2>
-                  <img
-                    src={addCostumeImg}
-                    alt=""
-                    className="addIcon"
-                    onClick={() => setIsBigModalOpen(true)}
-                  />
-                  {userCostumeSS
-                    ?.map((costume) => (
-                      <div key={costume.id} className="one-costume">
-                        <img src={costume.costume} alt="Costume" />
-                        <span>Персонаж: {costume.author}</span>
-                        <p>Категория: {costume.category}</p>
-                        <img
-                          src={del}
-                          className="delete"
-                          alt="Delete"
-                          style={{ height: "30px" }}
-                          onClick={() => handleDeleteAccount(costume.id)}
-                        />
-                      </div>
-                    ))
-                    .reverse()}
-                </div>
-              </div>
-
-              <div className="costumes">
-                <div className="res">
-                  <h2>Костюмы A</h2>
-                  <img
-                    src={addCostumeImg}
-                    alt=""
-                    className="addIcon"
-                    onClick={() => setIsBigModalOpen(true)}
-                  />
-                  {userCostumeA
-                    ?.map((costume) => (
-                      <div key={costume.id} className="one-costume">
-                        <img src={costume.costume} alt="Costume" />
-                        <span>Персонаж: {costume.author}</span>
-                        <p>Категория: {costume.category}</p>
-                        <img
-                          src={del}
-                          className="delete"
-                          alt="Delete"
-                          style={{ height: "30px" }}
-                          onClick={() => handleDeleteAccount(costume.id)}
-                        />
-                      </div>
-                    ))
-                    .reverse()}
-                </div>
+                <img
+                  src={addCostumeImg}
+                  alt=""
+                  className="addIcon"
+                  onClick={() => setIsBigModalOpen(true)}
+                />
+                {userCostumes
+                  ?.map((costume) => (
+                    <div key={costume.id} className="one-costume">
+                      <img src={costume.costume} alt="Costume" />
+                      <span>Персонаж: {costume.author}</span>
+                      <p>Категория: {costume.category}</p>
+                      <img
+                        src={del}
+                        className="delete"
+                        alt="Delete"
+                        style={{ height: "30px" }}
+                        onClick={() => handleDeleteAccount(costume.id)}
+                      />
+                    </div>
+                  ))
+                  .reverse()}
               </div>
             </div>
           </div>
