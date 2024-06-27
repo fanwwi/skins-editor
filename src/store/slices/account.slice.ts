@@ -1,15 +1,17 @@
 import { createSlice } from "@reduxjs/toolkit";
 import {
   AccountType,
-  CharactersType,
+  AssessoirsType,
   CostumesType,
   DetailsType,
 } from "../../types";
 import {
   accountDetails,
   getAccounts,
+  getAssessoirs,
   getCostume,
   getOneAccount,
+  getUserAss,
   getUserCostumes,
 } from "../actions/account.action";
 
@@ -21,6 +23,8 @@ type StatesType = {
   details: DetailsType | null;
   allCostumes: CostumesType[] | null;
   userCostumes: CostumesType[] | null;
+  allAssessoirs: AssessoirsType[] | null;
+  userAss: AssessoirsType[] | null
 };
 
 const INIT_STATE: StatesType = {
@@ -31,6 +35,8 @@ const INIT_STATE: StatesType = {
   details: null,
   allCostumes: null,
   userCostumes: null,
+  allAssessoirs: null,
+  userAss: null
 };
 
 export const accountsSlice = createSlice({
@@ -98,7 +104,29 @@ export const accountsSlice = createSlice({
       .addCase(getUserCostumes.rejected, (state) => {
         state.loading = false;
         console.log(state.error);
-      });
+      })
+      .addCase(getAssessoirs.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(getAssessoirs.fulfilled, (state, { payload }) => {
+        state.loading = true;
+        state.allAssessoirs = payload;
+      })
+      .addCase(getAssessoirs.rejected, (state) => {
+        state.loading = false;
+        console.log(state.error);
+      })
+      .addCase(getUserAss.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(getUserAss.fulfilled, (state, { payload }) => {
+        state.loading = true;
+        state.userAss = payload;
+      })
+      .addCase(getUserAss.rejected, (state) => {
+        state.loading = false;
+        console.log(state.error);
+      })
   },
 });
 

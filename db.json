@@ -97,96 +97,32 @@
       "id": 7
     }
   ],
+  "assessoirs": [
+    {
+      "assessoir": "https://oruzhejnaya.ru/images/cinema-swords/img-1.jpg",
+      "character": "Воин",
+      "id": 1
+    },
+    {
+      "assessoir": "https://kartinki.pics/uploads/posts/2022-12/thumbs/1669998232_18-kartinkin-net-p-mechi-fentezi-pinterest-18.jpg",
+      "character": "Егерь",
+      "id": 2
+    }
+  ],
+  "userAssessoirs": [
+    {
+      "assessoir": "https://oruzhejnaya.ru/images/cinema-swords/img-1.jpg",
+      "character": "Воин",
+      "bigAuthor": "1",
+      "id": 1
+    }
+  ],
   "cards": [
     {
       "background": "",
       "backgroundColor": "#ffffff",
       "text": "",
       "id": 1
-    },
-    {
-      "background": "",
-      "backgroundColor": "#ffffff",
-      "text": "",
-      "id": 2
-    },
-    {
-      "background": "",
-      "backgroundColor": "#ffffff",
-      "text": "",
-      "id": 3
-    },
-    {
-      "background": "",
-      "backgroundColor": "#ffffff",
-      "text": "",
-      "id": 4
-    },
-    {
-      "background": "",
-      "backgroundColor": "#ffffff",
-      "text": "",
-      "id": 5
-    },
-    {
-      "background": "",
-      "backgroundColor": "#ffffff",
-      "text": "",
-      "id": 6
-    },
-    {
-      "background": "",
-      "backgroundColor": "#ffffff",
-      "text": "",
-      "id": 7
-    },
-    {
-      "background": "",
-      "backgroundColor": "#ffffff",
-      "text": "",
-      "id": 8
-    },
-    {
-      "background": "",
-      "backgroundColor": "#ffffff",
-      "text": "",
-      "id": 9
-    },
-    {
-      "background": "",
-      "backgroundColor": "#ffffff",
-      "text": "",
-      "id": 10
-    },
-    {
-      "background": "",
-      "backgroundColor": "#ffffff",
-      "text": "",
-      "id": 11
-    },
-    {
-      "background": "",
-      "backgroundColor": "#ffffff",
-      "text": "",
-      "id": 12
-    },
-    {
-      "background": "",
-      "backgroundColor": "#ffffff",
-      "text": "",
-      "id": 13
-    },
-    {
-      "background": "",
-      "backgroundColor": "#ffffff",
-      "text": "",
-      "id": 14
-    },
-    {
-      "background": "",
-      "backgroundColor": "#ffffff",
-      "text": "",
-      "id": 15
     }
   ]
 }

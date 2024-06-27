@@ -58,11 +58,13 @@ export type CostumesType = {
   costume: string;
   author: string;
   category: string;
-  bigAuthor: string
+  bigAuthor: string;
   id: string;
 };
 
-export type CharactersType = {
-  name: string;
+export type AssessoirsType = {
+  assessoir: string;
+  character: string;
+  bigAuthor: string;
   id: string;
 };

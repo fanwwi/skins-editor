@@ -2,6 +2,7 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 import {
   AccountChange,
   AccountType,
+  AssessoirsType,
   CostumesType,
   DetailsType,
 } from "../../types";
@@ -180,7 +181,7 @@ export const addUserCostume = createAsyncThunk(
         "http://localhost:8000/userCostumes",
         newData
       );
-      window.location.reload()
+      window.location.reload();
       return data;
     } catch (error) {
       console.log(error);
@@ -197,12 +198,63 @@ export const getCostume = createAsyncThunk("accounts/getCostume", async () => {
   }
 });
 
+export const getAssessoirs = createAsyncThunk(
+  "accounts/getAssessoirs",
+  async () => {
+    try {
+      const response = await axios.get("http://localhost:8000/assessoirs");
+      return response.data;
+    } catch (error) {
+      console.log(error);
+    }
+  }
+);
+
+export const addUserAss = createAsyncThunk(
+  "account/addAss",
+  async ({ data, id }: { data: AssessoirsType; id: string }) => {
+    const newData = {
+      assessoir: data.assessoir,
+      character: data.character,
+      bigAuthor: id,
+    };
+
+    try {
+      const { data } = await axios.post(
+        "http://localhost:8000/userAssessoirs",
+        newData
+      );
+      window.location.reload();
+      return data;
+    } catch (error) {
+      console.log(error);
+    }
+  }
+);
 
 export const deleteOneCostume = createAsyncThunk(
   "accounts/deleteAccount",
   async (id: string, { rejectWithValue }) => {
     try {
       await axios.delete(`http://localhost:8000/userCostumes/${id}`);
+      window.location.reload();
+      return id;
+    } catch (error) {
+      console.error(error);
+      if (axios.isAxiosError(error) && error.response) {
+        return rejectWithValue(error.response.data);
+      } else {
+        return rejectWithValue("Ошибка удаления костюма!");
+      }
+    }
+  }
+);
+
+export const deleteAss = createAsyncThunk(
+  "accounts/deleteAss",
+  async (id: string, { rejectWithValue }) => {
+    try {
+      await axios.delete(`http://localhost:8000/userAssessoirs/${id}`);
       window.location.reload();
       return id;
     } catch (error) {
@@ -226,6 +278,23 @@ export const getUserCostumes = createAsyncThunk(
         return costume.bigAuthor === accountId;
       });
       console.log("Отфильтрованные данные:", filteredData);
+      return filteredData;
+    } catch (error) {
+      console.log("Ошибка при получении данных:", error);
+    }
+  }
+);
+
+export const getUserAss = createAsyncThunk(
+  "account/getUserAss",
+  async (accountId: string) => {
+    try {
+      const { data } = await axios.get("http://localhost:8000/userAssessoirs");
+
+      const filteredData = data.filter((ass: AssessoirsType) => {
+        return ass.bigAuthor === accountId;
+      });
+      console.log("Отфильтрованные акссессуары:", filteredData);
       return filteredData;
     } catch (error) {
       console.log("Ошибка при получении данных:", error);

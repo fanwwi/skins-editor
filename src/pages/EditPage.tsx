@@ -7,17 +7,26 @@ import editIcon from "../img/edit-icon2.png";
 import { useAppDispatch, useAppSelector } from "../store/store";
 import {
   accountDetails,
+  addUserAss,
   addUserCostume,
+  deleteAss,
   deleteOneCostume,
+  getAssessoirs,
   getCostume,
   getOneAccount,
+  getUserAss,
   getUserCostumes,
   updateAccount,
 } from "../store/actions/account.action";
 import iconCircle from "../img/small-circle-icon.png";
 import iconPazzle from "../img/small-pazzle-icon.png";
 import iconBrilliant from "../img/small-brilliant-icon.png";
-import { AccountChange, CostumesType, DetailsType } from "../types";
+import {
+  AccountChange,
+  AssessoirsType,
+  CostumesType,
+  DetailsType,
+} from "../types";
 import del from "../img/delete-icon.png";
 import { getCurrentUser } from "../store/actions/user.action";
 import addCostumeImg from "../img/add-icon.png";
@@ -44,7 +53,9 @@ const EditPage = () => {
   const [emailState, setEmailState] = useState(null);
 
   const { allCostumes } = useAppSelector((state) => state.accounts);
+  const { allAssessoirs } = useAppSelector((state) => state.accounts);
   const { userCostumes } = useAppSelector((state) => state.accounts);
+  const { userAss } = useAppSelector((state) => state.accounts);
 
   const [costumes, setCostumes] = useState<CostumesType>({
     author: account ? account!.id : "",
@@ -220,8 +231,18 @@ const EditPage = () => {
     }
   };
 
-  const [isActive, setIsActive] = useState(false);
+  const handleDeleteAss = (accountId: string) => {
+    if (window.confirm("Вы уверены, что хотите удалить этот костюм?")) {
+      dispatch(deleteAss(accountId))
+        .unwrap()
+        .catch((error) => {
+          console.error("Ошибка при удалении аккаунта:", error);
+        });
+    }
+  };
+
   const [searchData, setSearchData] = useState("");
+  const [searchAss, setSearchAss] = useState("");
 
   useEffect(() => {
     if (id) {
@@ -229,6 +250,9 @@ const EditPage = () => {
     }
     if (account) {
       dispatch(getCostume());
+    }
+    if (account) {
+      dispatch(getAssessoirs());
     }
   }, [dispatch]);
 
@@ -242,15 +266,23 @@ const EditPage = () => {
       )
     : [];
 
+  const searchAssValue = (e: any) => {
+    setSearchAss(e.target.value);
+  };
+
+  const filteresAssessoirs = allAssessoirs
+    ? allAssessoirs.filter((ass) =>
+        ass.character.toLowerCase().includes(searchAss.toLowerCase())
+      )
+    : [];
+
+  const hasAss = filteresAssessoirs.length > 0 && searchAss.trim() !== "";
+
   const hasResults = filteredCostumes.length > 0 && searchData.trim() !== "";
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isBigModalOpen, setIsBigModalOpen] = useState(false);
 
-  const handleCloseModal = () => {
-    setIsModalOpen(false);
-    setIsBigModalOpen(false);
-  };
   const [inputStyle, setInputStyle] = useState({});
 
   const handleInputClick = () => {
@@ -261,6 +293,7 @@ const EditPage = () => {
   };
 
   const [clickedItem, setClickedItem] = useState<CostumesType>();
+  const [clickedAss, setClickedAss] = useState<AssessoirsType>();
   const [selectedItem, setSelectedItem] = useState<CostumesType>({
     author: "",
     costume: "",
@@ -268,6 +301,13 @@ const EditPage = () => {
     bigAuthor: "",
     id: "",
   });
+
+  const [isAssModalOpen, setIsAssModalOpen] = useState(false);
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+    setIsBigModalOpen(false);
+    setIsAssModalOpen(false);
+  };
 
   const handleItemClick = (item: CostumesType) => {
     const selectedItem = {
@@ -282,9 +322,24 @@ const EditPage = () => {
     console.log(selectedItem);
   };
 
+  const handleAssClick = (item: AssessoirsType) => {
+    const selectedAss = {
+      assessoir: item.assessoir,
+      character: item.character,
+      bigAuthor: item.bigAuthor,
+      id: item.id,
+    };
+    dispatch(addUserAss({ data: selectedAss, id: account!.id }));
+    setClickedAss(selectedAss);
+    console.log(selectedAss);
+  };
+
   useEffect(() => {
     if (account) {
       dispatch(getUserCostumes(account.id));
+    }
+    if (account) {
+      dispatch(getUserAss(account.id));
     }
   }, [dispatch, account]);
   return (
@@ -376,7 +431,7 @@ const EditPage = () => {
             </div>
           </div>
           <div className="visual-card">
-            <Link to={`/editor/${account?.id}`} style={{all: "unset"}}>
+            <Link to={`/editor/${account?.id}`} style={{ all: "unset" }}>
               Создать визуальную карточку аккаунта
             </Link>
           </div>
@@ -394,15 +449,18 @@ const EditPage = () => {
             {activeTab === "accountData" && <hr />}
           </div>
           <div
-            onClick={() => setActiveTab("accountContent")}
+            onClick={() =>
+              setActiveTab("accountContent" && "accountAssessoirs")
+            }
             style={{
               fontWeight: activeTab === "accountContent" ? "700" : "400",
-              color: activeTab === "accountContent" ? "#3c00ff" : "black",
+              color: activeTab === "accountData" ? "black" : "#3c00ff",
               cursor: "pointer",
             }}
           >
             <h3>Содержание аккаунта</h3>
-            {activeTab === "accountContent" && <hr />}
+            {(activeTab === "accountContent" ||
+              activeTab === "accountAssessoirs") && <hr />}
           </div>
         </div>
 
@@ -561,6 +619,31 @@ const EditPage = () => {
           </>
         )}
 
+        <div className="main-header">
+          <div
+            onClick={() => setActiveTab("accountContent")}
+            style={{
+              fontWeight: activeTab === "accountContent" ? "700" : "400",
+              color: activeTab === "accountContent" ? "#3c00ff" : "black",
+              cursor: "pointer",
+            }}
+          >
+            <h3>Костюмы</h3>
+            {activeTab === "accountContent" && <hr />}
+          </div>
+          <div
+            onClick={() => setActiveTab("accountAssessoirs")}
+            style={{
+              fontWeight: activeTab === "accountAssessoirs" ? "700" : "400",
+              color: activeTab === "accountAssessoirs" ? "#3c00ff" : "black",
+              cursor: "pointer",
+            }}
+          >
+            <h3>Аксессуары</h3>
+            {activeTab === "accountAssessoirs" && <hr />}
+          </div>
+        </div>
+
         {account && activeTab === "accountContent" && (
           <div>
             {!isModalOpen && (
@@ -577,9 +660,8 @@ const EditPage = () => {
                 <input
                   type="text"
                   className="auth__input"
-                  value={searchData}
-                  placeholder="Search..."
-                  style={{ width: "1400px" }}
+                  placeholder="Поиск..."
+                  style={{ width: "1350px" }}
                   onClick={handleInputClick}
                 />
               </>
@@ -743,6 +825,122 @@ const EditPage = () => {
                         <p>Категория: {item.category}</p>
                       </div>
                     ))
+                : ""}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {account && activeTab == "accountAssessoirs" && (
+        <div className="container">
+          {!isModalOpen && (
+            <>
+              <label
+                htmlFor=""
+                className="label-input"
+                style={{ fontSize: "16px" }}
+              >
+                Добавление аксессуаров
+              </label>
+              <br />
+              <br />
+              <input
+                type="text"
+                className="auth__input"
+                placeholder="Поиск..."
+                style={{ width: "1350px" }}
+                onClick={handleInputClick}
+              />
+            </>
+          )}
+
+          {isModalOpen && (
+            <div className="modal-overlay" onClick={handleCloseModal}>
+              <div className="modal">
+                <div
+                  className="modal-content"
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  <input
+                    type="text"
+                    className="auth__input"
+                    value={searchAss}
+                    onChange={searchAssValue}
+                    placeholder="Поиск..."
+                    onClick={(e) => e.stopPropagation()}
+                    id="search"
+                  />
+                </div>
+                <div className="results">
+                  {hasAss
+                    ? filteresAssessoirs.map((item: AssessoirsType) => (
+                        <div
+                          key={item.id}
+                          className="cost"
+                          onClick={() => handleAssClick(item)}
+                        >
+                          <img
+                            src={item.assessoir}
+                            alt={`Costume ${item.id}`}
+                          />
+                          <span>Персонаж: {item.character}</span>
+                        </div>
+                      ))
+                    : ""}
+                </div>
+              </div>
+            </div>
+          )}
+
+          <div className="all-costumes">
+            <div className="costumes">
+              <h2>Ваши аксессуары:</h2>
+              <div className="res">
+                <img
+                  src={addCostumeImg}
+                  alt=""
+                  className="addIcon"
+                  onClick={() => {
+                    setIsAssModalOpen(true);
+                  }}
+                />
+                {userAss
+                  ?.map((ass) => (
+                    <div key={ass.id} className="one-costume">
+                      <img src={ass.assessoir} alt="Costume" />
+                      <span>Персонаж: {ass.character}</span>
+                      <img
+                        src={del}
+                        className="delete"
+                        alt="Delete"
+                        style={{ height: "30px" }}
+                        onClick={() => handleDeleteAss(ass.id)}
+                      />
+                    </div>
+                  ))
+                  .reverse()}
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {isAssModalOpen && (
+        <div className="modal-overlay" onClick={handleCloseModal}>
+          <div className="modal">
+            <h2>Выберите аксессуар:</h2>
+            <div className="results">
+              {allAssessoirs
+                ? allAssessoirs.map((item) => (
+                    <div
+                      key={item.id}
+                      className="cost"
+                      onClick={() => handleAssClick(item)}
+                    >
+                      <img src={item.assessoir} alt={`Аксессуар ${item.id}`} />
+                      <span>Персонаж: {item.character}</span>
+                    </div>
+                  ))
                 : ""}
             </div>
           </div>
