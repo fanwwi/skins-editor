@@ -44,10 +44,8 @@ const Editor = () => {
   };
 
   const handleTextDragStart = (event: MouseEvent<HTMLDivElement>) => {
-    if (event.detail === 2) {
-      setIsDragging(true);
-      event.preventDefault();
-    }
+    setIsDragging(true);
+    event.preventDefault();
   };
 
   const handleTextDragEnd = () => {
@@ -57,17 +55,13 @@ const Editor = () => {
   const handleTextDrag = (event: MouseEvent<HTMLDivElement>) => {
     if (isDragging) {
       const { movementX, movementY } = event;
-      setTextPosition((prevPosition) => {
-        const newX = Math.min(
+      setTextPosition((prevPosition) => ({
+        x: Math.min(
           Math.max(prevPosition.x + movementX, 0),
           600 - (textSize * text.length) / 2
-        );
-        const newY = Math.min(
-          Math.max(prevPosition.y + movementY, 0),
-          400 - textSize
-        );
-        return { x: newX, y: newY };
-      });
+        ),
+        y: Math.min(Math.max(prevPosition.y + movementY, 0), 400 - textSize),
+      }));
     }
   };
 
@@ -104,8 +98,6 @@ const Editor = () => {
       setShowResizeHandle(false);
     }
   };
-
-  const id = localStorage.getItem("currentUser");
 
   return (
     <>
@@ -209,7 +201,6 @@ const Editor = () => {
               }}
               onMouseDown={handleTextDragStart}
               onMouseUp={handleTextDragEnd}
-              onDoubleClick={handleTextDragStart}
               onMouseMove={handleTextDrag}
               onMouseEnter={handleMouseEnter}
               onMouseLeave={handleMouseLeave}
