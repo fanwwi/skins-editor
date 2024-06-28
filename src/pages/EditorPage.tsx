@@ -41,19 +41,25 @@ const Editor = () => {
   const getUserCostumes = (category: string) => {
     if (!userCostumes) return;
     switch (category) {
-      case 'SS':
-        setCostumesSS(userCostumes.filter((costume: any) => costume.category === 'SS'));
+      case "SS":
+        setCostumesSS(
+          userCostumes.filter((costume: any) => costume.category === "SS")
+        );
         break;
-      case 'S':
-        setCostumesS(userCostumes.filter((costume: any) => costume.category === 'S'));
+      case "S":
+        setCostumesS(
+          userCostumes.filter((costume: any) => costume.category === "S")
+        );
         break;
-      case 'A':
-        setCostumesA(userCostumes.filter((costume: any) => costume.category === 'A'));
+      case "A":
+        setCostumesA(
+          userCostumes.filter((costume: any) => costume.category === "A")
+        );
         break;
       default:
         break;
     }
-  };  
+  };
 
   const handleTextChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
     if (isEditable) {
@@ -157,7 +163,6 @@ const Editor = () => {
     );
     if (userConfirmed) {
       setIsEditable(false);
-      // Implement save logic here
     }
   };
 
