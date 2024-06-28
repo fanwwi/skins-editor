@@ -117,12 +117,5 @@
       "id": 1
     }
   ],
-  "cards": [
-    {
-      "background": "",
-      "backgroundColor": "#ffffff",
-      "text": "",
-      "id": 1
-    }
-  ]
+  "cards": [{}]
 }
