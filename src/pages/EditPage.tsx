@@ -21,12 +21,7 @@ import {
 import iconCircle from "../img/small-circle-icon.png";
 import iconPazzle from "../img/small-pazzle-icon.png";
 import iconBrilliant from "../img/small-brilliant-icon.png";
-import {
-  AccountChange,
-  AssessoirsType,
-  CostumesType,
-  DetailsType,
-} from "../types";
+import { AccountChange, AssessoirsType, CostumesType, DetailsType } from "../types";
 import del from "../img/delete-icon.png";
 import { getCurrentUser } from "../store/actions/user.action";
 import addCostumeImg from "../img/add-icon.png";
@@ -353,18 +348,11 @@ const EditPage = () => {
       >
         <div className="profile-left">
           <img src={logo} alt="" style={{ width: "70px" }} />
-          <Link
-            to={`/${id}/profile`}
-            style={{ fontSize: "18px", color: "#6232ff" }}
-          >
+          <Link to={`/${id}/profile`} style={{ fontSize: "18px", color: "#6232ff" }}>
             Мои аккаунты
           </Link>
         </div>
-        <img
-          src={userIcon}
-          alt="userIcon"
-          style={{ width: "70px", cursor: "pointer" }}
-        />
+        <img src={userIcon} alt="userIcon" style={{ width: "70px", cursor: "pointer" }} />
       </div>
       <hr />
       <div className="container">
@@ -375,9 +363,7 @@ const EditPage = () => {
                 {!isEditing ? (
                   <h2>
                     Детали аккаунта -{" "}
-                    <span className="blue-text">
-                      {gameAccount || "Ошибка сети"}
-                    </span>
+                    <span className="blue-text">{gameAccount || "Ошибка сети"}</span>
                   </h2>
                 ) : (
                   <h2>
@@ -431,7 +417,10 @@ const EditPage = () => {
             </div>
           </div>
           <div className="visual-card">
-            <Link to={`/editor/${account!.id}`} style={{ all: "unset" }}>
+            <Link
+              to={account?.id ? `/editor/${account!.id}` : ""}
+              style={{ all: "unset" }}
+            >
               Создать визуальную карточку аккаунта
             </Link>
           </div>
@@ -449,9 +438,7 @@ const EditPage = () => {
             {activeTab === "accountData" && <hr />}
           </div>
           <div
-            onClick={() =>
-              setActiveTab("accountContent" && "accountAssessoirs")
-            }
+            onClick={() => setActiveTab("accountContent" && "accountAssessoirs")}
             style={{
               fontWeight: activeTab === "accountContent" ? "700" : "400",
               color: activeTab === "accountData" ? "black" : "#3c00ff",
@@ -459,8 +446,9 @@ const EditPage = () => {
             }}
           >
             <h3>Содержание аккаунта</h3>
-            {(activeTab === "accountContent" ||
-              activeTab === "accountAssessoirs") && <hr />}
+            {(activeTab === "accountContent" || activeTab === "accountAssessoirs") && (
+              <hr />
+            )}
           </div>
         </div>
 
@@ -494,15 +482,9 @@ const EditPage = () => {
                   <div className="block-left">
                     <div
                       className={`toggle-container ${
-                        transferState === null
-                          ? "null"
-                          : transferState
-                          ? "true"
-                          : "false"
+                        transferState === null ? "null" : transferState ? "true" : "false"
                       }`}
-                      onClick={() =>
-                        toggleState(transferState, setTransferState)
-                      }
+                      onClick={() => toggleState(transferState, setTransferState)}
                     >
                       <div className="toggle-circle" />
                     </div>
@@ -515,11 +497,7 @@ const EditPage = () => {
                   <div className="block-left">
                     <div
                       className={`toggle-container ${
-                        emailState === null
-                          ? "null"
-                          : emailState
-                          ? "true"
-                          : "false"
+                        emailState === null ? "null" : emailState ? "true" : "false"
                       }`}
                       onClick={() => toggleState(emailState, setEmailState)}
                     >
@@ -648,11 +626,7 @@ const EditPage = () => {
           <div>
             {!isModalOpen && (
               <>
-                <label
-                  htmlFor=""
-                  className="label-input"
-                  style={{ fontSize: "16px" }}
-                >
+                <label htmlFor="" className="label-input" style={{ fontSize: "16px" }}>
                   Добавление костюма по параметрам
                 </label>
                 <br />
@@ -670,10 +644,7 @@ const EditPage = () => {
             {isModalOpen && (
               <div className="modal-overlay" onClick={handleCloseModal}>
                 <div className="modal">
-                  <div
-                    className="modal-content"
-                    onClick={(e) => e.stopPropagation()}
-                  >
+                  <div className="modal-content" onClick={(e) => e.stopPropagation()}>
                     <input
                       type="text"
                       className="auth__input"
@@ -692,10 +663,7 @@ const EditPage = () => {
                             className="cost"
                             onClick={() => handleItemClick(item)}
                           >
-                            <img
-                              src={item.costume}
-                              alt={`Costume ${item.id}`}
-                            />
+                            <img src={item.costume} alt={`Costume ${item.id}`} />
                             <span>Персонаж: {item.author}</span>
                             <span>Категория: {item.category}</span>
                           </div>
@@ -811,9 +779,7 @@ const EditPage = () => {
             <div className="results">
               {allCostumes
                 ? allCostumes
-                    .filter(
-                      (costume) => costume.category === selectedItem?.category
-                    )
+                    .filter((costume) => costume.category === selectedItem?.category)
                     .map((item) => (
                       <div
                         key={item.id}
@@ -835,11 +801,7 @@ const EditPage = () => {
         <div className="container">
           {!isModalOpen && (
             <>
-              <label
-                htmlFor=""
-                className="label-input"
-                style={{ fontSize: "16px" }}
-              >
+              <label htmlFor="" className="label-input" style={{ fontSize: "16px" }}>
                 Добавление аксессуаров
               </label>
               <br />
@@ -857,10 +819,7 @@ const EditPage = () => {
           {isModalOpen && (
             <div className="modal-overlay" onClick={handleCloseModal}>
               <div className="modal">
-                <div
-                  className="modal-content"
-                  onClick={(e) => e.stopPropagation()}
-                >
+                <div className="modal-content" onClick={(e) => e.stopPropagation()}>
                   <input
                     type="text"
                     className="auth__input"
@@ -879,10 +838,7 @@ const EditPage = () => {
                           className="cost"
                           onClick={() => handleAssClick(item)}
                         >
-                          <img
-                            src={item.assessoir}
-                            alt={`Costume ${item.id}`}
-                          />
+                          <img src={item.assessoir} alt={`Costume ${item.id}`} />
                           <span>Персонаж: {item.character}</span>
                         </div>
                       ))
