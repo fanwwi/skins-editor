@@ -21,7 +21,12 @@ import {
 import iconCircle from "../img/small-circle-icon.png";
 import iconPazzle from "../img/small-pazzle-icon.png";
 import iconBrilliant from "../img/small-brilliant-icon.png";
-import { AccountChange, AssessoirsType, CostumesType, DetailsType } from "../types";
+import {
+  AccountChange,
+  AssessoirsType,
+  CostumesType,
+  DetailsType,
+} from "../types";
 import del from "../img/delete-icon.png";
 import { getCurrentUser } from "../store/actions/user.action";
 import addCostumeImg from "../img/add-icon.png";
@@ -37,21 +42,20 @@ const EditPage = () => {
     gameAccount: "",
   });
   const [gameAccount, setGameAccount] = useState("");
-  const { account } = useAppSelector((state) => state.accounts);
-  const { details } = useAppSelector((state) => state.accounts);
+  const {
+    account,
+    details,
+    allCostumes,
+    allAssessoirs,
+    userCostumes,
+    userAss,
+  } = useAppSelector((state) => state.accounts);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-
   const { accountId } = useParams();
   const [dmmState, setDmmState] = useState(null);
   const [transferState, setTransferState] = useState(null);
   const [emailState, setEmailState] = useState(null);
-
-  const { allCostumes } = useAppSelector((state) => state.accounts);
-  const { allAssessoirs } = useAppSelector((state) => state.accounts);
-  const { userCostumes } = useAppSelector((state) => state.accounts);
-  const { userAss } = useAppSelector((state) => state.accounts);
-
   const [costumes, setCostumes] = useState<CostumesType>({
     author: account ? account!.id : "",
     costume: "",
@@ -68,14 +72,34 @@ const EditPage = () => {
     unlockA: "",
     author: "",
   });
-
   const [isInputActive, setIsInputActive] = useState(false);
+  const [searchData, setSearchData] = useState("");
+  const [searchAss, setSearchAss] = useState("");
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isBigModalOpen, setIsBigModalOpen] = useState(false);
+  const [inputStyle, setInputStyle] = useState({});
+  const [clickedItem, setClickedItem] = useState<CostumesType>();
+  const [clickedAss, setClickedAss] = useState<AssessoirsType>();
+  const [selectedItem, setSelectedItem] = useState<CostumesType>({
+    author: "",
+    costume: "",
+    category: "",
+    bigAuthor: "",
+    id: "",
+  });
+  const [isAssModalOpen, setIsAssModalOpen] = useState(false);
 
   useEffect(() => {
     if (accountId) {
       dispatch(getOneAccount(accountId));
     }
-  }, [dispatch, accountId]);
+    if (account) {
+      dispatch(getCostume());
+      dispatch(getAssessoirs());
+      dispatch(getUserCostumes(account.id));
+      dispatch(getUserAss(account.id));
+    }
+  }, [dispatch, accountId, account]);
 
   useEffect(() => {
     if (account) {
@@ -120,6 +144,7 @@ const EditPage = () => {
 
   const handleCostumeSubmit = async () => {
     if (costumes) {
+      // Add logic here if needed
     }
 
     setCostumes({
@@ -131,35 +156,6 @@ const EditPage = () => {
     });
     window.location.reload();
   };
-
-  useEffect(() => {
-    if (account) {
-      dispatch(getCostume());
-    }
-  }, [dispatch, account]);
-
-  useEffect(() => {
-    if (account) {
-      setFormData({
-        game: account.game || "",
-        gameId: account.gameId || "",
-        gameNickname: account.gameNickname || "",
-        gameAccount: account.gameAccount || "",
-      });
-
-      setNewData({
-        owners: details?.owners || "",
-        seal: details?.seal || "",
-        puzzle: details?.puzzle || "",
-        crystals: details?.crystals || "",
-        unlockS: details?.unlockS || "",
-        unlockA: details?.unlockA || "",
-        author: account.id || "",
-      });
-
-      setGameAccount(account.gameAccount || "");
-    }
-  }, [account, details]);
 
   const handleNewDataChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -236,21 +232,6 @@ const EditPage = () => {
     }
   };
 
-  const [searchData, setSearchData] = useState("");
-  const [searchAss, setSearchAss] = useState("");
-
-  useEffect(() => {
-    if (id) {
-      dispatch(getCurrentUser(id));
-    }
-    if (account) {
-      dispatch(getCostume());
-    }
-    if (account) {
-      dispatch(getAssessoirs());
-    }
-  }, [dispatch]);
-
   const searchValueChange = (event: ChangeEvent<HTMLInputElement>) => {
     setSearchData(event.target.value);
   };
@@ -272,36 +253,19 @@ const EditPage = () => {
     : [];
 
   const hasAss = filteresAssessoirs.length > 0 && searchAss.trim() !== "";
-
   const hasResults = filteredCostumes.length > 0 && searchData.trim() !== "";
 
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isBigModalOpen, setIsBigModalOpen] = useState(false);
-
-  const [inputStyle, setInputStyle] = useState({});
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+    setIsBigModalOpen(false);
+    setIsAssModalOpen(false);
+  };
 
   const handleInputClick = () => {
     setIsModalOpen(true);
     setInputStyle({
       display: "none",
     });
-  };
-
-  const [clickedItem, setClickedItem] = useState<CostumesType>();
-  const [clickedAss, setClickedAss] = useState<AssessoirsType>();
-  const [selectedItem, setSelectedItem] = useState<CostumesType>({
-    author: "",
-    costume: "",
-    category: "",
-    bigAuthor: "",
-    id: "",
-  });
-
-  const [isAssModalOpen, setIsAssModalOpen] = useState(false);
-  const handleCloseModal = () => {
-    setIsModalOpen(false);
-    setIsBigModalOpen(false);
-    setIsAssModalOpen(false);
   };
 
   const handleItemClick = (item: CostumesType) => {
@@ -329,14 +293,6 @@ const EditPage = () => {
     console.log(selectedAss);
   };
 
-  useEffect(() => {
-    if (account) {
-      dispatch(getUserCostumes(account.id));
-    }
-    if (account) {
-      dispatch(getUserAss(account.id));
-    }
-  }, [dispatch, account]);
   return (
     <div>
       <div
@@ -348,11 +304,18 @@ const EditPage = () => {
       >
         <div className="profile-left">
           <img src={logo} alt="" style={{ width: "70px" }} />
-          <Link to={`/${id}/profile`} style={{ fontSize: "18px", color: "#6232ff" }}>
+          <Link
+            to={`/${id}/profile`}
+            style={{ fontSize: "18px", color: "#6232ff" }}
+          >
             Мои аккаунты
           </Link>
         </div>
-        <img src={userIcon} alt="userIcon" style={{ width: "70px", cursor: "pointer" }} />
+        <img
+          src={userIcon}
+          alt="userIcon"
+          style={{ width: "70px", cursor: "pointer" }}
+        />
       </div>
       <hr />
       <div className="container">
@@ -363,7 +326,9 @@ const EditPage = () => {
                 {!isEditing ? (
                   <h2>
                     Детали аккаунта -{" "}
-                    <span className="blue-text">{gameAccount || "Ошибка сети"}</span>
+                    <span className="blue-text">
+                      {gameAccount || "Ошибка сети"}
+                    </span>
                   </h2>
                 ) : (
                   <h2>
@@ -438,7 +403,9 @@ const EditPage = () => {
             {activeTab === "accountData" && <hr />}
           </div>
           <div
-            onClick={() => setActiveTab("accountContent" && "accountAssessoirs")}
+            onClick={() =>
+              setActiveTab("accountContent" && "accountAssessoirs")
+            }
             style={{
               fontWeight: activeTab === "accountContent" ? "700" : "400",
               color: activeTab === "accountData" ? "black" : "#3c00ff",
@@ -446,9 +413,8 @@ const EditPage = () => {
             }}
           >
             <h3>Содержание аккаунта</h3>
-            {(activeTab === "accountContent" || activeTab === "accountAssessoirs") && (
-              <hr />
-            )}
+            {(activeTab === "accountContent" ||
+              activeTab === "accountAssessoirs") && <hr />}
           </div>
         </div>
 
@@ -482,9 +448,15 @@ const EditPage = () => {
                   <div className="block-left">
                     <div
                       className={`toggle-container ${
-                        transferState === null ? "null" : transferState ? "true" : "false"
+                        transferState === null
+                          ? "null"
+                          : transferState
+                          ? "true"
+                          : "false"
                       }`}
-                      onClick={() => toggleState(transferState, setTransferState)}
+                      onClick={() =>
+                        toggleState(transferState, setTransferState)
+                      }
                     >
                       <div className="toggle-circle" />
                     </div>
@@ -497,7 +469,11 @@ const EditPage = () => {
                   <div className="block-left">
                     <div
                       className={`toggle-container ${
-                        emailState === null ? "null" : emailState ? "true" : "false"
+                        emailState === null
+                          ? "null"
+                          : emailState
+                          ? "true"
+                          : "false"
                       }`}
                       onClick={() => toggleState(emailState, setEmailState)}
                     >
@@ -626,7 +602,11 @@ const EditPage = () => {
           <div>
             {!isModalOpen && (
               <>
-                <label htmlFor="" className="label-input" style={{ fontSize: "16px" }}>
+                <label
+                  htmlFor=""
+                  className="label-input"
+                  style={{ fontSize: "16px" }}
+                >
                   Добавление костюма по параметрам
                 </label>
                 <br />
@@ -644,7 +624,10 @@ const EditPage = () => {
             {isModalOpen && (
               <div className="modal-overlay" onClick={handleCloseModal}>
                 <div className="modal">
-                  <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+                  <div
+                    className="modal-content"
+                    onClick={(e) => e.stopPropagation()}
+                  >
                     <input
                       type="text"
                       className="auth__input"
@@ -663,7 +646,10 @@ const EditPage = () => {
                             className="cost"
                             onClick={() => handleItemClick(item)}
                           >
-                            <img src={item.costume} alt={`Costume ${item.id}`} />
+                            <img
+                              src={item.costume}
+                              alt={`Costume ${item.id}`}
+                            />
                             <span>Персонаж: {item.author}</span>
                             <span>Категория: {item.category}</span>
                           </div>
@@ -779,7 +765,9 @@ const EditPage = () => {
             <div className="results">
               {allCostumes
                 ? allCostumes
-                    .filter((costume) => costume.category === selectedItem?.category)
+                    .filter(
+                      (costume) => costume.category === selectedItem?.category
+                    )
                     .map((item) => (
                       <div
                         key={item.id}
@@ -801,7 +789,11 @@ const EditPage = () => {
         <div className="container">
           {!isModalOpen && (
             <>
-              <label htmlFor="" className="label-input" style={{ fontSize: "16px" }}>
+              <label
+                htmlFor=""
+                className="label-input"
+                style={{ fontSize: "16px" }}
+              >
                 Добавление аксессуаров
               </label>
               <br />
@@ -819,7 +811,10 @@ const EditPage = () => {
           {isModalOpen && (
             <div className="modal-overlay" onClick={handleCloseModal}>
               <div className="modal">
-                <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+                <div
+                  className="modal-content"
+                  onClick={(e) => e.stopPropagation()}
+                >
                   <input
                     type="text"
                     className="auth__input"
@@ -838,7 +833,10 @@ const EditPage = () => {
                           className="cost"
                           onClick={() => handleAssClick(item)}
                         >
-                          <img src={item.assessoir} alt={`Costume ${item.id}`} />
+                          <img
+                            src={item.assessoir}
+                            alt={`Costume ${item.id}`}
+                          />
                           <span>Персонаж: {item.character}</span>
                         </div>
                       ))

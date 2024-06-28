@@ -1,7 +1,8 @@
 import React, { useState, MouseEvent, ChangeEvent, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../store/store";
-import { getOneAccount } from "../store/actions/account.action";
+import { getCostume, getOneAccount } from "../store/actions/account.action";
+import { CostumesType } from "../types";
 
 const Editor = () => {
   const [background, setBackground] = useState("");
@@ -16,48 +17,35 @@ const Editor = () => {
   const [showResizeHandle, setShowResizeHandle] = useState(false);
   const [isEditable, setIsEditable] = useState(true);
 
-  const [costumesSS, setCostumesSS] = useState<any[]>([]);
-  const [costumesS, setCostumesS] = useState<any[]>([]);
-  const [costumesA, setCostumesA] = useState<any[]>([]);
-
   const { userCostumes } = useAppSelector((state) => state.accounts);
   const { account } = useAppSelector((state) => state.accounts);
   const { id } = useParams();
 
   const dispatch = useAppDispatch();
 
+  const [costumesSS, setCostumesSS] = useState<CostumesType[]>([]);
+  const [costumesS, setCostumesS] = useState<CostumesType[]>([]);
+  const [costumesA, setCostumesA] = useState<CostumesType[]>([]);
+
   useEffect(() => {
     if (id) {
       dispatch(getOneAccount(id));
     }
+    if(userCostumes) {
+      dispatch(getCostume())
+    }
   }, [id, dispatch]);
+
+  const getUserCostumes = (category: string): CostumesType[] => {
+    if (!userCostumes) return [];
+    return userCostumes.filter(
+      (costume: CostumesType) => costume.category === category
+    );
+  };
 
   const handleAddText = () => {
     if (isEditable) {
       setIsTextEditing(true);
-    }
-  };
-
-  const getUserCostumes = (category: string) => {
-    if (!userCostumes) return;
-    switch (category) {
-      case "SS":
-        setCostumesSS(
-          userCostumes.filter((costume: any) => costume.category === "SS")
-        );
-        break;
-      case "S":
-        setCostumesS(
-          userCostumes.filter((costume: any) => costume.category === "S")
-        );
-        break;
-      case "A":
-        setCostumesA(
-          userCostumes.filter((costume: any) => costume.category === "A")
-        );
-        break;
-      default:
-        break;
     }
   };
 
@@ -218,9 +206,32 @@ const Editor = () => {
       </div>
       <div className="editor-container2">
         <div className="costumes-editor">
-          <h3>Костюмы SS</h3>
-          <h3>Костюмы S</h3>
-          <h3>Костюмы A</h3>
+          <h3 onClick={() => setCostumesSS(getUserCostumes("SS"))}>
+            Костюмы SS
+          </h3>
+          <div className="display-costumes">
+            {costumesSS.map((costume, index) => (
+              <div key={index} className="one">
+                <img src={costume.costume} alt={`Костюм SS ${index}`} />
+              </div>
+            ))}
+          </div>
+          <h3 onClick={() => setCostumesS(getUserCostumes("S"))}>Костюмы S</h3>
+          <div className="display-costumes">
+            {costumesS.map((costume, index) => (
+              <div key={index} className="one">
+                <img src={costume.costume} alt={`Костюм S ${index}`} />
+              </div>
+            ))}
+          </div>
+          <h3 onClick={() => setCostumesA(getUserCostumes("A"))}>Костюмы A</h3>
+          <div className="display-costumes">
+            {costumesA.map((costume, index) => (
+              <div key={index} className="one">
+                <img src={costume.costume} alt={`Костюм A ${index}`} />
+              </div>
+            ))}
+          </div>
           <h3>Аксессуары</h3>
         </div>
         <div
@@ -270,7 +281,8 @@ const Editor = () => {
           >
             {isEditable && showResizeHandle && (
               <div
-                className="resize-handle"
+                className="
+                resize-handle"
                 style={{
                   position: "absolute",
                   width: "10px",
@@ -287,6 +299,9 @@ const Editor = () => {
               />
             )}
             {text}
+          </div>
+
+          <div className="display-costumes">
           </div>
         </div>
       </div>
