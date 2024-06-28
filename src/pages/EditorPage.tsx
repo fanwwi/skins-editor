@@ -1,10 +1,7 @@
 import React, { useState, MouseEvent, ChangeEvent, useEffect } from "react";
-import { Link, useParams } from "react-router-dom";
-import logo from "../img/logo.png";
-import userIcon from "../img/user-image.jpg";
+import { useParams } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../store/store";
 import { getOneAccount } from "../store/actions/account.action";
-import axios from "axios";
 
 const Editor = () => {
   const [background, setBackground] = useState("");
@@ -18,23 +15,45 @@ const Editor = () => {
   const [textColor, setTextColor] = useState("#000000");
   const [showResizeHandle, setShowResizeHandle] = useState(false);
   const [isEditable, setIsEditable] = useState(true);
-  const [imageUrl, setImageUrl] = useState<string | null>(null);
+
+  const [costumesSS, setCostumesSS] = useState<any[]>([]);
+  const [costumesS, setCostumesS] = useState<any[]>([]);
+  const [costumesA, setCostumesA] = useState<any[]>([]);
+
+  const { userCostumes } = useAppSelector((state) => state.accounts);
+  const { account } = useAppSelector((state) => state.accounts);
+  const { id } = useParams();
+
   const dispatch = useAppDispatch();
 
-  const { account } = useAppSelector((state) => state.accounts);
-  const { accountId } = useParams();
-
   useEffect(() => {
-    if (accountId) {
-      dispatch(getOneAccount(accountId));
+    if (id) {
+      dispatch(getOneAccount(id));
     }
-  }, [accountId, dispatch]);
+  }, [id, dispatch]);
 
   const handleAddText = () => {
     if (isEditable) {
       setIsTextEditing(true);
     }
   };
+
+  const getUserCostumes = (category: string) => {
+    if (!userCostumes) return;
+    switch (category) {
+      case 'SS':
+        setCostumesSS(userCostumes.filter((costume: any) => costume.category === 'SS'));
+        break;
+      case 'S':
+        setCostumesS(userCostumes.filter((costume: any) => costume.category === 'S'));
+        break;
+      case 'A':
+        setCostumesA(userCostumes.filter((costume: any) => costume.category === 'A'));
+        break;
+      default:
+        break;
+    }
+  };  
 
   const handleTextChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
     if (isEditable) {
@@ -48,7 +67,9 @@ const Editor = () => {
     }
   };
 
-  const handleBackgroundColorChange = (event: ChangeEvent<HTMLInputElement>) => {
+  const handleBackgroundColorChange = (
+    event: ChangeEvent<HTMLInputElement>
+  ) => {
     if (isEditable) {
       setBackgroundColor(event.target.value);
     }
@@ -130,56 +151,13 @@ const Editor = () => {
     }
   };
 
-  const handleSave = async () => {
+  const handleSave = () => {
     const userConfirmed = window.confirm(
       "После сохранения ничего изменять нельзя будет. Вы уверены, что хотите сохранить?"
     );
     if (userConfirmed) {
-      setIsEditable(false); // Блокировать дальнейшее редактирование
-
-      try {
-        // Создаем временный элемент для сохранения содержимого
-        const tempElement = document.createElement("div");
-        tempElement.style.backgroundColor = backgroundColor;
-        tempElement.style.width = "600px";
-        tempElement.style.height = "400px";
-        tempElement.style.position = "relative";
-
-        if (background) {
-          const backgroundImage = new Image();
-          backgroundImage.src = background;
-          backgroundImage.style.width = "100%";
-          backgroundImage.style.height = "100%";
-          backgroundImage.style.objectFit = "cover";
-          backgroundImage.style.position = "absolute";
-          backgroundImage.style.top = "0";
-          backgroundImage.style.left = "0";
-          tempElement.appendChild(backgroundImage);
-        }
-
-        const textElement = document.createElement("div");
-        textElement.innerText = text;
-        textElement.style.left = `${textPosition.x}px`;
-        textElement.style.top = `${textPosition.y}px`;
-        textElement.style.position = "absolute";
-        textElement.style.fontSize = `${textSize}px`;
-        textElement.style.color = textColor;
-        tempElement.appendChild(textElement);
-
-        const dataUrl = await elementToDataURL(tempElement);
-
-        const response = await axios.post("http://localhost:8000/cards", {
-          imageUrl: dataUrl,
-          accountId,
-        });
-        return response.data;
-
-        setImageUrl(dataUrl);
-        alert("Изображение сохранено!");
-      } catch (error) {
-        console.error("Ошибка при сохранении изображения:", error);
-        alert("Произошла ошибка при сохранении изображения.");
-      }
+      setIsEditable(false);
+      // Implement save logic here
     }
   };
 
@@ -187,66 +165,6 @@ const Editor = () => {
     if (isTextEditing && isEditable) {
       setIsTextEditing(false);
     }
-  };
-
-  // Функция для преобразования содержимого элемента в Data URL
-  const elementToDataURL = (element: HTMLElement): Promise<string> => {
-    return new Promise((resolve, reject) => {
-      // Создаем временный элемент для хранения содержимого
-      const tempElement = document.createElement("div");
-      tempElement.appendChild(element.cloneNode(true));
-
-      // Создаем временный блок для вставки элемента и извлечения изображения
-      const tempBlock = document.createElement("div");
-      tempBlock.style.position = "absolute";
-      tempBlock.style.left = "-99999px";
-      tempBlock.style.width = "1px";
-      tempBlock.style.height = "1px";
-      tempBlock.style.overflow = "hidden";
-      tempBlock.appendChild(tempElement);
-      document.body.appendChild(tempBlock);
-
-      // Функция для удаления временного блока
-      const cleanup = () => {
-        document.body.removeChild(tempBlock);
-      };
-
-      // Преобразуем содержимое в Data URL
-      const exportImage = () => {
-        const imageElement = tempElement.querySelector("img, canvas");
-        if (imageElement instanceof HTMLCanvasElement) {
-          resolve(imageElement.toDataURL("image/png"));
-        } else if (imageElement instanceof HTMLImageElement) {
-          const canvas = document.createElement("canvas");
-          canvas.width = imageElement.width;
-          canvas.height = imageElement.height;
-          const ctx = canvas.getContext("2d");
-          if (ctx) {
-            ctx.drawImage(imageElement, 0, 0);
-            resolve(canvas.toDataURL("image/png"));
-          } else {
-            reject("Ошибка при создании контекста Canvas");
-          }
-        } else {
-          reject("Невозможно извлечь изображение из элемента");
-        }
-      };
-
-      // Ждем загрузки изображения перед экспортом
-      const waitForImageLoad = () => {
-        const imageElement = tempElement.querySelector("img, canvas");
-        if (
-          imageElement instanceof HTMLImageElement ||
-          imageElement instanceof HTMLCanvasElement
-        ) {
-          imageElement.onerror = (error) => {
-            reject("Ошибка загрузки изображения");
-            cleanup();
-          };
-        }
-        reject("Элемент не содержит изображения");
-      };
-    });
   };
 
   return (
