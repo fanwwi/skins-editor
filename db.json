@@ -39,25 +39,25 @@
       "costume": "https://i.pinimg.com/originals/dc/f3/2b/dcf32bcdfe204bfe62ba6f35f668bd0a.png",
       "author": "Егерь",
       "category": "SS",
-      "id": 2
+      "id": "2"
     },
     {
       "costume": "https://i.pinimg.com/originals/dc/f3/2b/dcf32bcdfe204bfe62ba6f35f668bd0a.png",
       "author": "Егерь",
       "category": "S",
-      "id": 3
+      "id": "3"
     },
     {
       "costume": "https://i.pinimg.com/originals/dc/f3/2b/dcf32bcdfe204bfe62ba6f35f668bd0a.png",
       "author": "Егерь",
       "category": "SS",
-      "id": 4
+      "id": "4"
     },
     {
       "costume": "https://i.pinimg.com/originals/dc/f3/2b/dcf32bcdfe204bfe62ba6f35f668bd0a.png",
       "author": "Егерь",
       "category": "A",
-      "id": 4
+      "id": "4"
     }
   ],
   "userCostumes": [
@@ -66,47 +66,47 @@
       "category": "S",
       "author": "Воин",
       "bigAuthor": "1",
-      "id": 2
+      "id": "2"
     },
     {
       "costume": "https://i.pinimg.com/originals/dc/f3/2b/dcf32bcdfe204bfe62ba6f35f668bd0a.png",
       "category": "S",
       "author": "Егерь",
       "bigAuthor": "1",
-      "id": 4
+      "id": "4"
     },
     {
       "costume": "https://i.pinimg.com/originals/dc/f3/2b/dcf32bcdfe204bfe62ba6f35f668bd0a.png",
       "category": "A",
       "author": "Егерь",
       "bigAuthor": "1",
-      "id": 5
+      "id": "5"
     },
     {
       "costume": "https://i.pinimg.com/originals/dc/f3/2b/dcf32bcdfe204bfe62ba6f35f668bd0a.png",
       "category": "SS",
       "author": "Егерь",
       "bigAuthor": "1",
-      "id": 6
+      "id": "6"
     },
     {
       "costume": "https://i.pinimg.com/originals/dc/f3/2b/dcf32bcdfe204bfe62ba6f35f668bd0a.png",
       "category": "A",
       "author": "Егерь",
       "bigAuthor": "1",
-      "id": 7
+      "id": "7"
     }
   ],
   "assessoirs": [
     {
       "assessoir": "https://oruzhejnaya.ru/images/cinema-swords/img-1.jpg",
       "character": "Воин",
-      "id": 1
+      "id": "1"
     },
     {
       "assessoir": "https://kartinki.pics/uploads/posts/2022-12/thumbs/1669998232_18-kartinkin-net-p-mechi-fentezi-pinterest-18.jpg",
       "character": "Егерь",
-      "id": 2
+      "id": "2"
     }
   ],
   "userAssessoirs": [
@@ -114,8 +114,12 @@
       "assessoir": "https://oruzhejnaya.ru/images/cinema-swords/img-1.jpg",
       "character": "Воин",
       "bigAuthor": "1",
-      "id": 1
+      "id": "1"
     }
   ],
-  "cards": [{}]
+  "cards": [
+    {
+      "id": "685f"
+    }
+  ]
 }

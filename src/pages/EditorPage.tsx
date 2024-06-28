@@ -48,9 +48,7 @@ const Editor = () => {
     }
   };
 
-  const handleBackgroundColorChange = (
-    event: ChangeEvent<HTMLInputElement>
-  ) => {
+  const handleBackgroundColorChange = (event: ChangeEvent<HTMLInputElement>) => {
     if (isEditable) {
       setBackgroundColor(event.target.value);
     }
@@ -174,7 +172,7 @@ const Editor = () => {
           imageUrl: dataUrl,
           accountId,
         });
-        return response.data
+        return response.data;
 
         setImageUrl(dataUrl);
         alert("Изображение сохранено!");
