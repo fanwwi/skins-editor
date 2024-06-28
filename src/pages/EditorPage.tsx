@@ -22,13 +22,14 @@ const Editor = () => {
   const dispatch = useAppDispatch();
 
   const { account } = useAppSelector((state) => state.accounts);
-  const { accountId } = useParams();
+  const { id } = useParams();
+  console.log(id);
 
   useEffect(() => {
-    if (accountId) {
-      dispatch(getOneAccount(accountId));
+    if (id) {
+      dispatch(getOneAccount(id));
     }
-  }, [accountId, dispatch]);
+  }, [id, dispatch]);
 
   const handleAddText = () => {
     if (isEditable) {
@@ -170,7 +171,7 @@ const Editor = () => {
 
         const response = await axios.post("http://localhost:8000/cards", {
           imageUrl: dataUrl,
-          accountId,
+          id,
         });
         return response.data;
 
