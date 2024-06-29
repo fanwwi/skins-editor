@@ -28,7 +28,6 @@ import {
   DetailsType,
 } from "../types";
 import del from "../img/delete-icon.png";
-import { getCurrentUser } from "../store/actions/user.action";
 import addCostumeImg from "../img/add-icon.png";
 
 const EditPage = () => {
@@ -52,12 +51,12 @@ const EditPage = () => {
   } = useAppSelector((state) => state.accounts);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const { accountId } = useParams();
+  const accountId = localStorage.getItem("currentAccount");
   const [dmmState, setDmmState] = useState(null);
   const [transferState, setTransferState] = useState(null);
   const [emailState, setEmailState] = useState(null);
   const [costumes, setCostumes] = useState<CostumesType>({
-    author: account ? account!.id : "",
+    author: accountId!,
     costume: "",
     category: "",
     bigAuthor: "",
@@ -96,10 +95,10 @@ const EditPage = () => {
     if (account) {
       dispatch(getCostume());
       dispatch(getAssessoirs());
-      dispatch(getUserCostumes(account.id));
-      dispatch(getUserAss(account.id));
+      dispatch(getUserCostumes(accountId!));
+      dispatch(getUserAss(accountId!));
     }
-  }, [dispatch, accountId, account]);
+  }, [dispatch]);
 
   useEffect(() => {
     if (account) {
@@ -143,12 +142,8 @@ const EditPage = () => {
   };
 
   const handleCostumeSubmit = async () => {
-    if (costumes) {
-      // Add logic here if needed
-    }
-
     setCostumes({
-      author: account!.id,
+      author: accountId!,
       costume: "",
       category: "",
       bigAuthor: "",
@@ -276,7 +271,7 @@ const EditPage = () => {
       category: item.category,
       id: item.id,
     };
-    dispatch(addUserCostume({ data: selectedItem, id: account!.id }));
+    dispatch(addUserCostume({ data: selectedItem, id: accountId! }));
     setClickedItem(selectedItem);
     console.log(selectedItem);
   };
@@ -288,7 +283,7 @@ const EditPage = () => {
       bigAuthor: item.bigAuthor,
       id: item.id,
     };
-    dispatch(addUserAss({ data: selectedAss, id: account!.id }));
+    dispatch(addUserAss({ data: selectedAss, id: accountId! }));
     setClickedAss(selectedAss);
     console.log(selectedAss);
   };
@@ -383,7 +378,7 @@ const EditPage = () => {
           </div>
           <div className="visual-card">
             <Link
-              to={account?.id ? `/editor/${account!.id}` : ""}
+              to={`/editor/${accountId!}`}
               style={{ all: "unset" }}
             >
               Создать визуальную карточку аккаунта

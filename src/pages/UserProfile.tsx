@@ -121,7 +121,13 @@ const UserProfile = () => {
                     </div>
                     <div className="acc-icons">
                       <Link to={`/edit/${account.id}/`}>
-                        <img src={editIcon} alt="edit" />
+                        <img
+                          src={editIcon}
+                          alt="edit"
+                          onClick={() => {
+                            localStorage.setItem("currentAccount", account.id);
+                          }}
+                        />
                       </Link>
                       <img
                         src={copyIcon}

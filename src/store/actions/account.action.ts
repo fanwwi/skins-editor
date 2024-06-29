@@ -51,17 +51,12 @@ export const getAccounts = createAsyncThunk(
 
 export const getOneAccount = createAsyncThunk(
   "accounts/getOneAccount",
-  async (id: string, { rejectWithValue }) => {
+  async (id: string) => {
     try {
       const { data } = await axios.get(`http://localhost:8000/accounts/${id}`);
       return data;
     } catch (error) {
       console.error(error);
-      if (axios.isAxiosError(error) && error.response) {
-        return rejectWithValue(error.response.data);
-      } else {
-        return rejectWithValue("Ошибка получения пользователя");
-      }
     }
   }
 );
@@ -221,7 +216,7 @@ export const addUserAss = createAsyncThunk(
 
     try {
       const { data } = await axios.post(
-        "http://localhost:8000/userAssessoirs",
+        "http://localhost:8000/userAssesoirs",
         newData
       );
       window.location.reload();
@@ -254,7 +249,7 @@ export const deleteAss = createAsyncThunk(
   "accounts/deleteAss",
   async (id: string, { rejectWithValue }) => {
     try {
-      await axios.delete(`http://localhost:8000/userAssessoirs/${id}`);
+      await axios.delete(`http://localhost:8000/userAssesoirs/${id}`);
       window.location.reload();
       return id;
     } catch (error) {
@@ -289,7 +284,7 @@ export const getUserAss = createAsyncThunk(
   "account/getUserAss",
   async (accountId: string) => {
     try {
-      const { data } = await axios.get("http://localhost:8000/userAssessoirs");
+      const { data } = await axios.get("http://localhost:8000/userAssesoirs");
 
       const filteredData = data.filter((ass: AssessoirsType) => {
         return ass.bigAuthor === accountId;

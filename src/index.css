@@ -725,3 +725,184 @@ select {
   width: 250px;
   cursor: pointer;
 }
+
+/*! editor */
+
+.list {
+  width: 100%;
+  height: 729px;
+  background-color: #a3cbff;
+  position: relative;
+  overflow: hidden;
+}
+
+.options {
+  height: 170px;
+  width: 100%;
+  background-color: #fff;
+  align-items: center;
+}
+
+.options .container {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.block-top {
+  width: 1400px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 30px;
+}
+
+.costumes-block {
+  display: flex;
+  flex-direction: column;
+  height: 600px;
+  gap: 30px;
+  width: 300px;
+  position: absolute;
+  left: 50px;
+  top: 250px;
+}
+
+.costumes-block button {
+  height: 80px;
+  background-color: #006eff;
+  border: none;
+  color: #fff;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 20px;
+}
+
+.costumes-block button:hover {
+  background-color: #2200ff;
+}
+
+.options .label {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  font-size: 14px;
+  align-items: center;
+}
+
+.top {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.label img {
+  width: 20px;
+}
+
+.options input {
+  width: 300px;
+  border: 1px solid #000;
+  padding: 7px 10px;
+  outline: none;
+  border-radius: 7px;
+}
+
+.options h3 {
+  display: flex;
+  font-weight: 400;
+}
+
+.options h2 {
+  margin-top: 20px;
+}
+
+#color img {
+  width: 30px;
+  cursor: pointer;
+}
+
+#color {
+  gap: 10px;
+  align-items: center;
+}
+
+#color:hover,
+#bold:hover,
+#cursiv:hover,
+#underline:hover {
+  color: #8a8a8a;
+}
+
+.font-size {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.font-size button {
+  width: 30px;
+  height: 30px;
+  font-size: 20px;
+  background-color: #006eff;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.font-size button:hover {
+  background-color: #3c00ff;
+}
+
+.canva {
+  width: 500px;
+  height: 500px;
+  background-color: #fff;
+  position: absolute;
+  top: 200px;
+  right: 400px;
+  border-radius: 20px;
+  border: 3px dashed #8a8a8a;
+}
+
+.display-costumes {
+  width: 400px;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.display-cost {
+  height: 150px;
+}
+
+.display-cost img {
+  height: 150px;
+}
+
+.canva-size {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+.down-block {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.down-block button {
+  background-color: #ffffff;
+  border-radius: 2px;
+  padding: 7px 10px;
+  border: 1px solid #006eff;
+  color: #006eff;
+  cursor: pointer;
+}
+
+.down-block button:hover {
+  background-color: #f0f0f0;
+}
