@@ -25,7 +25,22 @@ const EditorPage = () => {
     dispatch(getUserCostumes(accountId!));
     dispatch(getOneAccount(accountId!));
     dispatch(getUserAss(accountId!));
-  }, [dispatch]);
+  }, [dispatch, accountId]);
+
+  const [canvasSize, setCanvasSize] = useState(700);
+
+  const increaseCanvasSize = () => {
+    if (canvasSize < 1000) {
+      setCanvasSize(canvasSize + 100);
+    }
+  };
+
+  const decreaseCanvasSize = () => {
+    if (canvasSize > 500) {
+      setCanvasSize(canvasSize - 100);
+    }
+  };
+
   return (
     <div className="list">
       <div className="options">
@@ -49,9 +64,9 @@ const EditorPage = () => {
             <div className="canva-size">
               <span>Размер холста:</span>
               <div className="down-block">
-                <button>+</button>
-                <div className="fz">default</div>
-                <button>-</button>
+                <button onClick={increaseCanvasSize}>+</button>
+                <div className="fz">{canvasSize}px</div>
+                <button onClick={decreaseCanvasSize}>-</button>
               </div>
             </div>
 
@@ -78,7 +93,14 @@ const EditorPage = () => {
           <button onClick={() => setCostumeA(true)}>Костюмы A</button>
           <button onClick={() => setAss(true)}>Аксессуары</button>
         </div>
-        <div className="canva">
+        <div
+          className="canva"
+          style={{
+            width: canvasSize,
+            position: "absolute",
+            right: `calc(70% - ${canvasSize}px)`,
+          }}
+        >
           <div className="display-costumes">
             {costumeS &&
               userCostumes
