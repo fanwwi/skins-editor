@@ -6,7 +6,7 @@ import {
   getUserAss,
   getUserCostumes,
 } from "../store/actions/account.action";
-import iconImage from "../img/image-icon.png"
+import iconImage from "../img/image-icon.png";
 
 const EditorPage = () => {
   const accountId = localStorage.getItem("currentAccount");
@@ -38,6 +38,8 @@ const EditorPage = () => {
               Изображение для заливки
               <input type="text" />
             </div>
+
+            <h3 id="text">Добавить текст</h3>
             <div className="font-size">
               <button>+</button>
               <div className="fz">default</div>
@@ -54,7 +56,9 @@ const EditorPage = () => {
             </div>
 
             <div className="label">
-              <div className="top">Добавить изображение <img src={iconImage} alt="" /></div>
+              <div className="top">
+                Добавить изображение <img src={iconImage} alt="" />
+              </div>
               <input type="text" />
             </div>
           </div>

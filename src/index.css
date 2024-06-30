@@ -801,6 +801,18 @@ select {
   width: 20px;
 }
 
+#text {
+  padding: 10px;
+  background-color: #54b2ff;
+  color: #fff;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+#text:hover {
+  background-color: #41a0ff;
+}
+
 .options input {
   width: 300px;
   border: 1px solid #000;
