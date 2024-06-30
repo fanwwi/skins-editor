@@ -838,6 +838,7 @@ select {
 #color {
   gap: 10px;
   align-items: center;
+  position: relative;
 }
 
 #color:hover,
@@ -917,4 +918,11 @@ select {
 
 .down-block button:hover {
   background-color: #f0f0f0;
+}
+
+#color input {
+  width: 30px;
+  padding: 0;
+  position: absolute;
+  opacity: 0;
 }

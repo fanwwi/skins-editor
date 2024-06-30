@@ -19,6 +19,9 @@ const EditorPage = () => {
   const [costumeA, setCostumeA] = useState(false);
   const [ass, setAss] = useState(false);
 
+  const [showModal, setShowModal] = useState(false);
+  const [backgroundColor, setBackgroundColor] = useState("#ffffff");
+
   const dispatch = useAppDispatch();
 
   useEffect(() => {
@@ -41,13 +44,30 @@ const EditorPage = () => {
     }
   };
 
+  const handleOpenModal = () => {
+    setShowModal(true);
+  };
+
+  const handleCloseModal = () => {
+    setShowModal(false);
+  };
+
+  const handleChangeColor = (color: any) => {
+    setBackgroundColor(color);
+    handleCloseModal();
+  };
+
   return (
     <div className="list">
       <div className="options">
         <div className="container">
           <div className="block-top">
-            <h3 id="color">
-              <img src={rainbow} alt="" /> Заливка
+            <h3 id="color" onClick={handleOpenModal}>
+              <img src={rainbow} alt="" /> Заливка{" "}
+              <input
+                type="color"
+                onChange={(e) => handleChangeColor(e.target.value)}
+              />
             </h3>
             <div className="label">
               Изображение для заливки
@@ -97,6 +117,7 @@ const EditorPage = () => {
           className="canva"
           style={{
             width: canvasSize,
+            backgroundColor: backgroundColor,
             position: "absolute",
             right: `calc(70% - ${canvasSize}px)`,
           }}
