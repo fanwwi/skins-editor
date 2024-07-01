@@ -737,7 +737,7 @@ select {
 }
 
 .options {
-  height: 170px;
+  height: 200px;
   width: 100%;
   background-color: #fff;
   align-items: center;
@@ -874,7 +874,7 @@ select {
   height: 500px;
   background-color: #fff;
   position: absolute;
-  top: 200px;
+  top: 220px;
   right: 400px;
   border-radius: 20px;
   border: 3px dashed #8a8a8a;

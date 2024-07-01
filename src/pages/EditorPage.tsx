@@ -22,6 +22,7 @@ const EditorPage = () => {
   const [showModal, setShowModal] = useState(false);
   const [backgroundColor, setBackgroundColor] = useState("#ffffff");
   const [backgroundImage, setBackgroundImage] = useState<string | null>(null);
+  const [canvasImages, setCanvasImages] = useState<string[]>([]); // State for storing canvas images
 
   const dispatch = useAppDispatch();
 
@@ -62,6 +63,13 @@ const EditorPage = () => {
     e: React.ChangeEvent<HTMLInputElement>
   ) => {
     setBackgroundImage(e.target.value);
+  };
+
+  const handleImageInsert = () => {
+    if (backgroundImage) {
+      setCanvasImages([...canvasImages, backgroundImage]);
+      setBackgroundImage(""); // Clear input after inserting image
+    }
   };
 
   return (
@@ -105,7 +113,12 @@ const EditorPage = () => {
               <div className="top">
                 Добавить изображение <img src={iconImage} alt="" />
               </div>
-              <input type="text" />
+              <input
+                type="text"
+                value={backgroundImage}
+                onChange={(e) => setBackgroundImage(e.target.value)}
+              />
+              <button onClick={handleImageInsert}>Добавить</button>
             </div>
           </div>
 
@@ -129,14 +142,20 @@ const EditorPage = () => {
           style={{
             width: canvasSize,
             backgroundColor: backgroundColor,
-            backgroundImage: backgroundImage
-              ? `url(${backgroundImage})`
-              : "none",
             backgroundSize: "cover",
             position: "absolute",
             right: `calc(70% - ${canvasSize}px)`,
           }}
         >
+          {canvasImages.map((image, index) => (
+            <img
+              key={index}
+              src={image}
+              alt={`Image ${index}`}
+              style={{ height: 150, position: "absolute", top: index * 160 }}
+            />
+          ))}
+
           <div className="display-costumes">
             {costumeS &&
               userCostumes
