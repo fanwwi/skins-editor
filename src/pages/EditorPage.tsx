@@ -115,7 +115,7 @@ const EditorPage = () => {
               </div>
               <input
                 type="text"
-                value={backgroundImage}
+                value={backgroundImage!}
                 onChange={(e) => setBackgroundImage(e.target.value)}
               />
               <button onClick={handleImageInsert}>Добавить</button>
