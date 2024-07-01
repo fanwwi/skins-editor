@@ -21,6 +21,7 @@ const EditorPage = () => {
 
   const [showModal, setShowModal] = useState(false);
   const [backgroundColor, setBackgroundColor] = useState("#ffffff");
+  const [backgroundImage, setBackgroundImage] = useState<string | null>(null);
 
   const dispatch = useAppDispatch();
 
@@ -57,6 +58,12 @@ const EditorPage = () => {
     handleCloseModal();
   };
 
+  const handleBackgroundImageChange = (
+    e: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    setBackgroundImage(e.target.value);
+  };
+
   return (
     <div className="list">
       <div className="options">
@@ -71,7 +78,11 @@ const EditorPage = () => {
             </h3>
             <div className="label">
               Изображение для заливки
-              <input type="text" />
+              <input
+                type="text"
+                value={backgroundImage || ""}
+                onChange={handleBackgroundImageChange}
+              />
             </div>
 
             <h3 id="text">Добавить текст</h3>
@@ -118,6 +129,10 @@ const EditorPage = () => {
           style={{
             width: canvasSize,
             backgroundColor: backgroundColor,
+            backgroundImage: backgroundImage
+              ? `url(${backgroundImage})`
+              : "none",
+            backgroundSize: "cover",
             position: "absolute",
             right: `calc(70% - ${canvasSize}px)`,
           }}
