@@ -60,6 +60,8 @@ export type CostumesType = {
   category: string;
   bigAuthor: string;
   id: string;
+  x?: number;
+  y?: number;
 };
 
 export type AssessoirsType = {
@@ -67,4 +69,6 @@ export type AssessoirsType = {
   character: string;
   bigAuthor: string;
   id: string;
+  x?: number;
+  y?: number;
 };

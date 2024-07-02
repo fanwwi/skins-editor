@@ -33,6 +33,15 @@ const EditorPage: React.FC = () => {
   const [textElements, setTextElements] = useState<TextElement[]>([]);
   const [canvasSize, setCanvasSize] = useState(700);
 
+  const [isDragging, setIsDragging] = useState(false);
+  const [draggingElementId, setDraggingElementId] = useState<number | null>(
+    null
+  );
+  const [mousePosition, setMousePosition] = useState<{ x: number; y: number }>({
+    x: 0,
+    y: 0,
+  });
+
   const dispatch = useAppDispatch();
 
   useEffect(() => {
@@ -107,6 +116,36 @@ const EditorPage: React.FC = () => {
     );
   };
 
+  const handleMouseDown = (
+    id: number,
+    event: React.MouseEvent<HTMLDivElement>
+  ) => {
+    event.stopPropagation();
+    setDraggingElementId(id);
+    setIsDragging(true);
+    setMousePosition({ x: event.clientX, y: event.clientY });
+  };
+
+  const handleMouseMove = (event: React.MouseEvent<HTMLDivElement>) => {
+    if (isDragging && draggingElementId !== null) {
+      const dx = event.clientX - mousePosition.x;
+      const dy = event.clientY - mousePosition.y;
+      setMousePosition({ x: event.clientX, y: event.clientY });
+      setTextElements((prevElements) =>
+        prevElements.map((element) =>
+          element.id === draggingElementId
+            ? { ...element, x: element.x + dx, y: element.y + dy }
+            : element
+        )
+      );
+    }
+  };
+
+  const handleMouseUp = () => {
+    setIsDragging(false);
+    setDraggingElementId(null);
+  };
+
   return (
     <div className="list">
       <div className="options">
@@ -174,6 +213,8 @@ const EditorPage: React.FC = () => {
             position: "absolute",
             right: `calc(70% - ${canvasSize}px)`,
           }}
+          onMouseMove={handleMouseMove}
+          onMouseUp={handleMouseUp}
         >
           <div className="display-costumes">
             {costumeS &&
@@ -227,8 +268,12 @@ const EditorPage: React.FC = () => {
                 position: "absolute",
                 left: element.x,
                 top: element.y,
+                cursor:
+                  isDragging && draggingElementId === element.id
+                    ? "grabbing"
+                    : "default",
               }}
-              onClick={() => handleTextClick(element.id)}
+              onMouseDown={(e) => handleMouseDown(element.id, e)}
             >
               <div
                 contentEditable={element.isEditing}
