@@ -16,6 +16,25 @@ interface TextElement {
   y: number;
 }
 
+interface CostumesType {
+  costume: string;
+  author: string;
+  category: string;
+  bigAuthor: string;
+  id: string;
+  x?: number;
+  y?: number;
+}
+
+interface AssessoirsType {
+  assessoir: string;
+  character: string;
+  bigAuthor: string;
+  id: string;
+  x?: number;
+  y?: number;
+}
+
 const EditorPage: React.FC = () => {
   const accountId = localStorage.getItem("currentAccount");
   const { userCostumes } = useAppSelector((state) => state.accounts);
@@ -92,30 +111,6 @@ const EditorPage: React.FC = () => {
     setTextElements([...textElements, newTextElement]);
   };
 
-  const handleTextClick = (id: number) => {
-    setTextElements((prevElements) =>
-      prevElements.map((element) =>
-        element.id === id ? { ...element, isEditing: true } : element
-      )
-    );
-  };
-
-  const handleTextChange = (id: number, text: string) => {
-    setTextElements((prevElements) =>
-      prevElements.map((element) =>
-        element.id === id ? { ...element, text } : element
-      )
-    );
-  };
-
-  const handleBlur = (id: number) => {
-    setTextElements((prevElements) =>
-      prevElements.map((element) =>
-        element.id === id ? { ...element, isEditing: false } : element
-      )
-    );
-  };
-
   const handleMouseDown = (
     id: number,
     event: React.MouseEvent<HTMLDivElement>
@@ -144,6 +139,36 @@ const EditorPage: React.FC = () => {
   const handleMouseUp = () => {
     setIsDragging(false);
     setDraggingElementId(null);
+  };
+
+  const [isDraggingCostumes, setIsDraggingCostumes] = useState(false);
+  const [draggingCostumes, setDraggingCostumes] = useState<CostumesType[]>([]);
+
+  const handleCostumeMouseDown = (id: number) => {
+    const costume = userCostumes!.find((cost) => cost.id === id.toString());
+    if (costume) {
+      setDraggingCostumes([...draggingCostumes, costume]);
+      setIsDraggingCostumes(true);
+    }
+  };
+
+  const handleCostumeMouseMove = (event: React.MouseEvent<HTMLDivElement>) => {
+    if (isDraggingCostumes) {
+      const dx = event.clientX - mousePosition.x;
+      const dy = event.clientY - mousePosition.y;
+      setMousePosition({ x: event.clientX, y: event.clientY });
+      setDraggingCostumes((prevCostumes) =>
+        prevCostumes.map((costume) => ({
+          ...costume,
+          x: costume.x ? costume.x + dx : dx,
+          y: costume.y ? costume.y + dy : dy,
+        }))
+      );
+    }
+  };
+
+  const handleCostumeMouseUp = () => {
+    setIsDraggingCostumes(false);
   };
 
   return (
@@ -216,46 +241,118 @@ const EditorPage: React.FC = () => {
           onMouseMove={handleMouseMove}
           onMouseUp={handleMouseUp}
         >
-          <div className="display-costumes">
-            {costumeS &&
-              userCostumes
-                ?.filter((cost) => cost.category === "S")
-                ?.reverse()
-                ?.map((costume) => (
-                  <div key={costume.id} className="display-cost">
-                    <img src={costume.costume} alt="Costume" />
-                  </div>
-                ))}
-          </div>
-
-          <div className="display-costumes">
-            {costumeSS &&
-              userCostumes
-                ?.filter((cost) => cost.category === "SS")
-                ?.reverse()
-                ?.map((costume) => (
-                  <div key={costume.id} className="display-cost">
-                    <img src={costume.costume} alt="Costume" />
-                  </div>
-                ))}
-          </div>
-
-          <div className="display-costumes">
+          <div
+            className="display-costumes"
+            onMouseMove={handleCostumeMouseMove}
+            onMouseUp={handleCostumeMouseUp}
+          >
             {costumeA &&
               userCostumes
                 ?.filter((cost) => cost.category === "A")
                 ?.reverse()
                 ?.map((costume) => (
-                  <div key={costume.id} className="display-cost">
+                  <div
+                    key={costume.id}
+                    className="display-cost"
+                    style={{
+                      position: "absolute",
+                      left: costume.x || 0,
+                      top: costume.y || 0,
+                      cursor:
+                        isDraggingCostumes &&
+                        draggingCostumes.some((c) => c.id === costume.id)
+                          ? "grabbing"
+                          : "default",
+                    }}
+                    onMouseDown={() => handleCostumeMouseDown(+costume.id)}
+                  >
                     <img src={costume.costume} alt="Costume" />
                   </div>
                 ))}
           </div>
 
-          <div className="display-costumes">
+          <div
+            className="display-costumes"
+            onMouseMove={handleCostumeMouseMove}
+            onMouseUp={handleCostumeMouseUp}
+          >
+            {costumeSS &&
+              userCostumes
+                ?.filter((cost) => cost.category === "SS")
+                ?.reverse()
+                ?.map((costume) => (
+                  <div
+                    key={costume.id}
+                    className="display-cost"
+                    style={{
+                      position: "absolute",
+                      left: costume.x || 0,
+                      top: costume.y || 0,
+                      cursor:
+                        isDraggingCostumes &&
+                        draggingCostumes.some((c) => c.id === costume.id)
+                          ? "grabbing"
+                          : "default",
+                    }}
+                    onMouseDown={() => handleCostumeMouseDown(+costume.id)}
+                  >
+                    <img src={costume.costume} alt="Costume" />
+                  </div>
+                ))}
+          </div>
+
+          <div
+            className="display-costumes"
+            onMouseMove={handleCostumeMouseMove}
+            onMouseUp={handleCostumeMouseUp}
+          >
+            {costumeS &&
+              userCostumes
+                ?.filter((cost) => cost.category === "S")
+                ?.reverse()
+                ?.map((costume) => (
+                  <div
+                    key={costume.id}
+                    className="display-cost"
+                    style={{
+                      position: "absolute",
+                      left: costume.x || 0,
+                      top: costume.y || 0,
+                      cursor:
+                        isDraggingCostumes &&
+                        draggingCostumes.some((c) => c.id === costume.id)
+                          ? "grabbing"
+                          : "default",
+                    }}
+                    onMouseDown={() => handleCostumeMouseDown(+costume.id)}
+                  >
+                    <img src={costume.costume} alt="Costume" />
+                  </div>
+                ))}
+          </div>
+
+          <div
+            className="display-costumes"
+            onMouseMove={handleCostumeMouseMove}
+            onMouseUp={handleCostumeMouseUp}
+          >
             {ass &&
               userAss?.reverse()?.map((ass) => (
-                <div key={ass.id} className="display-cost">
+                <div
+                  key={ass.id}
+                  className="display-cost"
+                  style={{
+                    position: "absolute",
+                    left: ass.x || 0,
+                    top: ass.y || 0,
+                    cursor:
+                      isDraggingCostumes &&
+                      draggingCostumes.some((c) => c.id === ass.id)
+                        ? "grabbing"
+                        : "default",
+                  }}
+                  onMouseDown={() => handleCostumeMouseDown(+ass.id)}
+                >
                   <img src={ass.assessoir} alt="Costume" />
                 </div>
               ))}
@@ -276,14 +373,6 @@ const EditorPage: React.FC = () => {
               onMouseDown={(e) => handleMouseDown(element.id, e)}
             >
               <div
-                contentEditable={element.isEditing}
-                onBlur={() => handleBlur(element.id)}
-                onInput={(e) =>
-                  handleTextChange(
-                    element.id,
-                    (e.target as HTMLDivElement).innerText
-                  )
-                }
                 style={{
                   outline: element.isEditing ? "1px solid blue" : "none",
                   padding: "5px",
