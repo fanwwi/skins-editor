@@ -203,10 +203,6 @@ const EditPage = () => {
     }
   };
 
-  const navigateToProfile = () => {
-    navigate(`${id}/profile`);
-  };
-
   const handleDeleteAccount = (accountId: string) => {
     if (window.confirm("Вы уверены, что хотите удалить этот костюм?")) {
       dispatch(deleteOneCostume(accountId))
@@ -376,13 +372,8 @@ const EditPage = () => {
               )}
             </div>
           </div>
-          <div className="visual-card">
-            <Link
-              to={`/editor/${accountId!}`}
-              style={{ all: "unset" }}
-            >
+          <div className="visual-card" onClick={() => navigate(`/editor/${accountId}`)}>
               Создать визуальную карточку аккаунта
-            </Link>
           </div>
         </div>
         <div className="main-header">
