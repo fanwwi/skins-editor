@@ -8,7 +8,15 @@ import {
 } from "../store/actions/account.action";
 import iconImage from "../img/image-icon.png";
 
-const EditorPage = () => {
+interface TextElement {
+  id: number;
+  text: string;
+  isEditing: boolean;
+  x: number;
+  y: number;
+}
+
+const EditorPage: React.FC = () => {
   const accountId = localStorage.getItem("currentAccount");
   const { userCostumes } = useAppSelector((state) => state.accounts);
   const { userAss } = useAppSelector((state) => state.accounts);
@@ -22,6 +30,8 @@ const EditorPage = () => {
   const [showModal, setShowModal] = useState(false);
   const [backgroundColor, setBackgroundColor] = useState("#ffffff");
   const [backgroundImage, setBackgroundImage] = useState<string | null>(null);
+  const [textElements, setTextElements] = useState<TextElement[]>([]);
+  const [canvasSize, setCanvasSize] = useState(700);
 
   const dispatch = useAppDispatch();
 
@@ -30,8 +40,6 @@ const EditorPage = () => {
     dispatch(getOneAccount(accountId!));
     dispatch(getUserAss(accountId!));
   }, [dispatch, accountId]);
-
-  const [canvasSize, setCanvasSize] = useState(700);
 
   const increaseCanvasSize = () => {
     if (canvasSize < 1000) {
@@ -53,7 +61,7 @@ const EditorPage = () => {
     setShowModal(false);
   };
 
-  const handleChangeColor = (color: any) => {
+  const handleChangeColor = (color: string) => {
     setBackgroundColor(color);
     handleCloseModal();
   };
@@ -64,6 +72,40 @@ const EditorPage = () => {
     setBackgroundImage(e.target.value);
   };
 
+  const addTextElement = () => {
+    const newTextElement: TextElement = {
+      id: textElements.length,
+      text: "Новый текст",
+      isEditing: false,
+      x: 50,
+      y: 50,
+    };
+    setTextElements([...textElements, newTextElement]);
+  };
+
+  const handleTextClick = (id: number) => {
+    setTextElements((prevElements) =>
+      prevElements.map((element) =>
+        element.id === id ? { ...element, isEditing: true } : element
+      )
+    );
+  };
+
+  const handleTextChange = (id: number, text: string) => {
+    setTextElements((prevElements) =>
+      prevElements.map((element) =>
+        element.id === id ? { ...element, text } : element
+      )
+    );
+  };
+
+  const handleBlur = (id: number) => {
+    setTextElements((prevElements) =>
+      prevElements.map((element) =>
+        element.id === id ? { ...element, isEditing: false } : element
+      )
+    );
+  };
 
   return (
     <div className="list">
@@ -86,7 +128,9 @@ const EditorPage = () => {
               />
             </div>
 
-            <h3 id="text">Добавить текст</h3>
+            <h3 id="text" onClick={addTextElement}>
+              Добавить текст
+            </h3>
             <div className="font-size">
               <button>+</button>
               <div className="fz">default</div>
@@ -175,6 +219,36 @@ const EditorPage = () => {
                 </div>
               ))}
           </div>
+
+          {textElements.map((element) => (
+            <div
+              key={element.id}
+              style={{
+                position: "absolute",
+                left: element.x,
+                top: element.y,
+              }}
+              onClick={() => handleTextClick(element.id)}
+            >
+              <div
+                contentEditable={element.isEditing}
+                onBlur={() => handleBlur(element.id)}
+                onInput={(e) =>
+                  handleTextChange(
+                    element.id,
+                    (e.target as HTMLDivElement).innerText
+                  )
+                }
+                style={{
+                  outline: element.isEditing ? "1px solid blue" : "none",
+                  padding: "5px",
+                  cursor: "text",
+                }}
+              >
+                {element.text}
+              </div>
+            </div>
+          ))}
         </div>
       </div>
     </div>
