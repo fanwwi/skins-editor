@@ -67,6 +67,7 @@ const EditorPage: React.FC = () => {
   const [isDraggingCostumeSS, setIsDraggingCostumeSS] = useState(false);
   const [isDraggingCostumeA, setIsDraggingCostumeA] = useState(false);
   const [isDraggingAss, setIsDraggingAss] = useState(false);
+  const [costumeSize, setCostumeSize] = useState(150);
 
   const [mousePosition, setMousePosition] = useState<{ x: number; y: number }>({
     x: 0,
@@ -122,6 +123,14 @@ const EditorPage: React.FC = () => {
     setFontSize((prevFontSize) =>
       prevFontSize > 8 ? prevFontSize - 2 : prevFontSize
     );
+  };
+
+  const increaseCostumeSize = () => {
+    setCostumeSize((prevSize) => prevSize + 5);
+  };
+
+  const decreaseCostumeSize = () => {
+    setCostumeSize((prevSize) => prevSize - 5);
   };
 
   const handleOpenModal = () => {
@@ -284,9 +293,9 @@ const EditorPage: React.FC = () => {
             <div className="canva-size">
               <span>Размер костюмов:</span>
               <div className="down-block">
-                <button>+</button>
-                <div className="fz">def</div>
-                <button>-</button>
+                <button onClick={increaseCostumeSize}>+</button>
+                <div className="fz">{costumeSize}px</div>
+                <button onClick={decreaseCostumeSize}>-</button>
               </div>
             </div>
           </div>
@@ -344,7 +353,11 @@ const EditorPage: React.FC = () => {
                         top: costume.y || 0,
                       }}
                     >
-                      <img src={costume.costume} alt="Costume" />
+                      <img
+                        src={costume.costume}
+                        alt="Costume"
+                        style={{ height: `${costumeSize}px` }}
+                      />
                     </div>
                   ))}
             </div>
@@ -371,7 +384,11 @@ const EditorPage: React.FC = () => {
                         top: costume.y || 0,
                       }}
                     >
-                      <img src={costume.costume} alt="Costume" />
+                      <img
+                        src={costume.costume}
+                        alt="Costume"
+                        style={{ height: `${costumeSize}px` }}
+                      />
                     </div>
                   ))}
             </div>
@@ -398,7 +415,11 @@ const EditorPage: React.FC = () => {
                         top: costume.y || 0,
                       }}
                     >
-                      <img src={costume.costume} alt="Costume" />
+                      <img
+                        src={costume.costume}
+                        alt="Costume"
+                        style={{ height: `${costumeSize}px` }}
+                      />
                     </div>
                   ))}
             </div>
@@ -423,7 +444,11 @@ const EditorPage: React.FC = () => {
                       top: ass.y || 0,
                     }}
                   >
-                    <img src={ass.assessoir} alt="Assessoir" />
+                    <img
+                      src={ass.assessoir}
+                      alt="Assessoir"
+                      style={{ height: `${costumeSize}px` }}
+                    />
                   </div>
                 ))}
             </div>
