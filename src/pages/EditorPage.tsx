@@ -56,6 +56,12 @@ const EditorPage: React.FC = () => {
   const [textElements, setTextElements] = useState<TextElement[]>([]);
   const [canvasSize, setCanvasSize] = useState(700);
   const [fontSize, setFontSize] = useState(16);
+  const [isDraggingText, setIsDraggingText] = useState(false);
+  const [draggedTextId, setDraggedTextId] = useState<number | null>(null);
+  const [startDragOffset, setStartDragOffset] = useState<{
+    x: number;
+    y: number;
+  }>({ x: 0, y: 0 });
 
   const [costumeSPosition, setCostumeSPosition] = useState({ x: 0, y: 0 });
   const [costumeSSPosition, setCostumeSSPosition] = useState({ x: 0, y: 0 });
@@ -227,6 +233,26 @@ const EditorPage: React.FC = () => {
     setIsDraggingAss(false);
   };
 
+  const handleTextChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setEditingText(event.target.value);
+  };
+
+  const handleMouseDownText = (
+    id: number,
+    event: React.MouseEvent<HTMLDivElement>
+  ) => {
+    event.stopPropagation();
+    const element = textElements.find((element) => element.id === id);
+    if (element) {
+      setIsDraggingText(true);
+      setDraggedTextId(id);
+      setStartDragOffset({
+        x: event.clientX - element.x,
+        y: event.clientY - element.y,
+      });
+    }
+  };
+
   const handleDoubleClick = (id: number) => {
     const element = textElements.find((element) => element.id === id);
     if (element) {
@@ -235,8 +261,23 @@ const EditorPage: React.FC = () => {
     }
   };
 
-  const handleTextChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setEditingText(event.target.value);
+  const handleMouseMoveText = (event: React.MouseEvent<HTMLDivElement>) => {
+    if (isDraggingText && draggedTextId !== null) {
+      const updatedTextElements = textElements.map((element) => {
+        if (element.id === draggedTextId) {
+          const newX = event.clientX - startDragOffset.x;
+          const newY = event.clientY - startDragOffset.y;
+          return { ...element, x: newX, y: newY };
+        }
+        return element;
+      });
+      setTextElements(updatedTextElements);
+    }
+  };
+
+  const handleMouseUpText = () => {
+    setIsDraggingText(false);
+    setDraggedTextId(null);
   };
 
   const saveTextElement = () => {
@@ -461,13 +502,18 @@ const EditorPage: React.FC = () => {
                 position: "absolute",
                 left: element.x,
                 top: element.y,
-                cursor: "default",
+                cursor:
+                  isDraggingText && draggedTextId === element.id
+                    ? "grabbing"
+                    : "default",
                 fontSize: element.fontSize,
               }}
-              onMouseDown={(e) => handleMouseDown(element.id, e)}
-              onDoubleClick={() => handleDoubleClick(element.id)}
+              onMouseDown={(e) => handleMouseDownText(element.id, e)}
+              onMouseMove={handleMouseMoveText}
+              onMouseUp={handleMouseUpText}
             >
               {editingTextElementId === element.id ? (
+                // Редактирование текста
                 <input
                   type="text"
                   className="text-input"
@@ -488,6 +534,7 @@ const EditorPage: React.FC = () => {
                     padding: "10px",
                     cursor: "text",
                   }}
+                  onDoubleClick={() => handleDoubleClick(element.id)}
                 >
                   {element.text}
                 </div>
