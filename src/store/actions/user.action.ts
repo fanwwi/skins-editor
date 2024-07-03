@@ -20,7 +20,7 @@ export const Register = createAsyncThunk(
 
     try {
       const response = await axios.post(
-        "http://localhost:8000/users/",
+        "http://localhost:8001/users/",
         userData
       );
       localStorage.setItem("currentUser", JSON.stringify(userData.id));
@@ -39,7 +39,7 @@ export const checkUserExistsAndPassword = async (
 ): Promise<{ exists: boolean; passwordMatch: boolean; userId?: string }> => {
   try {
     const response = await axios.get(
-      `http://localhost:8000/users/?email=${email}`
+      `http://localhost:8001/users/?email=${email}`
     );
     if (response.data.length > 0) {
       const user = response.data[0];
@@ -59,7 +59,7 @@ export const getCurrentUser = createAsyncThunk(
   async (id: string, { rejectWithValue }) => {
     try {
       const { data } = await axios.get<ProfileData>(
-        `http://localhost:8000/users/${id}`
+        `http://localhost:8001/users/${id}`
       );
       return data;
     } catch (error) {
@@ -85,7 +85,7 @@ export const changePassword = createAsyncThunk(
   ) => {
     try {
       const { data: user } = await axios.get<RegisterType>(
-        `http://localhost:8000/users/${userId}`
+        `http://localhost:8001/users/${userId}`
       );
 
       if (user.password !== oldPassword) {

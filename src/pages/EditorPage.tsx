@@ -74,8 +74,8 @@ const EditorPage: React.FC = () => {
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    dispatch(getUserCostumes(accountId!));
     dispatch(getOneAccount(accountId!));
+    dispatch(getUserCostumes(accountId!));
     dispatch(getUserAss(accountId!));
   }, [dispatch]);
 
@@ -302,122 +302,114 @@ const EditorPage: React.FC = () => {
           onMouseMove={handleMouseMove}
           onMouseUp={handleMouseUp}
         >
-          <div
-            className="display-costumes"
-            onMouseMove={handleCostumeMouseMove}
-            onMouseUp={handleCostumeMouseUp}
-          >
-            {costumeA &&
-              userCostumes
-                ?.filter((cost) => cost.category === "A")
-                ?.reverse()
-                ?.map((costume) => (
+          <div className="costumes-container" style={{ position: "relative" }}>
+            <div className="display-costumes">
+              {/* Костюмы A */}
+              {costumeA &&
+                userCostumes
+                  ?.filter((cost) => cost.category === "A")
+                  ?.reverse()
+                  ?.map((costume) => (
+                    <div
+                      key={costume.id}
+                      className="display-cost"
+                      style={{
+                        position: "absolute",
+                        left: costume.x || 0,
+                        top: costume.y || 0,
+                        cursor:
+                          isDraggingCostumes &&
+                          draggingCostumes.some((c) => c.id === costume.id)
+                            ? "grabbing"
+                            : "default",
+                      }}
+                      onMouseDown={() => handleCostumeMouseDown(+costume.id)}
+                    >
+                      <img src={costume.costume} alt="Costume" />
+                    </div>
+                  ))}
+            </div>
+
+            <div className="display-costumes">
+              {/* Костюмы SS */}
+              {costumeSS &&
+                userCostumes
+                  ?.filter((cost) => cost.category === "SS")
+                  ?.reverse()
+                  ?.map((costume) => (
+                    <div
+                      key={costume.id}
+                      className="display-cost"
+                      style={{
+                        position: "absolute",
+                        left: costume.x || 0,
+                        top: costume.y || 0,
+                        cursor:
+                          isDraggingCostumes &&
+                          draggingCostumes.some((c) => c.id === costume.id)
+                            ? "grabbing"
+                            : "default",
+                      }}
+                      onMouseDown={() => handleCostumeMouseDown(+costume.id)}
+                    >
+                      <img src={costume.costume} alt="Costume" />
+                    </div>
+                  ))}
+            </div>
+
+            <div className="display-costumes">
+              {/* Костюмы S */}
+              {costumeS &&
+                userCostumes
+                  ?.filter((cost) => cost.category === "S")
+                  ?.reverse()
+                  ?.map((costume) => (
+                    <div
+                      key={costume.id}
+                      className="display-cost"
+                      style={{
+                        position: "absolute",
+                        left: costume.x || 0,
+                        top: costume.y || 0,
+                        cursor:
+                          isDraggingCostumes &&
+                          draggingCostumes.some((c) => c.id === costume.id)
+                            ? "grabbing"
+                            : "default",
+                      }}
+                      onMouseDown={() => handleCostumeMouseDown(+costume.id)}
+                    >
+                      <img src={costume.costume} alt="Costume" />
+                    </div>
+                  ))}
+            </div>
+
+            <div className="display-costumes">
+              {/* Аксессуары */}
+              {ass &&
+                userAss?.reverse()?.map((ass) => (
                   <div
-                    key={costume.id}
+                    key={ass.id}
                     className="display-cost"
                     style={{
                       position: "absolute",
-                      left: costume.x || 0,
-                      top: costume.y || 0,
+                      left: ass.x || 0,
+                      top: ass.y || 0,
                       cursor:
                         isDraggingCostumes &&
-                        draggingCostumes.some((c) => c.id === costume.id)
+                        draggingCostumes.some((c) => c.id === ass.id)
                           ? "grabbing"
                           : "default",
                     }}
+                    onMouseDown={() => handleCostumeMouseDown(+ass.id)}
                   >
-                    <img src={costume.costume} alt="Costume" />
+                    <img src={ass.assessoir} alt="Costume" />
                   </div>
                 ))}
+            </div>
           </div>
 
-          <div
-            className="display-costumes"
-            onMouseMove={handleCostumeMouseMove}
-            onMouseUp={handleCostumeMouseUp}
-          >
-            {costumeSS &&
-              userCostumes
-                ?.filter((cost) => cost.category === "SS")
-                ?.reverse()
-                ?.map((costume) => (
-                  <div
-                    key={costume.id}
-                    className="display-cost"
-                    style={{
-                      position: "absolute",
-                      left: costume.x || 0,
-                      top: costume.y || 0,
-                      cursor:
-                        isDraggingCostumes &&
-                        draggingCostumes.some((c) => c.id === costume.id)
-                          ? "grabbing"
-                          : "default",
-                    }}
-                    onMouseDown={() => handleCostumeMouseDown(+costume.id)}
-                  >
-                    <img src={costume.costume} alt="Costume" />
-                  </div>
-                ))}
-          </div>
-
-          <div
-            className="display-costumes"
-            onMouseMove={handleCostumeMouseMove}
-            onMouseUp={handleCostumeMouseUp}
-          >
-            {costumeS &&
-              userCostumes
-                ?.filter((cost) => cost.category === "S")
-                ?.reverse()
-                ?.map((costume) => (
-                  <div
-                    key={costume.id}
-                    className="display-cost"
-                    style={{
-                      position: "absolute",
-                      left: costume.x || 0,
-                      top: costume.y || 0,
-                      cursor:
-                        isDraggingCostumes &&
-                        draggingCostumes.some((c) => c.id === costume.id)
-                          ? "grabbing"
-                          : "default",
-                    }}
-                    onMouseDown={() => handleCostumeMouseDown(+costume.id)}
-                  >
-                    <img src={costume.costume} alt="Costume" />
-                  </div>
-                ))}
-          </div>
-
-          <div
-            className="display-costumes"
-            onMouseMove={handleCostumeMouseMove}
-            onMouseUp={handleCostumeMouseUp}
-          >
-            {ass &&
-              userAss?.reverse()?.map((ass) => (
-                <div
-                  key={ass.id}
-                  className="display-cost"
-                  style={{
-                    position: "absolute",
-                    left: ass.x || 0,
-                    top: ass.y || 0,
-                    cursor:
-                      isDraggingCostumes &&
-                      draggingCostumes.some((c) => c.id === ass.id)
-                        ? "grabbing"
-                        : "default",
-                  }}
-                  onMouseDown={() => handleCostumeMouseDown(+ass.id)}
-                >
-                  <img src={ass.assessoir} alt="Costume" />
-                </div>
-              ))}
-          </div>
-
+          {/* Остальной код для текстовых элементов */}
           {textElements.map((element) => (
             <div
               key={element.id}
@@ -462,6 +454,7 @@ const EditorPage: React.FC = () => {
             </div>
           ))}
         </div>
+        ;
       </div>
     </div>
   );

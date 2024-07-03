@@ -29,7 +29,7 @@ export const createAccount = createAsyncThunk(
 
     try {
       const { data } = await axios.post(
-        "http://localhost:8000/accounts",
+        "http://localhost:8001/accounts",
         newAcc
       );
       return data;
@@ -43,7 +43,7 @@ export const getAccounts = createAsyncThunk(
   "accounts/getAccounts",
   async () => {
     try {
-      const response = await axios.get("http://localhost:8000/accounts");
+      const response = await axios.get("http://localhost:8001/accounts");
       return response.data;
     } catch (error) {}
   }
@@ -53,7 +53,7 @@ export const getOneAccount = createAsyncThunk(
   "accounts/getOneAccount",
   async (id: string) => {
     try {
-      const { data } = await axios.get(`http://localhost:8000/accounts/${id}`);
+      const { data } = await axios.get(`http://localhost:8001/accounts/${id}`);
       return data;
     } catch (error) {
       console.error(error);
@@ -66,10 +66,10 @@ export const copyAccount = createAsyncThunk(
   async (id: string, { rejectWithValue }) => {
     try {
       const { data } = await axios.get<AccountType>(
-        `http://localhost:8000/accounts/${id}`
+        `http://localhost:8001/accounts/${id}`
       );
 
-      const response = await axios.post("http://localhost:8000/accounts", {
+      const response = await axios.post("http://localhost:8001/accounts", {
         ...data,
         id: undefined,
       });
@@ -90,7 +90,7 @@ export const deleteAccount = createAsyncThunk(
   "accounts/deleteAccount",
   async (id: string, { rejectWithValue }) => {
     try {
-      await axios.delete(`http://localhost:8000/accounts/${id}`);
+      await axios.delete(`http://localhost:8001/accounts/${id}`);
       window.location.reload();
       return id;
     } catch (error) {
@@ -108,7 +108,7 @@ export const updateAccount =
   (accountId: string | number, formData: any) => async () => {
     try {
       const response = await axios.patch(
-        `http://localhost:8000/accounts/${accountId}`,
+        `http://localhost:8001/accounts/${accountId}`,
         formData
       );
       window.location.reload();
@@ -132,7 +132,7 @@ export const accountDetails = createAsyncThunk(
     };
     try {
       const { response }: any = await axios.post(
-        "http://localhost:8000/details",
+        "http://localhost:8001/details",
         formData
       );
       return response;
@@ -147,7 +147,7 @@ export const getAccountDetails = createAsyncThunk(
   async (accountId: string, { rejectWithValue }) => {
     try {
       const response = await axios.get(
-        `http://localhost:8000/details/${accountId}`
+        `http://localhost:8001/details/${accountId}`
       );
       return response.data;
     } catch (error) {
@@ -173,7 +173,7 @@ export const addUserCostume = createAsyncThunk(
 
     try {
       const { data } = await axios.post(
-        "http://localhost:8000/userCostumes",
+        "http://localhost:8001/userCostumes",
         newData
       );
       window.location.reload();
@@ -186,7 +186,7 @@ export const addUserCostume = createAsyncThunk(
 
 export const getCostume = createAsyncThunk("accounts/getCostume", async () => {
   try {
-    const response = await axios.get("http://localhost:8000/costumes");
+    const response = await axios.get("http://localhost:8001/costumes");
     return response.data;
   } catch (error) {
     console.log(error);
@@ -197,7 +197,7 @@ export const getAssessoirs = createAsyncThunk(
   "accounts/getAssessoirs",
   async () => {
     try {
-      const response = await axios.get("http://localhost:8000/assessoirs");
+      const response = await axios.get("http://localhost:8001/assessoirs");
       return response.data;
     } catch (error) {
       console.log(error);
@@ -216,7 +216,7 @@ export const addUserAss = createAsyncThunk(
 
     try {
       const { data } = await axios.post(
-        "http://localhost:8000/userAssesoirs",
+        "http://localhost:8001/userAssesoirs",
         newData
       );
       window.location.reload();
@@ -231,7 +231,7 @@ export const deleteOneCostume = createAsyncThunk(
   "accounts/deleteAccount",
   async (id: string, { rejectWithValue }) => {
     try {
-      await axios.delete(`http://localhost:8000/userCostumes/${id}`);
+      await axios.delete(`http://localhost:8001/userCostumes/${id}`);
       window.location.reload();
       return id;
     } catch (error) {
@@ -249,7 +249,7 @@ export const deleteAss = createAsyncThunk(
   "accounts/deleteAss",
   async (id: string, { rejectWithValue }) => {
     try {
-      await axios.delete(`http://localhost:8000/userAssesoirs/${id}`);
+      await axios.delete(`http://localhost:8001/userAssesoirs/${id}`);
       window.location.reload();
       return id;
     } catch (error) {
@@ -267,7 +267,7 @@ export const getUserCostumes = createAsyncThunk(
   "account/getUserCostumes",
   async (accountId: string) => {
     try {
-      const { data } = await axios.get("http://localhost:8000/userCostumes");
+      const { data } = await axios.get("http://localhost:8001/userCostumes");
 
       const filteredData = data.filter((costume: CostumesType) => {
         return costume.bigAuthor === accountId;
@@ -284,7 +284,7 @@ export const getUserAss = createAsyncThunk(
   "account/getUserAss",
   async (accountId: string) => {
     try {
-      const { data } = await axios.get("http://localhost:8000/userAssesoirs");
+      const { data } = await axios.get("http://localhost:8001/userAssesoirs");
 
       const filteredData = data.filter((ass: AssessoirsType) => {
         return ass.bigAuthor === accountId;
