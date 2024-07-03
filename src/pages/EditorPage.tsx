@@ -57,21 +57,26 @@ const EditorPage: React.FC = () => {
   const [canvasSize, setCanvasSize] = useState(700);
   const [fontSize, setFontSize] = useState(16);
 
-  const [costumesPosition, setCostumesPosition] = useState({ x: 0, y: 0 });
-  const [isDraggingCostumes, setIsDraggingCostumes] = useState(false);
+  const [costumeSPosition, setCostumeSPosition] = useState({ x: 0, y: 0 });
+  const [costumeSSPosition, setCostumeSSPosition] = useState({ x: 0, y: 0 });
+  const [costumeAPosition, setCostumeAPosition] = useState({ x: 0, y: 0 });
+  const [assPosition, setAssPosition] = useState({ x: 0, y: 0 });
+  const [isDragging, setIsDragging] = useState(false);
+
+  const [isDraggingCostumeS, setIsDraggingCostumeS] = useState(false);
+  const [isDraggingCostumeSS, setIsDraggingCostumeSS] = useState(false);
+  const [isDraggingCostumeA, setIsDraggingCostumeA] = useState(false);
+  const [isDraggingAss, setIsDraggingAss] = useState(false);
+
   const [mousePosition, setMousePosition] = useState<{ x: number; y: number }>({
     x: 0,
     y: 0,
   });
-  const [isDragging, setIsDragging] = useState(false);
 
   const [editingTextElementId, setEditingTextElementId] = useState<
     number | null
   >(null);
   const [editingText, setEditingText] = useState<string>("");
-   const [draggingElementId, setDraggingElementId] = useState<number | null>(
-    null
-  );
 
   const dispatch = useAppDispatch();
 
@@ -155,50 +160,62 @@ const EditorPage: React.FC = () => {
     event: React.MouseEvent<HTMLDivElement>
   ) => {
     event.stopPropagation();
-    setDraggingElementId(id);
     setIsDragging(true);
     setMousePosition({ x: event.clientX, y: event.clientY });
-  };
-
-  const handleMouseMove = (event: React.MouseEvent<HTMLDivElement>) => {
-    if (isDragging && draggingElementId !== null) {
-      const dx = event.clientX - mousePosition.x;
-      const dy = event.clientY - mousePosition.y;
-      setMousePosition({ x: event.clientX, y: event.clientY });
-      setTextElements((prevElements) =>
-        prevElements.map((element) =>
-          element.id === draggingElementId
-            ? { ...element, x: element.x + dx, y: element.y + dy }
-            : element
-        )
-      );
+    switch (id) {
+      case 1:
+        setIsDraggingCostumeS(true);
+        break;
+      case 2:
+        setIsDraggingCostumeSS(true);
+        break;
+      case 3:
+        setIsDraggingCostumeA(true);
+        break;
+      case 4:
+        setIsDraggingAss(true);
+        break;
+      default:
+        break;
     }
   };
 
-  const handleMouseUp = () => {
-    setIsDragging(false);
-    setDraggingElementId(null);
-  };
-
-  const handleCostumesMouseDown = (event: React.MouseEvent<HTMLDivElement>) => {
-    setIsDraggingCostumes(true);
+  const handleMouseMove = (event: React.MouseEvent<HTMLDivElement>) => {
+    const dx = event.clientX - mousePosition.x;
+    const dy = event.clientY - mousePosition.y;
     setMousePosition({ x: event.clientX, y: event.clientY });
-  };
-
-  const handleCostumesMouseMove = (event: React.MouseEvent<HTMLDivElement>) => {
-    if (isDraggingCostumes) {
-      const dx = event.clientX - mousePosition.x;
-      const dy = event.clientY - mousePosition.y;
-      setMousePosition({ x: event.clientX, y: event.clientY });
-      setCostumesPosition((prevPosition) => ({
+    if (isDraggingCostumeS) {
+      setCostumeSPosition((prevPosition) => ({
+        x: prevPosition.x + dx,
+        y: prevPosition.y + dy,
+      }));
+    }
+    if (isDraggingCostumeSS) {
+      setCostumeSSPosition((prevPosition) => ({
+        x: prevPosition.x + dx,
+        y: prevPosition.y + dy,
+      }));
+    }
+    if (isDraggingCostumeA) {
+      setCostumeAPosition((prevPosition) => ({
+        x: prevPosition.x + dx,
+        y: prevPosition.y + dy,
+      }));
+    }
+    if (isDraggingAss) {
+      setAssPosition((prevPosition) => ({
         x: prevPosition.x + dx,
         y: prevPosition.y + dy,
       }));
     }
   };
 
-  const handleCostumesMouseUp = () => {
-    setIsDraggingCostumes(false);
+  const handleMouseUp = () => {
+    setIsDragging(false);
+    setIsDraggingCostumeS(false);
+    setIsDraggingCostumeSS(false);
+    setIsDraggingCostumeA(false);
+    setIsDraggingAss(false);
   };
 
   const handleDoubleClick = (id: number) => {
@@ -263,6 +280,15 @@ const EditorPage: React.FC = () => {
                 <button onClick={decreaseCanvasSize}>-</button>
               </div>
             </div>
+
+            <div className="canva-size">
+              <span>Размер костюмов:</span>
+              <div className="down-block">
+                <button>+</button>
+                <div className="fz">def</div>
+                <button>-</button>
+              </div>
+            </div>
           </div>
 
           <h2>
@@ -300,71 +326,11 @@ const EditorPage: React.FC = () => {
               className="display-costumes"
               style={{
                 position: "absolute",
-                left: costumesPosition.x,
-                top: costumesPosition.y,
-                cursor: isDraggingCostumes ? "grabbing" : "default",
+                left: costumeSPosition.x,
+                top: costumeSPosition.y,
+                cursor: isDraggingCostumeS ? "grabbing" : "default",
               }}
-              onMouseDown={handleCostumesMouseDown}
-              onMouseMove={handleCostumesMouseMove}
-              onMouseUp={handleCostumesMouseUp}
-            >
-              {costumeA &&
-                userCostumes
-                  ?.filter((cost) => cost.category === "A")
-                  ?.map((costume) => (
-                    <div
-                      key={costume.id}
-                      className="display-cost"
-                      style={{
-                        left: costume.x || 0,
-                        top: costume.y || 0,
-                      }}
-                    >
-                      <img src={costume.costume} alt="Costume" />
-                    </div>
-                  ))}
-            </div>
-
-            <div
-              className="display-costumes"
-              style={{
-                position: "absolute",
-                left: costumesPosition.x,
-                top: costumesPosition.y,
-                cursor: isDraggingCostumes ? "grabbing" : "default",
-              }}
-              onMouseDown={handleCostumesMouseDown}
-              onMouseMove={handleCostumesMouseMove}
-              onMouseUp={handleCostumesMouseUp}
-            >
-              {costumeSS &&
-                userCostumes
-                  ?.filter((cost) => cost.category === "SS")
-                  ?.map((costume) => (
-                    <div
-                      key={costume.id}
-                      className="display-cost"
-                      style={{
-                        left: costume.x || 0,
-                        top: costume.y || 0,
-                      }}
-                    >
-                      <img src={costume.costume} alt="Costume" />
-                    </div>
-                  ))}
-            </div>
-
-            <div
-              className="display-costumes"
-              style={{
-                position: "absolute",
-                left: costumesPosition.x,
-                top: costumesPosition.y,
-                cursor: isDraggingCostumes ? "grabbing" : "default",
-              }}
-              onMouseDown={handleCostumesMouseDown}
-              onMouseMove={handleCostumesMouseMove}
-              onMouseUp={handleCostumesMouseUp}
+              onMouseDown={(e) => handleMouseDown(1, e)}
             >
               {costumeS &&
                 userCostumes
@@ -387,13 +353,65 @@ const EditorPage: React.FC = () => {
               className="display-costumes"
               style={{
                 position: "absolute",
-                left: costumesPosition.x,
-                top: costumesPosition.y,
-                cursor: isDraggingCostumes ? "grabbing" : "default",
+                left: costumeSSPosition.x,
+                top: costumeSSPosition.y,
+                cursor: isDraggingCostumeSS ? "grabbing" : "default",
               }}
-              onMouseDown={handleCostumesMouseDown}
-              onMouseMove={handleCostumesMouseMove}
-              onMouseUp={handleCostumesMouseUp}
+              onMouseDown={(e) => handleMouseDown(2, e)}
+            >
+              {costumeSS &&
+                userCostumes
+                  ?.filter((cost) => cost.category === "SS")
+                  ?.map((costume) => (
+                    <div
+                      key={costume.id}
+                      className="display-cost"
+                      style={{
+                        left: costume.x || 0,
+                        top: costume.y || 0,
+                      }}
+                    >
+                      <img src={costume.costume} alt="Costume" />
+                    </div>
+                  ))}
+            </div>
+
+            <div
+              className="display-costumes"
+              style={{
+                position: "absolute",
+                left: costumeAPosition.x,
+                top: costumeAPosition.y,
+                cursor: isDraggingCostumeA ? "grabbing" : "default",
+              }}
+              onMouseDown={(e) => handleMouseDown(3, e)}
+            >
+              {costumeA &&
+                userCostumes
+                  ?.filter((cost) => cost.category === "A")
+                  ?.map((costume) => (
+                    <div
+                      key={costume.id}
+                      className="display-cost"
+                      style={{
+                        left: costume.x || 0,
+                        top: costume.y || 0,
+                      }}
+                    >
+                      <img src={costume.costume} alt="Costume" />
+                    </div>
+                  ))}
+            </div>
+
+            <div
+              className="display-costumes"
+              style={{
+                position: "absolute",
+                left: assPosition.x,
+                top: assPosition.y,
+                cursor: isDraggingAss ? "grabbing" : "default",
+              }}
+              onMouseDown={(e) => handleMouseDown(4, e)}
             >
               {ass &&
                 userAss?.map((ass) => (
@@ -405,7 +423,7 @@ const EditorPage: React.FC = () => {
                       top: ass.y || 0,
                     }}
                   >
-                    <img src={ass.assessoir} alt="Costume" />
+                    <img src={ass.assessoir} alt="Assessoir" />
                   </div>
                 ))}
             </div>
@@ -418,10 +436,7 @@ const EditorPage: React.FC = () => {
                 position: "absolute",
                 left: element.x,
                 top: element.y,
-                cursor:
-                  isDragging && draggingElementId === element.id
-                    ? "grabbing"
-                    : "default",
+                cursor: "default",
                 fontSize: element.fontSize,
               }}
               onMouseDown={(e) => handleMouseDown(element.id, e)}
@@ -430,7 +445,7 @@ const EditorPage: React.FC = () => {
               {editingTextElementId === element.id ? (
                 <input
                   type="text"
-                  className="text-unput"
+                  className="text-input"
                   value={editingText}
                   onChange={handleTextChange}
                   onBlur={saveTextElement}
@@ -445,7 +460,7 @@ const EditorPage: React.FC = () => {
                 <div
                   style={{
                     outline: element.isEditing ? "1px solid blue" : "none",
-                    padding: "50px",
+                    padding: "10px",
                     cursor: "text",
                   }}
                 >
@@ -455,7 +470,6 @@ const EditorPage: React.FC = () => {
             </div>
           ))}
         </div>
-        ;
       </div>
     </div>
   );
