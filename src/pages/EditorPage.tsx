@@ -326,6 +326,7 @@ const EditorPage: React.FC = () => {
                     </div>
                   ))}
             </div>
+
             <div className="display-costumes" style={{ position: "absolute" }}>
               {costumeSS &&
                 userCostumes
@@ -349,6 +350,7 @@ const EditorPage: React.FC = () => {
                     </div>
                   ))}
             </div>
+
             <div className="display-costumes" style={{ position: "absolute" }}>
               {costumeS &&
                 userCostumes
@@ -372,8 +374,8 @@ const EditorPage: React.FC = () => {
                     </div>
                   ))}
             </div>
-            onMouseDown={() => handleCostumeMouseDown(+ass.id)}
-            <div className="display-costumes" style={{ position: "absolute" }}>
+
+            <div className="display-costumes" style={{ position: "absolute" }} >
               {ass &&
                 userAss?.map((ass) => (
                   <div
