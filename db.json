@@ -57,18 +57,39 @@
       "id": 1
     },
     {
-      "costume": "https://freefiremobile-a.akamaihd.net/common/web_event/official2.ff.garena.all/img/20228/26d226fa08410cc418959e3cc30095c7.png",
-      "category": "SS",
+      "costume": "https://i.pinimg.com/originals/dc/f3/2b/dcf32bcdfe204bfe62ba6f35f668bd0a.png",
+      "category": "S",
       "author": "Егерь",
       "bigAuthor": "1",
       "id": 2
+    },
+    {
+      "costume": "https://freefiremobile-a.akamaihd.net/common/web_event/official2.ff.garena.all/img/20228/26d226fa08410cc418959e3cc30095c7.png",
+      "category": "SS",
+      "author": "Воин",
+      "bigAuthor": "1",
+      "id": 3
+    },
+    {
+      "costume": "https://freefiremobile-a.akamaihd.net/common/web_event/official2.ff.garena.all/img/20228/26d226fa08410cc418959e3cc30095c7.png",
+      "category": "SS",
+      "author": "Воин",
+      "bigAuthor": "1",
+      "id": 4
     },
     {
       "costume": "https://dl.dir.freefiremobile.com/common/web_event/official2.ff.garena.all/20238/8f978bdbe46d3d2366b82713082d6683.png",
       "category": "A",
       "author": "Хиганбана",
       "bigAuthor": "1",
-      "id": "4"
+      "id": 5
+    },
+    {
+      "costume": "https://dl.dir.freefiremobile.com/common/web_event/official2.ff.garena.all/20238/8f978bdbe46d3d2366b82713082d6683.png",
+      "category": "A",
+      "author": "Хиганбана",
+      "bigAuthor": "1",
+      "id": 6
     }
   ],
   "assessoirs": [
@@ -84,6 +105,12 @@
       "character": "Воин",
       "bigAuthor": "1",
       "id": 1
+    },
+    {
+      "assessoir": "https://files.vgtimes.ru/posts/2015-07/thumbs/1436030863_14.jpg",
+      "character": "Воин",
+      "bigAuthor": "1",
+      "id": 2
     }
   ]
 }

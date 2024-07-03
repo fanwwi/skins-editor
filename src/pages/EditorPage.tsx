@@ -303,18 +303,15 @@ const EditorPage: React.FC = () => {
           onMouseUp={handleMouseUp}
         >
           <div className="costumes-container" style={{ position: "relative" }}>
-            <div className="display-costumes">
-              {/* Костюмы A */}
+            <div className="display-costumes" style={{ position: "absolute" }}>
               {costumeA &&
                 userCostumes
                   ?.filter((cost) => cost.category === "A")
-                  ?.reverse()
                   ?.map((costume) => (
                     <div
                       key={costume.id}
                       className="display-cost"
                       style={{
-                        position: "absolute",
                         left: costume.x || 0,
                         top: costume.y || 0,
                         cursor:
@@ -329,19 +326,15 @@ const EditorPage: React.FC = () => {
                     </div>
                   ))}
             </div>
-
-            <div className="display-costumes">
-              {/* Костюмы SS */}
+            <div className="display-costumes" style={{ position: "absolute" }}>
               {costumeSS &&
                 userCostumes
                   ?.filter((cost) => cost.category === "SS")
-                  ?.reverse()
                   ?.map((costume) => (
                     <div
                       key={costume.id}
                       className="display-cost"
                       style={{
-                        position: "absolute",
                         left: costume.x || 0,
                         top: costume.y || 0,
                         cursor:
@@ -356,19 +349,15 @@ const EditorPage: React.FC = () => {
                     </div>
                   ))}
             </div>
-
-            <div className="display-costumes">
-              {/* Костюмы S */}
+            <div className="display-costumes" style={{ position: "absolute" }}>
               {costumeS &&
                 userCostumes
                   ?.filter((cost) => cost.category === "S")
-                  ?.reverse()
                   ?.map((costume) => (
                     <div
                       key={costume.id}
                       className="display-cost"
                       style={{
-                        position: "absolute",
                         left: costume.x || 0,
                         top: costume.y || 0,
                         cursor:
@@ -383,16 +372,14 @@ const EditorPage: React.FC = () => {
                     </div>
                   ))}
             </div>
-
-            <div className="display-costumes">
-              {/* Аксессуары */}
+            onMouseDown={() => handleCostumeMouseDown(+ass.id)}
+            <div className="display-costumes" style={{ position: "absolute" }}>
               {ass &&
-                userAss?.reverse()?.map((ass) => (
+                userAss?.map((ass) => (
                   <div
                     key={ass.id}
                     className="display-cost"
                     style={{
-                      position: "absolute",
                       left: ass.x || 0,
                       top: ass.y || 0,
                       cursor:
@@ -401,7 +388,6 @@ const EditorPage: React.FC = () => {
                           ? "grabbing"
                           : "default",
                     }}
-                    onMouseDown={() => handleCostumeMouseDown(+ass.id)}
                   >
                     <img src={ass.assessoir} alt="Costume" />
                   </div>
@@ -409,7 +395,6 @@ const EditorPage: React.FC = () => {
             </div>
           </div>
 
-          {/* Остальной код для текстовых элементов */}
           {textElements.map((element) => (
             <div
               key={element.id}
