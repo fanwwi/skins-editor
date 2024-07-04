@@ -26,9 +26,8 @@ const UserProfile = () => {
   const modalRef = useRef(null);
   const dispatch = useAppDispatch();
   const { currentUser } = useAppSelector((state) => state.users);
-  const { allAccounts, loading, error } = useAppSelector(
-    (state) => state.accounts
-  );
+  const { allAccounts, error } = useAppSelector((state) => state.accounts);
+  const { loading } = useAppSelector((state) => state.users);
   const id = localStorage.getItem("currentUser")?.replace(/"/g, "");
   const { userCard } = useAppSelector((state) => state.accounts);
 
@@ -79,20 +78,6 @@ const UserProfile = () => {
         .catch((error) => {
           console.error("Ошибка при удалении аккаунта:", error);
         });
-    }
-  };
-
-  const handleDownloadCard = async () => {
-    if (userCard) {
-      const cardDataAsString = JSON.stringify(userCard);
-     const blob = await new Blob([cardDataAsString], { type: "application/json" });
-      const url = window.URL.createObjectURL(blob);
-      const link = document.createElement("a");
-      link.href = url;
-      link.setAttribute("download", "card.json");
-      document.body.appendChild(link);
-      link.click();
-      link.remove();
     }
   };
 
@@ -153,7 +138,10 @@ const UserProfile = () => {
                         onClick={() => handleCopyAccount(account.id)}
                         style={{ cursor: "pointer" }}
                       />
-                      <img src={downloadIcon} alt="download" onClick={handleDownloadCard}/>
+                      <img
+                        src={downloadIcon}
+                        alt="download"
+                      />
                       <img src={cardIcon} alt="card" />
                       <img
                         src={deleteIcon}
