@@ -782,6 +782,17 @@ select {
 #img {
   height: 80px;
   background-color: #9900ff;
+  padding: 20px;
+  border: none;
+  outline: none;
+  border-radius: 10px;
+  color: #fff;
+  font-size: 20px;
+}
+
+#img::placeholder {
+  color: #fff;
+  font-size: 20px;
 }
 
 .costumes-block button:hover {

@@ -67,6 +67,16 @@ const EditorPage: React.FC = () => {
     y: number;
   }>({ x: 0, y: 0 });
 
+  const [images, setImages] = useState<
+    { id: string; src: string; position: { x: number; y: number } }[]
+  >([]);
+  const [isDraggingImage, setIsDraggingImage] = useState(false);
+  const [draggedImageId, setDraggedImageId] = useState<string | null>(null);
+  const [startImageOffset, setStartImageOffset] = useState<{
+    x: number;
+    y: number;
+  }>({ x: 0, y: 0 });
+
   const [costumeSPosition, setCostumeSPosition] = useState({ x: 0, y: 0 });
   const [costumeSSPosition, setCostumeSSPosition] = useState({ x: 0, y: 0 });
   const [costumeAPosition, setCostumeAPosition] = useState({ x: 0, y: 0 });
@@ -89,6 +99,7 @@ const EditorPage: React.FC = () => {
   const [isDraggingId, setIsDraggingId] = useState(false);
   const [isDraggingServer, setIsDraggingServer] = useState(false);
   const [costumeSize, setCostumeSize] = useState(150);
+  const [imgSize, setImgSize] = useState(150);
 
   const [mousePosition, setMousePosition] = useState<{ x: number; y: number }>({
     x: 0,
@@ -153,6 +164,14 @@ const EditorPage: React.FC = () => {
 
   const decreaseCostumeSize = () => {
     setCostumeSize((prevSize) => prevSize - 5);
+  };
+
+  const increaseImgSize = () => {
+    setImgSize((prevSize) => prevSize + 5);
+  };
+
+  const decreaseImgSize = () => {
+    setImgSize((prevSize) => prevSize - 5);
   };
 
   const handleOpenModal = () => {
@@ -388,6 +407,59 @@ const EditorPage: React.FC = () => {
     }
   };
 
+  const addImage = () => {
+    const imgUrl = document.getElementById("img") as HTMLInputElement;
+    const newImage = {
+      id: `image-${images.length}`,
+      src: imgUrl.value,
+      position: { x: 0, y: 0 },
+    };
+    setImages((prevImages) => [...prevImages, newImage]);
+    imgUrl.value = "";
+  };
+
+  const handleImageMouseDown = (
+    id: string,
+    event: React.MouseEvent<HTMLImageElement>
+  ) => {
+    event.stopPropagation();
+    const image = images.find((img) => img.id === id);
+    if (image) {
+      setIsDraggingImage(true);
+      setDraggedImageId(id);
+      setStartImageOffset({
+        x: event.clientX - image.position.x,
+        y: event.clientY - image.position.y,
+      });
+    }
+  };
+
+  const handleImageMouseMove = (event: React.MouseEvent<HTMLDivElement>) => {
+    const dx = event.clientX - mousePosition.x;
+    const dy = event.clientY - mousePosition.y;
+    setMousePosition({ x: event.clientX, y: event.clientY });
+    if (isDraggingImage && draggedImageId !== null) {
+      const updatedImages = images.map((img) => {
+        if (img.id === draggedImageId) {
+          return {
+            ...img,
+            position: {
+              x: event.clientX - startImageOffset.x,
+              y: event.clientY - startImageOffset.y,
+            },
+          };
+        }
+        return img;
+      });
+      setImages(updatedImages);
+    }
+  };
+
+  const handleImageMouseUp = () => {
+    setIsDraggingImage(false);
+    setDraggedImageId(null);
+  };
+
   return (
     <div className="list">
       <div className="options">
@@ -428,7 +500,16 @@ const EditorPage: React.FC = () => {
             </div>
 
             <div className="canva-size">
-              <span>Размер костюмов:</span>
+              <span>Размеры картинок:</span>
+              <div className="down-block">
+                <button onClick={increaseImgSize}>+</button>
+                <div className="fz">{imgSize}px</div>
+                <button onClick={decreaseImgSize}>-</button>
+              </div>
+            </div>
+
+            <div className="canva-size">
+              <span>Размеры костюмов:</span>
               <div className="down-block">
                 <button onClick={increaseCostumeSize}>+</button>
                 <div className="fz">{costumeSize}px</div>
@@ -455,7 +536,7 @@ const EditorPage: React.FC = () => {
           <button onClick={() => setGameAccount(true)}>Имя акканута</button>
           <button onClick={() => setServer(true)}>Сервер</button>
           <button onClick={() => setId(true)}>ID</button>
-          <button id="img">Добавить картинку</button>
+          <input id="img" placeholder="Добавить картинку" onChange={addImage} />
         </div>
         <div
           className="canva"
@@ -605,7 +686,9 @@ const EditorPage: React.FC = () => {
               top: gameAccountPosition.y,
               cursor: isDraggingAccount ? "grabbing" : "default",
             }}
-            onMouseDown={(e) => {handleAccountMouseDown('gameAccount', e)}}
+            onMouseDown={(e) => {
+              handleAccountMouseDown("gameAccount", e);
+            }}
             onMouseMove={handleAccountMouseMove}
             onMouseUp={handleMouseUpAccount}
           >
@@ -620,7 +703,9 @@ const EditorPage: React.FC = () => {
               top: nicknamePosition.y,
               cursor: isDraggingAccount ? "grabbing" : "default",
             }}
-            onMouseDown={(e) => {handleAccountMouseDown('nickname', e)}}
+            onMouseDown={(e) => {
+              handleAccountMouseDown("nickname", e);
+            }}
             onMouseMove={handleAccountMouseMove}
             onMouseUp={handleMouseUpAccount}
           >
@@ -635,7 +720,9 @@ const EditorPage: React.FC = () => {
               top: idPosition.y,
               cursor: isDraggingAccount ? "grabbing" : "default",
             }}
-            onMouseDown={(e) => {handleAccountMouseDown('id', e)}}
+            onMouseDown={(e) => {
+              handleAccountMouseDown("id", e);
+            }}
             onMouseMove={handleAccountMouseMove}
             onMouseUp={handleMouseUpAccount}
           >
@@ -650,12 +737,35 @@ const EditorPage: React.FC = () => {
               top: serverPosition.y,
               cursor: isDraggingAccount ? "grabbing" : "default",
             }}
-            onMouseDown={(e) => {handleAccountMouseDown('server', e)}}
+            onMouseDown={(e) => {
+              handleAccountMouseDown("server", e);
+            }}
             onMouseMove={handleAccountMouseMove}
             onMouseUp={handleMouseUpAccount}
           >
             {server && <span>{account?.gameServer}</span>}
           </div>
+
+          {images.map((image) => (
+            <img
+              key={image.id}
+              src={image.src}
+              alt="User Image"
+              style={{
+                position: "absolute",
+                left: image.position.x,
+                top: image.position.y,
+                width: imgSize,
+                cursor:
+                  isDraggingImage && draggedImageId === image.id
+                    ? "grabbing"
+                    : "default",
+              }}
+              onMouseDown={(e) => handleImageMouseDown(image.id, e)}
+              onMouseMove={handleImageMouseMove}
+              onMouseUp={handleImageMouseUp}
+            />
+          ))}
 
           {textElements.map((element) => (
             <div
