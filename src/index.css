@@ -762,21 +762,26 @@ select {
   display: flex;
   flex-direction: column;
   height: 600px;
-  gap: 30px;
+  gap: 10px;
   width: 300px;
   position: absolute;
   left: 50px;
-  top: 250px;
+  top: 210px;
 }
 
 .costumes-block button {
-  height: 80px;
+  height: 40px;
   background-color: #006eff;
   border: none;
   color: #fff;
   border-radius: 10px;
   cursor: pointer;
   font-size: 20px;
+}
+
+#img {
+  height: 80px;
+  background-color: #9900ff;
 }
 
 .costumes-block button:hover {

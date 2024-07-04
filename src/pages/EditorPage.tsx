@@ -49,6 +49,10 @@ const EditorPage: React.FC = () => {
   const [costumeSS, setCostumeSS] = useState(false);
   const [costumeA, setCostumeA] = useState(false);
   const [ass, setAss] = useState(false);
+  const [nickname, setNickname] = useState(false);
+  const [gameAccount, setGameAccount] = useState(false);
+  const [id, setId] = useState(false);
+  const [server, setServer] = useState(false);
 
   const [showModal, setShowModal] = useState(false);
   const [backgroundColor, setBackgroundColor] = useState("#ffffff");
@@ -67,12 +71,23 @@ const EditorPage: React.FC = () => {
   const [costumeSSPosition, setCostumeSSPosition] = useState({ x: 0, y: 0 });
   const [costumeAPosition, setCostumeAPosition] = useState({ x: 0, y: 0 });
   const [assPosition, setAssPosition] = useState({ x: 0, y: 0 });
+  const [nicknamePosition, setNicknamePosition] = useState({ x: 0, y: 0 });
+  const [gameAccountPosition, setGameAccountPosition] = useState({
+    x: 0,
+    y: 0,
+  });
+  const [idPosition, setIdPosition] = useState({ x: 0, y: 0 });
+  const [serverPosition, setServerPosition] = useState({ x: 0, y: 0 });
   const [isDragging, setIsDragging] = useState(false);
 
   const [isDraggingCostumeS, setIsDraggingCostumeS] = useState(false);
   const [isDraggingCostumeSS, setIsDraggingCostumeSS] = useState(false);
   const [isDraggingCostumeA, setIsDraggingCostumeA] = useState(false);
   const [isDraggingAss, setIsDraggingAss] = useState(false);
+  const [isDraggingNickname, setIsDraggingNickname] = useState(false);
+  const [isDraggingAccount, setIsDraggingAccount] = useState(false);
+  const [isDraggingId, setIsDraggingId] = useState(false);
+  const [isDraggingServer, setIsDraggingServer] = useState(false);
   const [costumeSize, setCostumeSize] = useState(150);
 
   const [mousePosition, setMousePosition] = useState<{ x: number; y: number }>({
@@ -313,6 +328,66 @@ const EditorPage: React.FC = () => {
     }
   };
 
+  const handleAccountMouseMove = (event: React.MouseEvent<HTMLDivElement>) => {
+    const dx = event.clientX - mousePosition.x;
+    const dy = event.clientY - mousePosition.y;
+    setMousePosition({ x: event.clientX, y: event.clientY });
+    if (isDraggingAccount) {
+      setGameAccountPosition((prevPosition) => ({
+        x: prevPosition.x + dx,
+        y: prevPosition.y + dy,
+      }));
+    }
+    if (isDraggingNickname) {
+      setNicknamePosition((prevPosition) => ({
+        x: prevPosition.x + dx,
+        y: prevPosition.y + dy,
+      }));
+    }
+    if (isDraggingId) {
+      setIdPosition((prevPosition) => ({
+        x: prevPosition.x + dx,
+        y: prevPosition.y + dy,
+      }));
+    }
+    if (isDraggingServer) {
+      setServerPosition((prevPosition) => ({
+        x: prevPosition.x + dx,
+        y: prevPosition.y + dy,
+      }));
+    }
+  };
+
+  const handleMouseUpAccount = () => {
+    setIsDraggingAccount(false);
+    setIsDraggingNickname(false);
+    setIsDraggingId(false);
+    setIsDraggingServer(false);
+  };
+
+  const handleAccountMouseDown = (
+    elementId: string,
+    event: React.MouseEvent<HTMLDivElement>
+  ) => {
+    event.stopPropagation();
+    switch (elementId) {
+      case "gameAccount":
+        setIsDraggingAccount(true);
+        break;
+      case "nickname":
+        setIsDraggingNickname(true);
+        break;
+      case "id":
+        setIsDraggingId(true);
+        break;
+      case "server":
+        setIsDraggingServer(true);
+        break;
+      default:
+        break;
+    }
+  };
+
   return (
     <div className="list">
       <div className="options">
@@ -376,6 +451,11 @@ const EditorPage: React.FC = () => {
           <button onClick={() => setCostumeSS(true)}>Костюмы SS</button>
           <button onClick={() => setCostumeA(true)}>Костюмы A</button>
           <button onClick={() => setAss(true)}>Аксессуары</button>
+          <button onClick={() => setNickname(true)}>Никнэйм</button>
+          <button onClick={() => setGameAccount(true)}>Имя акканута</button>
+          <button onClick={() => setServer(true)}>Сервер</button>
+          <button onClick={() => setId(true)}>ID</button>
+          <button id="img">Добавить картинку</button>
         </div>
         <div
           className="canva"
@@ -517,6 +597,66 @@ const EditorPage: React.FC = () => {
             </div>
           </div>
 
+          <div
+            className="account-details"
+            style={{
+              position: "absolute",
+              left: gameAccountPosition.x,
+              top: gameAccountPosition.y,
+              cursor: isDraggingAccount ? "grabbing" : "default",
+            }}
+            onMouseDown={(e) => {handleAccountMouseDown('gameAccount', e)}}
+            onMouseMove={handleAccountMouseMove}
+            onMouseUp={handleMouseUpAccount}
+          >
+            {gameAccount && <h3>{account?.gameAccount}</h3>}
+          </div>
+
+          <div
+            className="account-details"
+            style={{
+              position: "absolute",
+              left: nicknamePosition.x,
+              top: nicknamePosition.y,
+              cursor: isDraggingAccount ? "grabbing" : "default",
+            }}
+            onMouseDown={(e) => {handleAccountMouseDown('nickname', e)}}
+            onMouseMove={handleAccountMouseMove}
+            onMouseUp={handleMouseUpAccount}
+          >
+            {nickname && <span>{account?.gameNickname}</span>}
+          </div>
+
+          <div
+            className="account-details"
+            style={{
+              position: "absolute",
+              left: idPosition.x,
+              top: idPosition.y,
+              cursor: isDraggingAccount ? "grabbing" : "default",
+            }}
+            onMouseDown={(e) => {handleAccountMouseDown('id', e)}}
+            onMouseMove={handleAccountMouseMove}
+            onMouseUp={handleMouseUpAccount}
+          >
+            {id && <span>{account?.gameId}</span>}
+          </div>
+
+          <div
+            className="account-details"
+            style={{
+              position: "absolute",
+              left: serverPosition.x,
+              top: serverPosition.y,
+              cursor: isDraggingAccount ? "grabbing" : "default",
+            }}
+            onMouseDown={(e) => {handleAccountMouseDown('server', e)}}
+            onMouseMove={handleAccountMouseMove}
+            onMouseUp={handleMouseUpAccount}
+          >
+            {server && <span>{account?.gameServer}</span>}
+          </div>
+
           {textElements.map((element) => (
             <div
               key={element.id}
@@ -563,7 +703,11 @@ const EditorPage: React.FC = () => {
             </div>
           ))}
 
-          <button onClick={handleSave} className="save" style={{width: canvasSize}}>
+          <button
+            onClick={handleSave}
+            className="save"
+            style={{ width: canvasSize }}
+          >
             Сохранить
           </button>
         </div>
