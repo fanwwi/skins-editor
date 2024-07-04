@@ -37,9 +37,6 @@ interface AssessoirsType {
 }
 
 const EditorPage: React.FC = () => {
-  useEffect(() => {
-    localStorage.setItem("currentAccount", "1");
-  });
   const accountId = localStorage.getItem("currentAccount");
   const { userCostumes } = useAppSelector((state) => state.accounts);
   const { userAss } = useAppSelector((state) => state.accounts);
@@ -513,7 +510,6 @@ const EditorPage: React.FC = () => {
               onMouseUp={handleMouseUpText}
             >
               {editingTextElementId === element.id ? (
-                // Редактирование текста
                 <input
                   type="text"
                   className="text-input"
