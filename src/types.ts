@@ -72,3 +72,9 @@ export type AssessoirsType = {
   x?: number;
   y?: number;
 };
+
+export type CardsType = {
+  card: string;
+  author: string;
+  id: string;
+};

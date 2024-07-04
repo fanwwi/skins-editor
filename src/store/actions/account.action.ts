@@ -3,6 +3,7 @@ import {
   AccountChange,
   AccountType,
   AssessoirsType,
+  CardsType,
   CostumesType,
   DetailsType,
 } from "../../types";
@@ -295,4 +296,22 @@ export const getUserAss = createAsyncThunk(
       console.log("Ошибка при получении данных:", error);
     }
   }
+);
+
+export const getCard = createAsyncThunk(
+  "accounts/downloadCard",
+  async (id: string) => {
+    try {
+      const { data } = await axios.get("http://localhost:8001/userCards", {
+        responseType: "blob"
+      });
+      const filteredData = data.filter((card: CardsType) => card.author === id);
+      return filteredData;
+    } catch (error) {}
+  }
+);
+
+export const downloadCard = createAsyncThunk(
+  "accounts/downloadCard",
+  async () => {}
 );

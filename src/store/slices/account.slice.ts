@@ -2,6 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 import {
   AccountType,
   AssessoirsType,
+  CardsType,
   CostumesType,
   DetailsType,
 } from "../../types";
@@ -9,6 +10,7 @@ import {
   accountDetails,
   getAccounts,
   getAssessoirs,
+  getCard,
   getCostume,
   getOneAccount,
   getUserAss,
@@ -24,7 +26,8 @@ type StatesType = {
   allCostumes: CostumesType[] | null;
   userCostumes: CostumesType[] | null;
   allAssessoirs: AssessoirsType[] | null;
-  userAss: AssessoirsType[] | null
+  userAss: AssessoirsType[] | null;
+  userCard: CardsType | null;
 };
 
 const INIT_STATE: StatesType = {
@@ -36,7 +39,8 @@ const INIT_STATE: StatesType = {
   allCostumes: null,
   userCostumes: null,
   allAssessoirs: null,
-  userAss: null
+  userAss: null,
+  userCard: null,
 };
 
 export const accountsSlice = createSlice({
@@ -127,6 +131,17 @@ export const accountsSlice = createSlice({
         state.loading = false;
         console.log(state.error);
       })
+      .addCase(getCard.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(getCard.fulfilled, (state, { payload }) => {
+        state.loading = true;
+        state.userCard = payload;
+      })
+      .addCase(getCard.rejected, (state) => {
+        state.loading = false;
+        console.log(state.error);
+      });
   },
 });
 
