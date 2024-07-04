@@ -310,8 +310,3 @@ export const getCard = createAsyncThunk(
     } catch (error) {}
   }
 );
-
-export const downloadCard = createAsyncThunk(
-  "accounts/downloadCard",
-  async () => {}
-);

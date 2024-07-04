@@ -3,9 +3,6 @@ import { useNavigate } from "react-router-dom";
 
 const PaymentPage = () => {
   const navigate = useNavigate();
-  useEffect(() => {
-    alert("Нажмите оплатить и скачайте вашу визуальную карточку аккаунта!")
-  })
   const id = localStorage.getItem("currentUser")?.replace(/"/g, "");
 
   return (
@@ -19,7 +16,9 @@ const PaymentPage = () => {
           backgroundColor: "lightblue",
           cursor: "pointer",
         }}
-        onClick={() => {navigate(`/${id}/profile`)}}
+        onClick={() => {
+          navigate(`/${id}/profile`);
+        }}
       >
         ОПЛАТИТЬ
       </button>

@@ -110,6 +110,7 @@ const EditorPage: React.FC = () => {
     number | null
   >(null);
   const [editingText, setEditingText] = useState<string>("");
+  const [modal, setModal] = useState(false);
 
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
@@ -335,12 +336,11 @@ const EditorPage: React.FC = () => {
         const dataUrl = await toJpeg(canvasRef.current, {
           quality: 0.95,
         });
-
         const response = await axios.post("http://localhost:8001/userCards", {
           card: dataUrl,
           author: accountId,
         });
-        navigate(`/payment/${accountId}`);
+        navigate(`/payment/${accountId}`)
       } catch (error) {
         console.error("Error saving image:", error);
       }
@@ -817,13 +817,21 @@ const EditorPage: React.FC = () => {
             </div>
           ))}
 
-          <button
-            onClick={handleSave}
-            className="save"
-            style={{ width: canvasSize }}
-          >
+          <button onClick={() => setModal(true)} className="save">
             Сохранить
           </button>
+
+          {modal && (
+            <div className="modal">
+              <div className="modal-content">
+                <h2>Вы уверены что добавили все элементы на макет?</h2>
+                <div className="btns">
+                  <button className="auth-btn2" onClick={() => setModal(false)}>Пропустить</button>
+                  <button className="auth-btn" onClick={handleSave}>Уверен</button>
+                </div>
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </div>
