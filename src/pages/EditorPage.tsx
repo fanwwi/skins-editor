@@ -826,7 +826,7 @@ const EditorPage: React.FC = () => {
               <div className="modal-content">
                 <h2>Вы уверены что добавили все элементы на макет?</h2>
                 <div className="btns">
-                  <button className="auth-btn2" onClick={() => setModal(false)}>Пропустить</button>
+                  <button className="auth-btn2" onClick={() => setModal(false)}>Не уверен</button>
                   <button className="auth-btn" onClick={handleSave}>Уверен</button>
                 </div>
               </div>
