@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import rainbow from "../img/rainbow-ball.png";
 import { useAppDispatch, useAppSelector } from "../store/store";
 import {
@@ -7,6 +7,9 @@ import {
   getUserCostumes,
 } from "../store/actions/account.action";
 import iconImage from "../img/image-icon.png";
+import { toJpeg } from "html-to-image";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 interface TextElement {
   id: number;
@@ -83,6 +86,7 @@ const EditorPage: React.FC = () => {
   const [editingText, setEditingText] = useState<string>("");
 
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
 
   useEffect(() => {
     dispatch(getOneAccount(accountId!));
@@ -289,6 +293,26 @@ const EditorPage: React.FC = () => {
     setEditingText("");
   };
 
+  const canvasRef = useRef<HTMLDivElement>(null);
+
+  const handleSave = async () => {
+    if (canvasRef.current) {
+      try {
+        const dataUrl = await toJpeg(canvasRef.current, {
+          quality: 0.95,
+        });
+
+        const response = await axios.post("http://localhost:8001/userCards", {
+          card: dataUrl,
+          author: accountId,
+        });
+        navigate(`/payment/${accountId}`);
+      } catch (error) {
+        console.error("Error saving image:", error);
+      }
+    }
+  };
+
   return (
     <div className="list">
       <div className="options">
@@ -355,6 +379,7 @@ const EditorPage: React.FC = () => {
         </div>
         <div
           className="canva"
+          ref={canvasRef}
           style={{
             width: canvasSize,
             backgroundColor: backgroundColor,
@@ -537,6 +562,10 @@ const EditorPage: React.FC = () => {
               )}
             </div>
           ))}
+
+          <button onClick={handleSave} className="save" style={{width: canvasSize}}>
+            Сохранить
+          </button>
         </div>
       </div>
     </div>

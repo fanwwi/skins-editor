@@ -14,6 +14,7 @@ import AddPage from "../pages/AddPage";
 import Settings from "../pages/Settings";
 import EditPage from "../pages/EditPage";
 import Editor from "../pages/EditorPage";
+import PaymentPage from "../pages/PaymentPage";
 
 const MainRoutes = () => {
   return (
@@ -31,6 +32,7 @@ const MainRoutes = () => {
       <Route path="/add-page/add-account" element={<AddPage />} />
       <Route path="/edit/:accountId" element={<EditPage />} />
       <Route path="/editor/:id" element={<Editor />} />
+      <Route path="/payment/:id" element={<PaymentPage />} />
       <Route path="/*" element={<NotFoundPage />} />
     </Routes>
   );
