@@ -684,6 +684,7 @@ const EditorPage: React.FC = () => {
               position: "absolute",
               left: gameAccountPosition.x,
               top: gameAccountPosition.y,
+              fontSize: fontSize,
               cursor: isDraggingAccount ? "grabbing" : "default",
             }}
             onMouseDown={(e) => {
@@ -701,6 +702,7 @@ const EditorPage: React.FC = () => {
               position: "absolute",
               left: nicknamePosition.x,
               top: nicknamePosition.y,
+              fontSize: fontSize,
               cursor: isDraggingAccount ? "grabbing" : "default",
             }}
             onMouseDown={(e) => {
@@ -718,6 +720,7 @@ const EditorPage: React.FC = () => {
               position: "absolute",
               left: idPosition.x,
               top: idPosition.y,
+              fontSize: fontSize,
               cursor: isDraggingAccount ? "grabbing" : "default",
             }}
             onMouseDown={(e) => {
@@ -735,6 +738,7 @@ const EditorPage: React.FC = () => {
               position: "absolute",
               left: serverPosition.x,
               top: serverPosition.y,
+              fontSize: fontSize,
               cursor: isDraggingAccount ? "grabbing" : "default",
             }}
             onMouseDown={(e) => {
