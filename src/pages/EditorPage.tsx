@@ -642,7 +642,9 @@ const EditorPage: React.FC = () => {
                     <div
                       className="oneIcon"
                       key={icon.id}
-                      onClick={() => handleItemClick(icon)}
+                      onClick={() =>
+                        dispatch(addUserIcons({ data: icon, id: accountId! }))
+                      }
                     >
                       <img src={icon.icon} alt="" />
                     </div>
