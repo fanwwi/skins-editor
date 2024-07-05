@@ -14,7 +14,6 @@ import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
 import userIcon from "../img/user-image.jpg";
 import logo from "../img/logo.png";
-import { IconsType } from "../types";
 
 interface TextElement {
   id: number;
@@ -122,7 +121,6 @@ const EditorPage: React.FC = () => {
   const [costumeSize, setCostumeSize] = useState(150);
   const [imgSize, setImgSize] = useState(150);
   const [activeTab, setActiveTab] = useState("content");
-  const [clickedItem, setClickedItem] = useState<IconsType>();
 
   const [mousePosition, setMousePosition] = useState<{ x: number; y: number }>({
     x: 0,
@@ -489,17 +487,6 @@ const EditorPage: React.FC = () => {
     setDraggedImageId(null);
   };
 
-  const handleItemClick = (item: IconsType) => {
-    const selectedItem = {
-      icon: item.icon,
-      author: accountId!,
-      id: item.id,
-    };
-    setClickedItem(selectedItem);
-    dispatch(addUserIcons({ data: selectedItem, id: accountId! }));
-    console.log(selectedItem);
-  };
-
   return (
     <div className="list">
       <div
@@ -642,9 +629,10 @@ const EditorPage: React.FC = () => {
                     <div
                       className="oneIcon"
                       key={icon.id}
-                      onClick={() =>
-                        dispatch(addUserIcons({ data: icon, id: accountId! }))
-                      }
+                      onClick={() => {
+                        dispatch(addUserIcons({ data: icon, id: accountId! }));
+                        setModalIcon(false);
+                      }}
                     >
                       <img src={icon.icon} alt="" />
                     </div>

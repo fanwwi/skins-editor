@@ -322,7 +322,7 @@ export const getIcons = createAsyncThunk("account/getIcons", async () => {
 });
 
 export const addUserIcons = createAsyncThunk(
-  "account/getIcons",
+  "account/addUserIcons",
   async ({ data, id }: { data: IconsType; id: string }) => {
     try {
       const res = await axios.post("http://localhost:8001/userIcons", {
