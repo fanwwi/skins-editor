@@ -50,44 +50,44 @@
   ],
   "userCostumes": [
     {
-      "costume": "https://i.pinimg.com/originals/dc/f3/2b/dcf32bcdfe204bfe62ba6f35f668bd0a.png",
+      "costume": "https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/47d2942e-69cd-4902-897b-bcd92a0dd986/ddyihcl-b27b444c-863e-49b0-a2c0-8f44ecf41e43.jpg/v1/fill/w_754,h_1060,q_70,strp/dream_witch___tomie_kawakami_by_sashaartheart_ddyihcl-pre.jpg?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7ImhlaWdodCI6Ijw9MTQwMCIsInBhdGgiOiJcL2ZcLzQ3ZDI5NDJlLTY5Y2QtNDkwMi04OTdiLWJjZDkyYTBkZDk4NlwvZGR5aWhjbC1iMjdiNDQ0Yy04NjNlLTQ5YjAtYTJjMC04ZjQ0ZWNmNDFlNDMuanBnIiwid2lkdGgiOiI8PTk5NSJ9XV0sImF1ZCI6WyJ1cm46c2VydmljZTppbWFnZS5vcGVyYXRpb25zIl19.m0m4ac_mmQrxL-4JRq6uW-Zti_fJnBIzbQs4xzMqpcA",
       "category": "S",
       "author": "Егерь",
       "bigAuthor": "1",
       "id": 1
     },
     {
-      "costume": "https://i.pinimg.com/originals/dc/f3/2b/dcf32bcdfe204bfe62ba6f35f668bd0a.png",
+      "costume": "https://i.pinimg.com/474x/0e/1e/d8/0e1ed8750ff53fe21d92423840b98d77.jpg",
       "category": "S",
       "author": "Егерь",
       "bigAuthor": "1",
       "id": 2
     },
     {
-      "costume": "https://freefiremobile-a.akamaihd.net/common/web_event/official2.ff.garena.all/img/20228/26d226fa08410cc418959e3cc30095c7.png",
+      "costume": "https://pics.craiyon.com/2023-11-05/b115349ab092402f96a02d0d8d863697.webp",
       "category": "SS",
-      "author": "Воин",
+      "author": "Апостол",
       "bigAuthor": "1",
       "id": 3
     },
     {
-      "costume": "https://freefiremobile-a.akamaihd.net/common/web_event/official2.ff.garena.all/img/20228/26d226fa08410cc418959e3cc30095c7.png",
+      "costume": "https://www.identityv.ru/wp-content/uploads/2018/09/doctor.jpg",
       "category": "SS",
       "author": "Воин",
       "bigAuthor": "1",
       "id": 4
     },
     {
-      "costume": "https://dl.dir.freefiremobile.com/common/web_event/official2.ff.garena.all/20238/8f978bdbe46d3d2366b82713082d6683.png",
+      "costume": "https://pbs.twimg.com/media/FkFrqtCakAElA-I.jpg",
       "category": "A",
-      "author": "Хиганбана",
+      "author": "Наяда",
       "bigAuthor": "1",
       "id": 5
     },
     {
-      "costume": "https://dl.dir.freefiremobile.com/common/web_event/official2.ff.garena.all/20238/8f978bdbe46d3d2366b82713082d6683.png",
+      "costume": "https://pbs.twimg.com/media/GLkx9gOXwAAsaa9.jpg:large",
       "category": "A",
-      "author": "Хиганбана",
+      "author": "Кошмар",
       "bigAuthor": "1",
       "id": 6
     }
@@ -113,5 +113,15 @@
       "id": 2
     }
   ],
-  "userCards": []
+  "userCards": [],
+  "icons": [
+    {
+      "icon": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSS90uM0WY2CESXO403PFRP_BqBTe5xhtP9wg&s",
+      "id": 1
+    },
+    {
+      "icon": "https://pbs.twimg.com/ext_tw_video_thumb/1581254605782110210/pu/img/kqzcdOsjgs85soTf.jpg",
+      "id": 2
+    }
+  ]
 }

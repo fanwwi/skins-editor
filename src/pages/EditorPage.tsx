@@ -2,14 +2,17 @@ import React, { useEffect, useRef, useState } from "react";
 import rainbow from "../img/rainbow-ball.png";
 import { useAppDispatch, useAppSelector } from "../store/store";
 import {
+  getIcons,
   getOneAccount,
   getUserAss,
   getUserCostumes,
 } from "../store/actions/account.action";
-import iconImage from "../img/image-icon.png";
 import { toJpeg } from "html-to-image";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import userIcon from "../img/user-image.jpg";
+import logo from "../img/logo.png";
+import { IconsType } from "../types";
 
 interface TextElement {
   id: number;
@@ -39,11 +42,21 @@ interface AssessoirsType {
   y?: number;
 }
 
+interface IconType {
+  id: string | null;
+  src: string;
+  position: {
+    x: number;
+    y: number;
+  };
+}
+
 const EditorPage: React.FC = () => {
   const accountId = localStorage.getItem("currentAccount");
   const { userCostumes } = useAppSelector((state) => state.accounts);
   const { userAss } = useAppSelector((state) => state.accounts);
   const { account } = useAppSelector((state) => state.accounts);
+  const { icons } = useAppSelector((state) => state.accounts);
 
   const [costumeS, setCostumeS] = useState(false);
   const [costumeSS, setCostumeSS] = useState(false);
@@ -77,6 +90,11 @@ const EditorPage: React.FC = () => {
     y: number;
   }>({ x: 0, y: 0 });
 
+  const [icon, setIcon] = useState<IconType[]>([]);
+  const [isDraggingIcon, setIsDraggingIcon] = useState(false);
+  const [draggedIconId, setDraggedIconId] = useState("");
+  const [startIconOffset, setStartIconOffset] = useState({ x: 0, y: 0 });
+
   const [costumeSPosition, setCostumeSPosition] = useState({ x: 0, y: 0 });
   const [costumeSSPosition, setCostumeSSPosition] = useState({ x: 0, y: 0 });
   const [costumeAPosition, setCostumeAPosition] = useState({ x: 0, y: 0 });
@@ -100,6 +118,7 @@ const EditorPage: React.FC = () => {
   const [isDraggingServer, setIsDraggingServer] = useState(false);
   const [costumeSize, setCostumeSize] = useState(150);
   const [imgSize, setImgSize] = useState(150);
+  const [activeTab, setActiveTab] = useState("content");
 
   const [mousePosition, setMousePosition] = useState<{ x: number; y: number }>({
     x: 0,
@@ -115,10 +134,14 @@ const EditorPage: React.FC = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
+  const [selectedIcon, setSelectedIcon] = useState(false);
+  const [modalIcon, setModalIcon] = useState(false);
+
   useEffect(() => {
     dispatch(getOneAccount(accountId!));
     dispatch(getUserCostumes(accountId!));
     dispatch(getUserAss(accountId!));
+    dispatch(getIcons());
   }, [dispatch]);
 
   const increaseCanvasSize = () => {
@@ -340,7 +363,7 @@ const EditorPage: React.FC = () => {
           card: dataUrl,
           author: accountId,
         });
-        navigate(`/payment/${accountId}`)
+        navigate(`/payment/${accountId}`);
       } catch (error) {
         console.error("Error saving image:", error);
       }
@@ -460,8 +483,88 @@ const EditorPage: React.FC = () => {
     setDraggedImageId(null);
   };
 
+  const handleIconMouseDown = (
+    id: string | null,
+    event: React.MouseEvent<HTMLDivElement>
+  ) => {
+    event.stopPropagation();
+    const iconn = icon.find((icn) => icn.id === id);
+    if (iconn) {
+      setIsDraggingIcon(true);
+      setDraggedIconId(id!);
+      setStartIconOffset({
+        x: event.clientX - iconn.position.x,
+        y: event.clientY - iconn.position.y,
+      });
+    }
+  };
+
+  const addIcon = (selectedIcon: IconType) => {
+    const newIcon: IconType = {
+      id: selectedIcon.id,
+      src: selectedIcon.src,
+      position: { x: 0, y: 0 },
+    };
+    setIcon([...icon, newIcon]);
+  };
+
+  const handleIconMouseMove = (event: React.MouseEvent<HTMLDivElement>) => {
+    const dx = event.clientX - mousePosition.x;
+    const dy = event.clientY - mousePosition.y;
+    setMousePosition({ x: event.clientX, y: event.clientY });
+    if (isDraggingIcon && draggedIconId !== null) {
+      const updatedIcons = icon.map((icn) => {
+        if (icn.id === draggedIconId) {
+          return {
+            ...icn,
+            position: {
+              x: event.clientX - startIconOffset.x,
+              y: event.clientY - startIconOffset.y,
+            },
+          };
+        }
+        return icn;
+      });
+      setIcon(updatedIcons);
+    }
+  };
+
+  const handleIconMouseUp = () => {
+    setIsDraggingIcon(false);
+    setDraggedIconId("");
+  };
+
   return (
     <div className="list">
+      <div
+        className="profile-header"
+        style={{
+          width: "1500px",
+          justifyContent: "space-between",
+        }}
+      >
+        <div className="profile-left">
+          <img src={logo} alt="" style={{ width: "70px" }} />
+          <Link
+            to={`/${id}/profile`}
+            style={{ fontSize: "18px", color: "#6232ff" }}
+          >
+            Мои аккаунты
+          </Link>
+        </div>
+        <h2>
+          Визуальная карточка аккаунта -{" "}
+          <span className="blue-text">
+            {account?.gameAccount || "Ошибка сети"}
+          </span>
+        </h2>
+        <img
+          src={userIcon}
+          alt="userIcon"
+          style={{ width: "70px", cursor: "pointer" }}
+        />
+      </div>
+      <hr />
       <div className="options">
         <div className="container">
           <div className="block-top">
@@ -481,15 +584,6 @@ const EditorPage: React.FC = () => {
               />
             </div>
 
-            <h3 id="text" onClick={addTextElement}>
-              Добавить текст
-            </h3>
-            <div className="font-size">
-              <button onClick={increaseFontSize}>+</button>
-              <div className="fz">{fontSize}</div>
-              <button onClick={decreaseFontSize}>-</button>
-            </div>
-
             <div className="canva-size">
               <span>Размер холста:</span>
               <div className="down-block">
@@ -498,45 +592,95 @@ const EditorPage: React.FC = () => {
                 <button onClick={decreaseCanvasSize}>-</button>
               </div>
             </div>
-
-            <div className="canva-size">
-              <span>Размеры картинок:</span>
-              <div className="down-block">
-                <button onClick={increaseImgSize}>+</button>
-                <div className="fz">{imgSize}px</div>
-                <button onClick={decreaseImgSize}>-</button>
-              </div>
-            </div>
-
-            <div className="canva-size">
-              <span>Размеры костюмов:</span>
-              <div className="down-block">
-                <button onClick={increaseCostumeSize}>+</button>
-                <div className="fz">{costumeSize}px</div>
-                <button onClick={decreaseCostumeSize}>-</button>
-              </div>
+          </div>
+          <div className="btns" style={{ display: "flex" }}>
+            <div className="auth-btn2">Назад</div>
+            <div className="save-btn" onClick={() => setModal(true)}>
+              Сохранить
             </div>
           </div>
-
-          <h2>
-            Визуальная карточка аккаунта -{" "}
-            <span className="blue-text">
-              {account?.gameAccount || "Ошибка сети"}
-            </span>
-          </h2>
         </div>
       </div>
       <div className="center">
-        <div className="costumes-block">
-          <button onClick={() => setCostumeS(true)}>Костюмы S</button>
-          <button onClick={() => setCostumeSS(true)}>Костюмы SS</button>
-          <button onClick={() => setCostumeA(true)}>Костюмы A</button>
-          <button onClick={() => setAss(true)}>Аксессуары</button>
-          <button onClick={() => setNickname(true)}>Никнэйм</button>
-          <button onClick={() => setGameAccount(true)}>Имя акканута</button>
-          <button onClick={() => setServer(true)}>Сервер</button>
-          <button onClick={() => setId(true)}>ID</button>
-          <input id="img" placeholder="Добавить картинку" onChange={addImage} />
+        <div className="tab">
+          <div className="tab-buttons">
+            <button
+              className={`tab-button ${
+                activeTab === "content" ? "active" : ""
+              }`}
+              onClick={() => setActiveTab("content")}
+            >
+              Содержание аккаунта
+            </button>
+            <button
+              className={`tab-button ${
+                activeTab === "account-data" ? "active" : ""
+              }`}
+              onClick={() => setActiveTab("account-data")}
+            >
+              Данные аккаунта
+            </button>
+            <button
+              className={`tab-button ${
+                activeTab === "elements" ? "active" : ""
+              }`}
+              onClick={() => setActiveTab("elements")}
+            >
+              Элементы
+            </button>
+          </div>
+
+          <div className="tab-content">
+            {activeTab === "content" && (
+              <div className="costumes-block">
+                <button onClick={() => setCostumeS(true)}>Костюмы S</button>
+                <button onClick={() => setCostumeSS(true)}>Костюмы SS</button>
+                <button onClick={() => setCostumeA(true)}>Костюмы A</button>
+                <button onClick={() => setAss(true)}>Аксессуары</button>
+              </div>
+            )}
+            {activeTab === "account-data" && (
+              <div className="costumes-block">
+                <button onClick={() => setNickname(true)}>Никнэйм</button>
+                <button onClick={() => setGameAccount(true)}>
+                  Имя акканута
+                </button>
+                <button onClick={() => setServer(true)}>Сервер</button>
+                <button onClick={() => setId(true)}>ID</button>
+              </div>
+            )}
+            {activeTab === "elements" && (
+              <div className="costumes-block">
+                <input
+                  id="img"
+                  placeholder="Вставьте ссылку на вашу картинку"
+                  onChange={addImage}
+                />
+                <button onClick={() => setModalIcon(true)}>
+                  Добавить иконку
+                </button>
+                <button onClick={addTextElement}>Добавить текст</button>
+              </div>
+            )}
+          </div>
+
+          {modalIcon && (
+            <div className="modal" onClick={() => setModalIcon(false)}>
+              <div
+                className="modal-content2"
+                onClick={(e) => e.stopPropagation()}
+              >
+                <h2>Выберите иконку</h2>
+                <div className="icons">
+                  {icons?.map((icon) => (
+                    <div className="oneIcon" key={icon.id} onClick={() => {}}>
+                      <img src={icon.icon} alt="" />
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          )}
         </div>
         <div
           className="canva"
@@ -771,6 +915,26 @@ const EditorPage: React.FC = () => {
             />
           ))}
 
+          <div className="icons-container" style={{ position: "relative" }}>
+            {icon.map((icon) => (
+              <div
+                key={icon.id}
+                className="display-icon"
+                style={{
+                  position: "absolute",
+                  left: icon.position.x,
+                  top: icon.position.y,
+                  cursor: isDraggingIcon ? "grabbing" : "pointer",
+                }}
+                onMouseDown={(e) => handleIconMouseDown(icon.id!, e)}
+                onMouseMove={handleIconMouseMove}
+                onMouseUp={handleIconMouseUp}
+              >
+                <img src={icon.src} alt="Icon" />
+              </div>
+            ))}
+          </div>
+
           {textElements.map((element) => (
             <div
               key={element.id}
@@ -817,17 +981,17 @@ const EditorPage: React.FC = () => {
             </div>
           ))}
 
-          <button onClick={() => setModal(true)} className="save">
-            Сохранить
-          </button>
-
           {modal && (
             <div className="modal">
               <div className="modal-content">
                 <h2>Вы уверены что добавили все элементы на макет?</h2>
                 <div className="btns">
-                  <button className="auth-btn2" onClick={() => setModal(false)}>Не уверен</button>
-                  <button className="auth-btn" onClick={handleSave}>Уверен</button>
+                  <button className="auth-btn2" onClick={() => setModal(false)}>
+                    Не уверен
+                  </button>
+                  <button className="auth-btn" onClick={handleSave}>
+                    Уверен
+                  </button>
                 </div>
               </div>
             </div>

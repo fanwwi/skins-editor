@@ -78,3 +78,8 @@ export type CardsType = {
   author: string;
   id: string;
 };
+
+export type IconsType = {
+  icon: string;
+  id: string;
+};

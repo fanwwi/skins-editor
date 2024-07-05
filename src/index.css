@@ -731,72 +731,145 @@ select {
 .list {
   width: 100%;
   height: 729px;
-  background-color: #a3cbff;
   position: relative;
   overflow: hidden;
 }
 
 .options {
   height: 170px;
-  width: 100%;
+  width: 1000px;
   background-color: #fff;
   align-items: center;
 }
 
 .options .container {
   display: flex;
-  flex-direction: column;
-  justify-content: space-between;
   align-items: center;
+  justify-content: space-between;
+}
+
+.save-btn {
+  display: flex;
+  width: 150px;
+  background-color: #1c7e58;
+  justify-content: center;
+  align-items: center;
+  height: 50px;
+  color: #fff;
+  border-radius: 5px;
+  margin-left: 30px;
+  cursor: pointer;
+}
+
+.save-btn:hover {
+  background-color: #2cba84;
+}
+
+.tab {
+  display: flex;
+  flex-direction: column;
+  width: 450px;
+  margin-top: -70px;
+  margin-left: 20px;
+}
+
+.tab-buttons {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.tab-button {
+  padding: 10px 20px;
+  cursor: pointer;
+  background-color: transparent;
+  border: none;
+  font-size: 12px;
+  transition: color 0.3s;
+  position: relative;
+  margin-bottom: 20px;
+}
+
+.tab-button.active {
+  color: #9832ff;
+}
+
+.tab-button.active::after {
+  content: "";
+  display: block;
+  margin: auto;
+  height: 2px;
+  width: 80%;
+  background-color: #9832ff;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
+
+.tab-content {
+  height: 440px;
+  border: 1px solid #000;
+  margin-top: -20px;
+  width: 440px;
+  margin-left: 10px;
+  border-radius: 3px;
+}
+
+.account-data,
+.costumes-block,
+.account-details {
+  width: 430px;
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  top: 280px;
+  left: 40px;
 }
 
 .block-top {
   width: 1400px;
   display: flex;
-  justify-content: space-between;
+  gap: 100px;
   align-items: center;
-  margin-top: 30px;
-}
-
-.costumes-block {
-  display: flex;
-  flex-direction: column;
-  height: 600px;
-  gap: 10px;
-  width: 300px;
-  position: absolute;
-  left: 50px;
-  top: 210px;
+  margin-left: 100px;
+  margin-top: 10px;
 }
 
 .costumes-block button {
-  height: 40px;
-  background-color: #006eff;
+  height: 100px;
   border: none;
-  color: #fff;
-  border-radius: 10px;
+  border: 1px solid #000;
   cursor: pointer;
   font-size: 20px;
+  margin-top: -22.5px;
+  margin-bottom: 36px;
+  margin-left: -10px;
+  background-color: #fff;
 }
 
-#img {
-  height: 80px;
-  background-color: #9900ff;
-  padding: 20px;
+.costumes-block input {
+  height: 100px;
   border: none;
+  border: 1px solid #000;
+  font-size: 20px;
+  margin-top: -22.5px;
+  margin-bottom: 36px;
+  margin-left: -10px;
+  background-color: #fff;
+  padding-left: 25px;
   outline: none;
-  border-radius: 10px;
-  color: #fff;
-  font-size: 20px;
+  color: #000;
 }
 
-#img::placeholder {
-  color: #fff;
-  font-size: 20px;
+.costumes-block button:hover,
+.costumes-block input:hover {
+  border: 2px solid #9832ff;
+  color: #9832ff;
 }
 
-.costumes-block button:hover {
-  background-color: #2200ff;
+.costumes-block input::placeholder {
+  color: #000;
 }
 
 .options .label {
@@ -890,10 +963,10 @@ select {
   height: 500px;
   background-color: #fff;
   position: absolute;
-  top: 200px;
-  right: 400px;
+  top: 210px;
   border-radius: 20px;
   border: 3px dashed #8a8a8a;
+  left: 500px;
 }
 
 .display-costumes {
@@ -995,4 +1068,29 @@ select {
   cursor: pointer;
   border: none;
   border-radius: 4px;
+}
+
+.modal-content2 {
+  width: 1200px;
+  height: 600px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: white;
+  padding: 20px;
+  border-radius: 8px;
+  text-align: center;
+}
+
+.icons {
+  margin-top: 20px;
+  width: 1100px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 60px;
+}
+
+.icons img {
+  width: 200px;
+  border-radius: 20px;
 }

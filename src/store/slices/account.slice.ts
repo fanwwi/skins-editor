@@ -5,6 +5,7 @@ import {
   CardsType,
   CostumesType,
   DetailsType,
+  IconsType,
 } from "../../types";
 import {
   accountDetails,
@@ -12,6 +13,7 @@ import {
   getAssessoirs,
   getCard,
   getCostume,
+  getIcons,
   getOneAccount,
   getUserAss,
   getUserCostumes,
@@ -27,6 +29,7 @@ type StatesType = {
   allAssessoirs: AssessoirsType[] | null;
   userAss: AssessoirsType[] | null;
   userCard: CardsType | null;
+  icons: IconsType[] | null;
 };
 
 const INIT_STATE: StatesType = {
@@ -39,6 +42,7 @@ const INIT_STATE: StatesType = {
   allAssessoirs: null,
   userAss: null,
   userCard: null,
+  icons: null,
 };
 
 export const accountsSlice = createSlice({
@@ -101,6 +105,12 @@ export const accountsSlice = createSlice({
       })
       .addCase(getCard.rejected, (state) => {
         console.log(state.error);
+      })
+      .addCase(getIcons.rejected, (state) => {
+        console.log(state.error);
+      })
+      .addCase(getIcons.fulfilled, (state, { payload }) => {
+        state.icons = payload;
       });
   },
 });

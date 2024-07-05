@@ -299,14 +299,23 @@ export const getUserAss = createAsyncThunk(
 );
 
 export const getCard = createAsyncThunk(
-  "accounts/downloadCard",
+  "accounts/getCard",
   async (id: string) => {
     try {
       const { data } = await axios.get("http://localhost:8001/userCards", {
-        responseType: "blob"
+        responseType: "blob",
       });
       const filteredData = data.filter((card: CardsType) => card.author === id);
       return filteredData;
     } catch (error) {}
   }
 );
+
+export const getIcons = createAsyncThunk("account/getIcons", async () => {
+  try {
+    const { data } = await axios.get("http://localhost:8001/icons");
+    return data;
+  } catch (error) {
+    console.log(error);
+  }
+});
