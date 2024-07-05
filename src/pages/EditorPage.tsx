@@ -547,7 +547,12 @@ const EditorPage: React.FC = () => {
             </div>
           </div>
           <div className="btns" style={{ display: "flex" }}>
-            <div className="auth-btn2">Назад</div>
+            <div
+              className="auth-btn2"
+              onClick={() => navigate(`/edit/${accountId}/`)}
+            >
+              Назад
+            </div>
             <div className="save-btn" onClick={() => setModal(true)}>
               Сохранить
             </div>
