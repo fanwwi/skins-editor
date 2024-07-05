@@ -2,10 +2,12 @@ import React, { useEffect, useRef, useState } from "react";
 import rainbow from "../img/rainbow-ball.png";
 import { useAppDispatch, useAppSelector } from "../store/store";
 import {
+  addUserIcons,
   getIcons,
   getOneAccount,
   getUserAss,
   getUserCostumes,
+  getUserIcons,
 } from "../store/actions/account.action";
 import { toJpeg } from "html-to-image";
 import axios from "axios";
@@ -56,7 +58,8 @@ const EditorPage: React.FC = () => {
   const { userCostumes } = useAppSelector((state) => state.accounts);
   const { userAss } = useAppSelector((state) => state.accounts);
   const { account } = useAppSelector((state) => state.accounts);
-  const { icons } = useAppSelector((state) => state.accounts);
+  const { allIcons } = useAppSelector((state) => state.accounts);
+  const { userIcons } = useAppSelector((state) => state.accounts);
 
   const [costumeS, setCostumeS] = useState(false);
   const [costumeSS, setCostumeSS] = useState(false);
@@ -119,6 +122,7 @@ const EditorPage: React.FC = () => {
   const [costumeSize, setCostumeSize] = useState(150);
   const [imgSize, setImgSize] = useState(150);
   const [activeTab, setActiveTab] = useState("content");
+  const [clickedItem, setClickedItem] = useState<IconsType>();
 
   const [mousePosition, setMousePosition] = useState<{ x: number; y: number }>({
     x: 0,
@@ -134,7 +138,10 @@ const EditorPage: React.FC = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
-  const [selectedIcon, setSelectedIcon] = useState(false);
+  const [selectedIcon, setSelectedIcon] = useState<IconType>();
+  const [iconsOnCanvas, setIconsOnCanvas] = useState<
+    { icon: IconType; position: { x: number; y: number } }[]
+  >([]);
   const [modalIcon, setModalIcon] = useState(false);
 
   useEffect(() => {
@@ -142,6 +149,7 @@ const EditorPage: React.FC = () => {
     dispatch(getUserCostumes(accountId!));
     dispatch(getUserAss(accountId!));
     dispatch(getIcons());
+    dispatch(getUserIcons(accountId!));
   }, [dispatch]);
 
   const increaseCanvasSize = () => {
@@ -458,8 +466,6 @@ const EditorPage: React.FC = () => {
   };
 
   const handleImageMouseMove = (event: React.MouseEvent<HTMLDivElement>) => {
-    const dx = event.clientX - mousePosition.x;
-    const dy = event.clientY - mousePosition.y;
     setMousePosition({ x: event.clientX, y: event.clientY });
     if (isDraggingImage && draggedImageId !== null) {
       const updatedImages = images.map((img) => {
@@ -483,55 +489,15 @@ const EditorPage: React.FC = () => {
     setDraggedImageId(null);
   };
 
-  const handleIconMouseDown = (
-    id: string | null,
-    event: React.MouseEvent<HTMLDivElement>
-  ) => {
-    event.stopPropagation();
-    const iconn = icon.find((icn) => icn.id === id);
-    if (iconn) {
-      setIsDraggingIcon(true);
-      setDraggedIconId(id!);
-      setStartIconOffset({
-        x: event.clientX - iconn.position.x,
-        y: event.clientY - iconn.position.y,
-      });
-    }
-  };
-
-  const addIcon = (selectedIcon: IconType) => {
-    const newIcon: IconType = {
-      id: selectedIcon.id,
-      src: selectedIcon.src,
-      position: { x: 0, y: 0 },
+  const handleItemClick = (item: IconsType) => {
+    const selectedItem = {
+      icon: item.icon,
+      author: accountId!,
+      id: item.id,
     };
-    setIcon([...icon, newIcon]);
-  };
-
-  const handleIconMouseMove = (event: React.MouseEvent<HTMLDivElement>) => {
-    const dx = event.clientX - mousePosition.x;
-    const dy = event.clientY - mousePosition.y;
-    setMousePosition({ x: event.clientX, y: event.clientY });
-    if (isDraggingIcon && draggedIconId !== null) {
-      const updatedIcons = icon.map((icn) => {
-        if (icn.id === draggedIconId) {
-          return {
-            ...icn,
-            position: {
-              x: event.clientX - startIconOffset.x,
-              y: event.clientY - startIconOffset.y,
-            },
-          };
-        }
-        return icn;
-      });
-      setIcon(updatedIcons);
-    }
-  };
-
-  const handleIconMouseUp = () => {
-    setIsDraggingIcon(false);
-    setDraggedIconId("");
+    setClickedItem(selectedItem);
+    dispatch(addUserIcons({ data: selectedItem, id: accountId! }));
+    console.log(selectedItem);
   };
 
   return (
@@ -672,8 +638,12 @@ const EditorPage: React.FC = () => {
               >
                 <h2>Выберите иконку</h2>
                 <div className="icons">
-                  {icons?.map((icon) => (
-                    <div className="oneIcon" key={icon.id} onClick={() => {}}>
+                  {allIcons?.map((icon: any) => (
+                    <div
+                      className="oneIcon"
+                      key={icon.id}
+                      onClick={() => handleItemClick(icon)}
+                    >
                       <img src={icon.icon} alt="" />
                     </div>
                   ))}
@@ -894,20 +864,15 @@ const EditorPage: React.FC = () => {
             {server && <span>{account?.gameServer}</span>}
           </div>
 
-          {images.map((image) => (
+          {images.map((image, index) => (
             <img
-              key={image.id}
+              key={index}
               src={image.src}
-              alt="User Image"
+              alt={`Image ${index}`}
               style={{
                 position: "absolute",
                 left: image.position.x,
                 top: image.position.y,
-                width: imgSize,
-                cursor:
-                  isDraggingImage && draggedImageId === image.id
-                    ? "grabbing"
-                    : "default",
               }}
               onMouseDown={(e) => handleImageMouseDown(image.id, e)}
               onMouseMove={handleImageMouseMove}
@@ -916,21 +881,13 @@ const EditorPage: React.FC = () => {
           ))}
 
           <div className="icons-container" style={{ position: "relative" }}>
-            {icon.map((icon) => (
+            {iconsOnCanvas.map((item: any, index) => (
               <div
-                key={icon.id}
-                className="display-icon"
-                style={{
-                  position: "absolute",
-                  left: icon.position.x,
-                  top: icon.position.y,
-                  cursor: isDraggingIcon ? "grabbing" : "pointer",
-                }}
-                onMouseDown={(e) => handleIconMouseDown(icon.id!, e)}
-                onMouseMove={handleIconMouseMove}
-                onMouseUp={handleIconMouseUp}
+                key={index}
+                className="icon-on-canvas"
+                style={{ left: item.position.x, top: item.position.y }}
               >
-                <img src={icon.src} alt="Icon" />
+                <img src={item.icon} alt="" />
               </div>
             ))}
           </div>

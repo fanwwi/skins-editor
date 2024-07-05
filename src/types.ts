@@ -81,5 +81,6 @@ export type CardsType = {
 
 export type IconsType = {
   icon: string;
+  author: string;
   id: string;
 };
