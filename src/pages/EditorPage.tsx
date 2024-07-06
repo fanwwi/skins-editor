@@ -15,6 +15,7 @@ import deleteIcon from "../img/delete-icon.png";
 import alignLeft from "../img/alignLeft.png";
 import alignRight from "../img/alignRight.png";
 import alignCenter from "../img/alignCenter.png";
+import close from "../img/close.png";
 
 interface TextElement {
   id: number;
@@ -115,6 +116,10 @@ const EditorPage: React.FC = () => {
   const [costumeSize, setCostumeSize] = useState(150);
   const [imgSize, setImgSize] = useState(150);
   const [activeTab, setActiveTab] = useState("content");
+
+  const [modalPosition, setModalPosition] = useState({ x: 0, y: 0 });
+  const [textModal, setTextModal] = useState({ x: 0, y: 0 });
+  const [imageModal, setImageModal] = useState({ x: 0, y: 0 });
 
   const [mousePosition, setMousePosition] = useState<{ x: number; y: number }>({
     x: 0,
@@ -478,6 +483,21 @@ const EditorPage: React.FC = () => {
     setDraggedImageId(null);
   };
 
+  const handleCostumeClick = (position: any) => {
+    setModalPosition({ x: position.x, y: position.y - 100 });
+    setContextModalCostumes(true);
+  };
+
+  const handleTextClick = (position: any) => {
+    setTextModal({ x: position.x, y: position.y - 100 });
+    setContextModalText(true);
+  };
+
+  const handleImageClick = (position: any) => {
+    setImageModal({ x: position.x, y: position.y - 100 });
+    setContextModalImage(true);
+  };
+
   return (
     <div className="list">
       <div
@@ -628,7 +648,14 @@ const EditorPage: React.FC = () => {
         >
           <div className="costumes-container" style={{ position: "relative" }}>
             {contextModalCostumes && (
-              <div className="context-modal">
+              <div
+                className="context-modal"
+                style={{
+                  position: "absolute",
+                  left: modalPosition.x,
+                  top: modalPosition.y,
+                }}
+              >
                 <div className="fz">
                   <h6>Размер</h6>
                   <div className="btns">
@@ -654,6 +681,18 @@ const EditorPage: React.FC = () => {
                   <img src={alignCenter} alt="" />
                   <img src={alignRight} alt="" />
                 </div>
+                <img
+                  src={close}
+                  alt=""
+                  style={{
+                    position: "absolute",
+                    right: "5px",
+                    top: "5px",
+                    width: "10px",
+                    cursor: "pointer",
+                  }}
+                  onClick={() => setContextModalCostumes(false)}
+                />
               </div>
             )}
             <div
@@ -682,7 +721,7 @@ const EditorPage: React.FC = () => {
                       <img
                         src={costume.costume}
                         alt="Costume"
-                        onClick={() => setContextModalCostumes(true)}
+                        onClick={() => handleCostumeClick(costumeSPosition)}
                         style={{ height: `${costumeSize}px` }}
                       />
                     </div>
@@ -714,7 +753,7 @@ const EditorPage: React.FC = () => {
                       <img
                         src={costume.costume}
                         alt="Costume"
-                        onClick={() => setContextModalCostumes(true)}
+                        onClick={() => handleCostumeClick(costumeSSPosition)}
                         style={{ height: `${costumeSize}px` }}
                       />
                     </div>
@@ -746,7 +785,7 @@ const EditorPage: React.FC = () => {
                       <img
                         src={costume.costume}
                         alt="Costume"
-                        onClick={() => setContextModalCostumes(true)}
+                        onClick={() => handleCostumeClick(costumeAPosition)}
                         style={{ height: `${costumeSize}px` }}
                       />
                     </div>
@@ -776,88 +815,167 @@ const EditorPage: React.FC = () => {
                     <img
                       src={ass.assessoir}
                       alt="Assessoir"
-                      onClick={() => setContextModalCostumes(true)}
                       style={{ height: `${costumeSize}px` }}
+                      onClick={() => handleCostumeClick(costumeAPosition)}
                     />
                   </div>
                 ))}
             </div>
           </div>
 
-          <div
-            className="account-details"
-            style={{
-              position: "absolute",
-              left: gameAccountPosition.x,
-              top: gameAccountPosition.y,
-              fontSize: fontSize,
-              cursor: isDraggingAccount ? "grabbing" : "default",
-            }}
-            onMouseDown={(e) => {
-              handleAccountMouseDown("gameAccount", e);
-            }}
-            onMouseMove={handleAccountMouseMove}
-            onMouseUp={handleMouseUpAccount}
-            onClick={() => setContextModalText(true)}
-          >
-            {gameAccount && <h3>{account?.gameAccount}</h3>}
-          </div>
+          <div className="account-all">
+            {contextModalText && (
+              <div
+                className="context-modal"
+                style={{
+                  position: "absolute",
+                  left: textModal.x,
+                  top: textModal.y,
+                }}
+              >
+                <div className="fz">
+                  <h6>Размер шрифта</h6>
+                  <div className="btns">
+                    <button onClick={increaseFontSize}>+</button>
+                    <span>{fontSize}</span>
+                    <button onClick={decreaseFontSize}>-</button>
+                  </div>
+                </div>
+                <div className="deleteCostume">
+                  <h6>Удалить</h6>
+                  <img src={deleteIcon} alt="" />
+                </div>
+                <div
+                  id="color"
+                  style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "center",
+                  }}
+                >
+                  <h6>Цвет</h6>
+                  <img src={rainbow} alt="" />
+                </div>
 
-          <div
-            className="account-details"
-            style={{
-              position: "absolute",
-              left: nicknamePosition.x,
-              top: nicknamePosition.y,
-              fontSize: fontSize,
-              cursor: isDraggingAccount ? "grabbing" : "default",
-            }}
-            onMouseDown={(e) => {
-              handleAccountMouseDown("nickname", e);
-            }}
-            onMouseMove={handleAccountMouseMove}
-            onMouseUp={handleMouseUpAccount}
-            onClick={() => setContextModalText(true)}
-          >
-            {nickname && <span>{account?.gameNickname}</span>}
-          </div>
+                <div className="group">
+                  <h6>Шрифт</h6>
+                  <select name="" id="">
+                    <option value="">Arial</option>
+                    <option value="">Open Sans</option>
+                    <option value="">Inter</option>
+                  </select>
+                </div>
 
-          <div
-            className="account-details"
-            style={{
-              position: "absolute",
-              left: idPosition.x,
-              top: idPosition.y,
-              fontSize: fontSize,
-              cursor: isDraggingAccount ? "grabbing" : "default",
-            }}
-            onMouseDown={(e) => {
-              handleAccountMouseDown("id", e);
-            }}
-            onMouseMove={handleAccountMouseMove}
-            onMouseUp={handleMouseUpAccount}
-            onClick={() => setContextModalText(true)}
-          >
-            {id && <span>{account?.gameId}</span>}
-          </div>
+                <div className="btns">
+                  <img src={alignLeft} alt="" />
+                  <img src={alignCenter} alt="" />
+                  <img src={alignRight} alt="" />
+                </div>
+                <img
+                  src={close}
+                  alt=""
+                  style={{
+                    position: "absolute",
+                    right: "5px",
+                    top: "5px",
+                    width: "10px",
+                    cursor: "pointer",
+                  }}
+                  onClick={() => setContextModalText(false)}
+                />
+              </div>
+            )}
 
-          <div
-            className="account-details"
-            style={{
-              position: "absolute",
-              left: serverPosition.x,
-              top: serverPosition.y,
-              fontSize: fontSize,
-              cursor: isDraggingAccount ? "grabbing" : "default",
-            }}
-            onMouseDown={(e) => {
-              handleAccountMouseDown("server", e);
-            }}
-            onMouseMove={handleAccountMouseMove}
-            onMouseUp={handleMouseUpAccount}
-            onClick={() => setContextModalText(true)}
-          >
-            {server && <span>{account?.gameServer}</span>}
+            <div
+              className="account-details"
+              style={{
+                position: "absolute",
+                left: gameAccountPosition.x,
+                top: gameAccountPosition.y,
+                fontSize: fontSize,
+                cursor: isDraggingAccount ? "grabbing" : "default",
+              }}
+              onMouseDown={(e) => {
+                handleAccountMouseDown("gameAccount", e);
+              }}
+              onMouseMove={handleAccountMouseMove}
+              onMouseUp={handleMouseUpAccount}
+            >
+              {gameAccount && (
+                <h3 onClick={() => handleTextClick(gameAccountPosition)}>
+                  {account?.gameAccount}
+                </h3>
+              )}
+            </div>
+
+            <div
+              className="account-details"
+              style={{
+                position: "absolute",
+                left: nicknamePosition.x,
+                top: nicknamePosition.y,
+                fontSize: fontSize,
+                cursor: isDraggingAccount ? "grabbing" : "default",
+              }}
+              onMouseDown={(e) => {
+                handleAccountMouseDown("nickname", e);
+              }}
+              onMouseMove={handleAccountMouseMove}
+              onMouseUp={handleMouseUpAccount}
+              onClick={() => setContextModalText(true)}
+            >
+              {nickname && (
+                <span onClick={() => handleTextClick(nicknamePosition)}>
+                  Никнэйм: {account?.gameNickname}
+                </span>
+              )}
+            </div>
+
+            <div
+              className="account-details"
+              style={{
+                position: "absolute",
+                left: idPosition.x,
+                top: idPosition.y,
+                fontSize: fontSize,
+                cursor: isDraggingAccount ? "grabbing" : "default",
+              }}
+              onMouseDown={(e) => {
+                handleAccountMouseDown("id", e);
+              }}
+              onMouseMove={handleAccountMouseMove}
+              onMouseUp={handleMouseUpAccount}
+              onClick={() => setContextModalText(true)}
+            >
+              {id && (
+                <span onClick={() => handleTextClick(idPosition)}>
+                  ID: {account?.gameId}
+                </span>
+              )}
+            </div>
+
+            <div
+              className="account-details"
+              style={{
+                position: "absolute",
+                left: serverPosition.x,
+                top: serverPosition.y,
+                fontSize: fontSize,
+                cursor: isDraggingAccount ? "grabbing" : "default",
+              }}
+              onMouseDown={(e) => {
+                handleAccountMouseDown("server", e);
+              }}
+              onMouseMove={handleAccountMouseMove}
+              onMouseUp={handleMouseUpAccount}
+              onClick={() => setContextModalText(true)}
+            >
+              {server && (
+                <span onClick={() => handleTextClick(serverPosition)}>
+                  Сервер: {account?.gameServer}
+                </span>
+              )}
+            </div>
           </div>
 
           {images.map((image, index) => (
@@ -866,6 +984,7 @@ const EditorPage: React.FC = () => {
               src={image.src}
               alt={`Image ${index}`}
               style={{
+                width: imgSize,
                 position: "absolute",
                 left: image.position.x,
                 top: image.position.y,
@@ -873,9 +992,46 @@ const EditorPage: React.FC = () => {
               onMouseDown={(e) => handleImageMouseDown(image.id, e)}
               onMouseMove={handleImageMouseMove}
               onMouseUp={handleImageMouseUp}
-              onClick={() => setContextModalImage(true)}
+              onClick={() => handleImageClick(image.position)}
             />
           ))}
+
+          {imageModal && (
+            <div
+              className="context-modal"
+              style={{
+                position: "absolute",
+                left: modalPosition.x,
+                top: modalPosition.y,
+                width: "250px"
+              }}
+            >
+              <div className="fz">
+                <h6>Размер картинки</h6>
+                <div className="btns">
+                  <button onClick={increaseImgSize}>+</button>
+                  <span>{imgSize}</span>
+                  <button onClick={decreaseImgSize}>-</button>
+                </div>
+              </div>
+              <div className="deleteCostume">
+                <h6>Удалить</h6>
+                <img src={deleteIcon} alt="" />
+              </div>
+              <img
+                src={close}
+                alt=""
+                style={{
+                  position: "absolute",
+                  right: "5px",
+                  top: "5px",
+                  width: "10px",
+                  cursor: "pointer",
+                }}
+                onClick={() => setContextModalImage(false)}
+              />
+            </div>
+          )}
 
           {textElements.map((element) => (
             <div
@@ -893,7 +1049,7 @@ const EditorPage: React.FC = () => {
               onMouseDown={(e) => handleMouseDownText(element.id, e)}
               onMouseMove={handleMouseMoveText}
               onMouseUp={handleMouseUpText}
-              onClick={() => setContextModalText(true)}
+              onClick={() => handleTextClick(element.x && element.y)}
             >
               {editingTextElementId === element.id ? (
                 <input
