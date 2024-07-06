@@ -13,11 +13,9 @@ import {
   getAssessoirs,
   getCard,
   getCostume,
-  getIcons,
   getOneAccount,
   getUserAss,
   getUserCostumes,
-  getUserIcons,
 } from "../actions/account.action";
 
 type StatesType = {
@@ -30,8 +28,6 @@ type StatesType = {
   allAssessoirs: AssessoirsType[] | null;
   userAss: AssessoirsType[] | null;
   userCard: CardsType | null;
-  allIcons: IconsType[] | null;
-  userIcons: IconsType[] | null;
 };
 
 const INIT_STATE: StatesType = {
@@ -44,8 +40,6 @@ const INIT_STATE: StatesType = {
   allAssessoirs: null,
   userAss: null,
   userCard: null,
-  allIcons: null,
-  userIcons: null,
 };
 
 export const accountsSlice = createSlice({
@@ -108,18 +102,6 @@ export const accountsSlice = createSlice({
       })
       .addCase(getCard.rejected, (state) => {
         console.log(state.error);
-      })
-      .addCase(getIcons.rejected, (state) => {
-        console.log(state.error);
-      })
-      .addCase(getIcons.fulfilled, (state, { payload }) => {
-        state.allIcons = payload;
-      })
-      .addCase(getUserIcons.rejected, (state) => {
-        console.log(state.error);
-      })
-      .addCase(getUserIcons.fulfilled, (state, { payload }) => {
-        state.userIcons = payload;
       });
   },
 });

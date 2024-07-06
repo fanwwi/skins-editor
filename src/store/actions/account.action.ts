@@ -311,37 +311,3 @@ export const getCard = createAsyncThunk(
     } catch (error) {}
   }
 );
-
-export const getIcons = createAsyncThunk("account/getIcons", async () => {
-  try {
-    const { data } = await axios.get("http://localhost:8001/icons");
-    return data;
-  } catch (error) {
-    console.log(error);
-  }
-});
-
-export const addUserIcons = createAsyncThunk(
-  "account/addUserIcons",
-  async ({ data, id }: { data: IconsType; id: string }) => {
-    try {
-      const res = await axios.post("http://localhost:8001/userIcons", {
-        icon: data.icon,
-        author: id,
-      });
-      return res.data;
-    } catch (error) {
-      console.log(error);
-    }
-  }
-);
-
-export const getUserIcons = createAsyncThunk("account/getUserIcons", async (id: string) => {
-  try {
-    const { data } = await axios.get("http://localhost:8001/userIcons");
-    const filteredData = data.filter((icon: any) => icon.author === id);
-    return filteredData;
-  } catch (error) {
-    console.log(error);
-  }
-});

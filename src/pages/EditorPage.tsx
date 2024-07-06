@@ -2,12 +2,9 @@ import React, { useEffect, useRef, useState } from "react";
 import rainbow from "../img/rainbow-ball.png";
 import { useAppDispatch, useAppSelector } from "../store/store";
 import {
-  addUserIcons,
-  getIcons,
   getOneAccount,
   getUserAss,
   getUserCostumes,
-  getUserIcons,
 } from "../store/actions/account.action";
 import { toJpeg } from "html-to-image";
 import axios from "axios";
@@ -57,8 +54,6 @@ const EditorPage: React.FC = () => {
   const { userCostumes } = useAppSelector((state) => state.accounts);
   const { userAss } = useAppSelector((state) => state.accounts);
   const { account } = useAppSelector((state) => state.accounts);
-  const { allIcons } = useAppSelector((state) => state.accounts);
-  const { userIcons } = useAppSelector((state) => state.accounts);
 
   const [costumeS, setCostumeS] = useState(false);
   const [costumeSS, setCostumeSS] = useState(false);
@@ -91,11 +86,6 @@ const EditorPage: React.FC = () => {
     x: number;
     y: number;
   }>({ x: 0, y: 0 });
-
-  const [icon, setIcon] = useState<IconType[]>([]);
-  const [isDraggingIcon, setIsDraggingIcon] = useState(false);
-  const [draggedIconId, setDraggedIconId] = useState("");
-  const [startIconOffset, setStartIconOffset] = useState({ x: 0, y: 0 });
 
   const [costumeSPosition, setCostumeSPosition] = useState({ x: 0, y: 0 });
   const [costumeSSPosition, setCostumeSSPosition] = useState({ x: 0, y: 0 });
@@ -136,18 +126,10 @@ const EditorPage: React.FC = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
-  const [selectedIcon, setSelectedIcon] = useState<IconType>();
-  const [iconsOnCanvas, setIconsOnCanvas] = useState<
-    { icon: IconType; position: { x: number; y: number } }[]
-  >([]);
-  const [modalIcon, setModalIcon] = useState(false);
-
   useEffect(() => {
     dispatch(getOneAccount(accountId!));
     dispatch(getUserCostumes(accountId!));
     dispatch(getUserAss(accountId!));
-    dispatch(getIcons());
-    dispatch(getUserIcons(accountId!));
   }, [dispatch]);
 
   const increaseCanvasSize = () => {
@@ -370,6 +352,7 @@ const EditorPage: React.FC = () => {
           author: accountId,
         });
         navigate(`/payment/${accountId}`);
+        return response.data;
       } catch (error) {
         console.error("Error saving image:", error);
       }
@@ -614,38 +597,10 @@ const EditorPage: React.FC = () => {
                   placeholder="Вставьте ссылку на вашу картинку"
                   onChange={addImage}
                 />
-                <button onClick={() => setModalIcon(true)}>
-                  Добавить иконку
-                </button>
                 <button onClick={addTextElement}>Добавить текст</button>
               </div>
             )}
           </div>
-
-          {modalIcon && (
-            <div className="modal" onClick={() => setModalIcon(false)}>
-              <div
-                className="modal-content2"
-                onClick={(e) => e.stopPropagation()}
-              >
-                <h2>Выберите иконку</h2>
-                <div className="icons">
-                  {allIcons?.map((icon: any) => (
-                    <div
-                      className="oneIcon"
-                      key={icon.id}
-                      onClick={() => {
-                        dispatch(addUserIcons({ data: icon, id: accountId! }));
-                        setModalIcon(false);
-                      }}
-                    >
-                      <img src={icon.icon} alt="" />
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
-          )}
         </div>
         <div
           className="canva"
@@ -874,18 +829,6 @@ const EditorPage: React.FC = () => {
               onMouseUp={handleImageMouseUp}
             />
           ))}
-
-          <div className="icons-container" style={{ position: "relative" }}>
-            {iconsOnCanvas.map((item: any, index) => (
-              <div
-                key={index}
-                className="icon-on-canvas"
-                style={{ left: item.position.x, top: item.position.y }}
-              >
-                <img src={item.icon} alt="" />
-              </div>
-            ))}
-          </div>
 
           {textElements.map((element) => (
             <div
