@@ -1094,3 +1094,79 @@ select {
   width: 200px;
   border-radius: 20px;
 }
+
+.context-modal {
+  display: flex;
+  width: 500px;
+  height: 80px;
+  padding: 20px;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.75);
+}
+
+.context-modal img {
+  width: 20px;
+}
+
+.fz {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  align-items: center;
+}
+
+.fz .btns {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.fz button {
+  width: 25px;
+  height: 25px;
+  background-color: #fff;
+  border: 1px solid #000;
+  cursor: pointer;
+}
+
+.fz button:hover {
+  background-color: #f1f1f1;
+}
+
+.deleteCostume {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.group {
+  height: 60px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.group select {
+  margin-top: 5px;
+  height: 50px;
+  width: 150px;
+  cursor: pointer;
+}
+
+.btns {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.btns img {
+  cursor: pointer;
+  background-color: #fff;
+}
+
+.btns img:first-child {
+  width: 19px;
+}
+.btns img:nth-child(2) {
+  width: 30px;
+}

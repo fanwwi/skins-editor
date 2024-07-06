@@ -11,6 +11,10 @@ import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
 import userIcon from "../img/user-image.jpg";
 import logo from "../img/logo.png";
+import deleteIcon from "../img/delete-icon.png";
+import alignLeft from "../img/alignLeft.png";
+import alignRight from "../img/alignRight.png";
+import alignCenter from "../img/alignCenter.png";
 
 interface TextElement {
   id: number;
@@ -122,6 +126,10 @@ const EditorPage: React.FC = () => {
   >(null);
   const [editingText, setEditingText] = useState<string>("");
   const [modal, setModal] = useState(false);
+
+  const [contextModalCostumes, setContextModalCostumes] = useState(false);
+  const [contextModalText, setContextModalText] = useState(false);
+  const [contextModalImage, setContextModalImage] = useState(false);
 
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
@@ -619,6 +627,35 @@ const EditorPage: React.FC = () => {
           onMouseUp={handleMouseUp}
         >
           <div className="costumes-container" style={{ position: "relative" }}>
+            {contextModalCostumes && (
+              <div className="context-modal">
+                <div className="fz">
+                  <h6>Размер</h6>
+                  <div className="btns">
+                    <button onClick={increaseCostumeSize}>+</button>
+                    <span>{costumeSize}</span>
+                    <button onClick={decreaseCostumeSize}>-</button>
+                  </div>
+                </div>
+                <div className="deleteCostume">
+                  <h6>Удалить</h6>
+                  <img src={deleteIcon} alt="" />
+                </div>
+                <div className="group">
+                  <h6>Добавить в группу + </h6>
+                  <select>
+                    <option>Костюмы SS</option>
+                    <option>Костюмы S</option>
+                    <option>Костюмы A</option>
+                  </select>
+                </div>
+                <div className="btns">
+                  <img src={alignLeft} alt="" />
+                  <img src={alignCenter} alt="" />
+                  <img src={alignRight} alt="" />
+                </div>
+              </div>
+            )}
             <div
               className="display-costumes"
               style={{
@@ -637,6 +674,7 @@ const EditorPage: React.FC = () => {
                       key={costume.id}
                       className="display-cost"
                       style={{
+                        position: "relative",
                         left: costume.x || 0,
                         top: costume.y || 0,
                       }}
@@ -644,6 +682,7 @@ const EditorPage: React.FC = () => {
                       <img
                         src={costume.costume}
                         alt="Costume"
+                        onClick={() => setContextModalCostumes(true)}
                         style={{ height: `${costumeSize}px` }}
                       />
                     </div>
@@ -675,6 +714,7 @@ const EditorPage: React.FC = () => {
                       <img
                         src={costume.costume}
                         alt="Costume"
+                        onClick={() => setContextModalCostumes(true)}
                         style={{ height: `${costumeSize}px` }}
                       />
                     </div>
@@ -706,6 +746,7 @@ const EditorPage: React.FC = () => {
                       <img
                         src={costume.costume}
                         alt="Costume"
+                        onClick={() => setContextModalCostumes(true)}
                         style={{ height: `${costumeSize}px` }}
                       />
                     </div>
@@ -735,6 +776,7 @@ const EditorPage: React.FC = () => {
                     <img
                       src={ass.assessoir}
                       alt="Assessoir"
+                      onClick={() => setContextModalCostumes(true)}
                       style={{ height: `${costumeSize}px` }}
                     />
                   </div>
@@ -756,6 +798,7 @@ const EditorPage: React.FC = () => {
             }}
             onMouseMove={handleAccountMouseMove}
             onMouseUp={handleMouseUpAccount}
+            onClick={() => setContextModalText(true)}
           >
             {gameAccount && <h3>{account?.gameAccount}</h3>}
           </div>
@@ -774,6 +817,7 @@ const EditorPage: React.FC = () => {
             }}
             onMouseMove={handleAccountMouseMove}
             onMouseUp={handleMouseUpAccount}
+            onClick={() => setContextModalText(true)}
           >
             {nickname && <span>{account?.gameNickname}</span>}
           </div>
@@ -792,6 +836,7 @@ const EditorPage: React.FC = () => {
             }}
             onMouseMove={handleAccountMouseMove}
             onMouseUp={handleMouseUpAccount}
+            onClick={() => setContextModalText(true)}
           >
             {id && <span>{account?.gameId}</span>}
           </div>
@@ -810,6 +855,7 @@ const EditorPage: React.FC = () => {
             }}
             onMouseMove={handleAccountMouseMove}
             onMouseUp={handleMouseUpAccount}
+            onClick={() => setContextModalText(true)}
           >
             {server && <span>{account?.gameServer}</span>}
           </div>
@@ -827,6 +873,7 @@ const EditorPage: React.FC = () => {
               onMouseDown={(e) => handleImageMouseDown(image.id, e)}
               onMouseMove={handleImageMouseMove}
               onMouseUp={handleImageMouseUp}
+              onClick={() => setContextModalImage(true)}
             />
           ))}
 
@@ -846,6 +893,7 @@ const EditorPage: React.FC = () => {
               onMouseDown={(e) => handleMouseDownText(element.id, e)}
               onMouseMove={handleMouseMoveText}
               onMouseUp={handleMouseUpText}
+              onClick={() => setContextModalText(true)}
             >
               {editingTextElementId === element.id ? (
                 <input
