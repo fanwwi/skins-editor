@@ -29,9 +29,22 @@ import {
 } from "../types";
 import del from "../img/delete-icon.png";
 import addCostumeImg from "../img/add-icon.png";
+import Loader from "../components/Loader";
 
 const EditPage = () => {
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    dispatch(getOneAccount(accountId!));
+    dispatch(getCostume());
+    dispatch(getAssessoirs());
+    dispatch(getUserCostumes(accountId!));
+    dispatch(getUserAss(accountId!));
+  }, [dispatch]);
+
   const id = localStorage.getItem("currentUser")?.replace(/"/g, "");
+  const accountId = localStorage.getItem("currentAccount");
   const [activeTab, setActiveTab] = useState("accountData");
   const [isEditing, setIsEditing] = useState(false);
   const [formData, setFormData] = useState<AccountChange>({
@@ -49,9 +62,6 @@ const EditPage = () => {
     userCostumes,
     userAss,
   } = useAppSelector((state) => state.accounts);
-  const dispatch = useAppDispatch();
-  const navigate = useNavigate();
-  const accountId = localStorage.getItem("currentAccount");
   const [dmmState, setDmmState] = useState(null);
   const [transferState, setTransferState] = useState(null);
   const [emailState, setEmailState] = useState(null);
@@ -89,18 +99,6 @@ const EditPage = () => {
   const [isAssModalOpen, setIsAssModalOpen] = useState(false);
 
   useEffect(() => {
-    if (accountId) {
-      dispatch(getOneAccount(accountId));
-    }
-    if (account) {
-      dispatch(getCostume());
-      dispatch(getAssessoirs());
-      dispatch(getUserCostumes(accountId!));
-      dispatch(getUserAss(accountId!));
-    }
-  }, [dispatch]);
-
-  useEffect(() => {
     if (account) {
       setFormData({
         game: account.game || "",
@@ -134,22 +132,6 @@ const EditPage = () => {
     } else {
       setFormData({ ...formData, [name]: value });
     }
-  };
-
-  const handleInputCostumeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setCostumes({ ...costumes, [name]: value });
-  };
-
-  const handleCostumeSubmit = async () => {
-    setCostumes({
-      author: accountId!,
-      costume: "",
-      category: "",
-      bigAuthor: "",
-      id: "",
-    });
-    window.location.reload();
   };
 
   const handleNewDataChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -372,8 +354,11 @@ const EditPage = () => {
               )}
             </div>
           </div>
-          <div className="visual-card" onClick={() => navigate(`/editor/${accountId}`)}>
-              Создать визуальную карточку аккаунта
+          <div
+            className="visual-card"
+            onClick={() => navigate(`/editor/${accountId}`)}
+          >
+            Создать визуальную карточку аккаунта
           </div>
         </div>
         <div className="main-header">
@@ -743,34 +728,32 @@ const EditPage = () => {
           </div>
         )}
       </div>
-
       {isBigModalOpen && (
         <div className="modal-overlay" onClick={handleCloseModal}>
           <div className="modal">
-            <h2>{`Выберите костюм из категории ${selectedItem.category}:`}</h2>
             <div className="results">
-              {allCostumes
-                ? allCostumes
-                    .filter(
-                      (costume) => costume.category === selectedItem?.category
-                    )
-                    .map((item) => (
-                      <div
-                        key={item.id}
-                        className="cost"
-                        onClick={() => handleItemClick(item)}
-                      >
-                        <img src={item.costume} alt={`Costume ${item.id}`} />
-                        <span>Персонаж: {item.author}</span>
-                        <p>Категория: {item.category}</p>
-                      </div>
-                    ))
-                : ""}
+              <h2>{`Выберите костюм из категории ${selectedItem.category}:`}</h2>
+              <div className="res">
+                {allCostumes!
+                  .filter(
+                    (costume) => costume.category === selectedItem?.category
+                  )
+                  .map((item) => (
+                    <div
+                      key={item.id}
+                      className="cost"
+                      onClick={() => handleItemClick(item)}
+                    >
+                      <img src={item.costume} alt={`Costume ${item.id}`} />
+                      <span>Персонаж: {item.author}</span>
+                      <p>Категория: {item.category}</p>
+                    </div>
+                  ))}
+              </div>
             </div>
           </div>
         </div>
       )}
-
       {account && activeTab == "accountAssessoirs" && (
         <div className="container">
           {!isModalOpen && (
@@ -792,44 +775,6 @@ const EditPage = () => {
                 onClick={handleInputClick}
               />
             </>
-          )}
-
-          {isModalOpen && (
-            <div className="modal-overlay" onClick={handleCloseModal}>
-              <div className="modal">
-                <div
-                  className="modal-content"
-                  onClick={(e) => e.stopPropagation()}
-                >
-                  <input
-                    type="text"
-                    className="auth__input"
-                    value={searchAss}
-                    onChange={searchAssValue}
-                    placeholder="Поиск..."
-                    onClick={(e) => e.stopPropagation()}
-                    id="search"
-                  />
-                </div>
-                <div className="results">
-                  {hasAss
-                    ? filteresAssessoirs.map((item: AssessoirsType) => (
-                        <div
-                          key={item.id}
-                          className="cost"
-                          onClick={() => handleAssClick(item)}
-                        >
-                          <img
-                            src={item.assessoir}
-                            alt={`Costume ${item.id}`}
-                          />
-                          <span>Персонаж: {item.character}</span>
-                        </div>
-                      ))
-                    : ""}
-                </div>
-              </div>
-            </div>
           )}
 
           <div className="all-costumes">
@@ -864,24 +809,23 @@ const EditPage = () => {
           </div>
         </div>
       )}
-
       {isAssModalOpen && (
         <div className="modal-overlay" onClick={handleCloseModal}>
           <div className="modal">
-            <h2>Выберите аксессуар:</h2>
             <div className="results">
-              {allAssessoirs
-                ? allAssessoirs.map((item) => (
-                    <div
-                      key={item.id}
-                      className="cost"
-                      onClick={() => handleAssClick(item)}
-                    >
-                      <img src={item.assessoir} alt={`Аксессуар ${item.id}`} />
-                      <span>Персонаж: {item.character}</span>
-                    </div>
-                  ))
-                : ""}
+              <h2>Выберите аксессуар:</h2>
+              <div className="res">
+                {allAssessoirs!.map((item) => (
+                  <div
+                    key={item.id}
+                    className="cost"
+                    onClick={() => handleAssClick(item)}
+                  >
+                    <img src={item.assessoir} alt={`Аксессуар ${item.id}`} />
+                    <span>Персонаж: {item.character}</span>
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
         </div>

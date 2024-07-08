@@ -996,7 +996,7 @@ const EditorPage: React.FC = () => {
             />
           ))}
 
-          {imageModal && (
+          {contextModalImage && (
             <div
               className="context-modal"
               style={{

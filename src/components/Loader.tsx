@@ -2,7 +2,7 @@ import React from "react";
 
 const Loader = () => {
   return (
-    <div style={styles.container}>
+    <div style={{ ...styles.container }}>
       <style>
         {`
           @keyframes spin {
