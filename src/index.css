@@ -1099,6 +1099,7 @@ select {
 }
 
 .context-modal {
+  z-index: 2;
   display: flex;
   width: 500px;
   height: 80px;

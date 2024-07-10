@@ -11,6 +11,12 @@
       "nickname": "fanwwi",
       "password": "12345678",
       "id": "1718441497986"
+    },
+    {
+      "email": "mirishova_s@mail.ru",
+      "nickname": "miri",
+      "password": "12345678",
+      "id": "1720442239568"
     }
   ],
   "accounts": [
@@ -31,9 +37,29 @@
       "gameServer": "VALVE",
       "gameAccount": "burn",
       "author": "\"1718361546427\""
+    },
+    {
+      "game": "Identity Vvvvvv",
+      "gameId": "98875678345671",
+      "gameNickname": "miri",
+      "gameserver": "Asia",
+      "gameAccount": "miri1",
+      "author": "\"1720442239568\"",
+      "id": "xpibncF"
     }
   ],
-  "details": [],
+  "details": [
+    {
+      "owners": "q",
+      "seal": "12",
+      "puzzle": "dw",
+      "crystals": "w",
+      "unlockS": "sw11",
+      "unlockA": "dw",
+      "author": "Twqoq2P",
+      "id": 1
+    }
+  ],
   "costumes": [
     {
       "costume": "https://pics.craiyon.com/2023-11-05/b115349ab092402f96a02d0d8d863697.webp",
@@ -99,6 +125,27 @@
       "author": "Найт",
       "bigAuthor": "1",
       "id": 6
+    },
+    {
+      "costume": "https://www.identityv.ru/wp-content/uploads/2018/09/doctor.jpg",
+      "category": "SS",
+      "author": "Воин",
+      "bigAuthor": "Twqoq2P",
+      "id": 7
+    },
+    {
+      "costume": "https://www.identityv.ru/wp-content/uploads/2018/09/doctor.jpg",
+      "category": "SS",
+      "author": "Воин",
+      "bigAuthor": "pKikQ1L",
+      "id": 8
+    },
+    {
+      "costume": "https://www.identityv.ru/wp-content/uploads/2018/09/doctor.jpg",
+      "category": "SS",
+      "author": "Воин",
+      "bigAuthor": "xpibncF",
+      "id": 9
     }
   ],
   "assessoirs": [
@@ -114,6 +161,18 @@
       "character": "Воин",
       "bigAuthor": "1",
       "id": 1
+    },
+    {
+      "assessoir": "https://files.vgtimes.ru/posts/2015-07/thumbs/1436030863_14.jpg",
+      "character": "Воин",
+      "bigAuthor": "Twqoq2P",
+      "id": 2
+    },
+    {
+      "assessoir": "https://files.vgtimes.ru/posts/2015-07/thumbs/1436030863_14.jpg",
+      "character": "Воин",
+      "bigAuthor": "pKikQ1L",
+      "id": 3
     }
   ],
   "userCards": []

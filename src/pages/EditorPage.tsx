@@ -113,7 +113,6 @@ const EditorPage: React.FC = () => {
   const [isDraggingAccount, setIsDraggingAccount] = useState(false);
   const [isDraggingId, setIsDraggingId] = useState(false);
   const [isDraggingServer, setIsDraggingServer] = useState(false);
-  const [costumeSize, setCostumeSize] = useState(150);
   const [imgSize, setImgSize] = useState(150);
   const [activeTab, setActiveTab] = useState("content");
 
@@ -132,10 +131,21 @@ const EditorPage: React.FC = () => {
   const [editingText, setEditingText] = useState<string>("");
   const [modal, setModal] = useState(false);
 
+  const [showCostumeSizeS, setShowCostumeSizeS] = useState(false);
+  const [showCostumeSizeSS, setShowCostumeSizeSS] = useState(false);
+  const [showCostumeSizeA, setShowCostumeSizeA] = useState(false);
+  const [showCostumeSizeAss, setShowCostumeSizeAss] = useState(false);
   const [contextModalCostumes, setContextModalCostumes] = useState(false);
-  const [contextModalText, setContextModalText] = useState(false);
   const [contextModalImage, setContextModalImage] = useState(false);
-
+  const [contextModalText, setContextModalText] = useState(false);
+  const initialCostumeSizes = userCostumes ? userCostumes.map(() => 150) : [];
+  const [costumeSizesS, setCostumeSizesS] = useState(initialCostumeSizes);
+  const [costumeSizesSS, setCostumeSizesSS] = useState(initialCostumeSizes);
+  const [costumeSizesA, setCostumeSizesA] = useState(initialCostumeSizes);
+  const [costumeSizesAss, setCostumeSizesAss] = useState(initialCostumeSizes);
+  const [activeCostumeIndex, setActiveCostumeIndex] = useState<number | null>(
+    null
+  );
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
@@ -183,14 +193,67 @@ const EditorPage: React.FC = () => {
     );
   };
 
-  const increaseCostumeSize = () => {
-    setCostumeSize((prevSize) => prevSize + 5);
+  const increaseCostumeSize = (id: any, category: any) => {
+    switch (category) {
+      case "S":
+        setCostumeSizesS((prevSizes) => ({
+          ...prevSizes,
+          [id]: (prevSizes[id] || 150) + 5,
+        }));
+        break;
+      case "SS":
+        setCostumeSizesSS((prevSizes) => ({
+          ...prevSizes,
+          [id]: (prevSizes[id] || 150) + 5,
+        }));
+        break;
+      case "A":
+        setCostumeSizesA((prevSizes) => ({
+          ...prevSizes,
+          [id]: (prevSizes[id] || 150) + 5,
+        }));
+        break;
+      case "Ass":
+        setCostumeSizesAss((prevSizes) => ({
+          ...prevSizes,
+          [id]: (prevSizes[id] || 150) + 5,
+        }));
+        break;
+      default:
+        break;
+    }
   };
 
-  const decreaseCostumeSize = () => {
-    setCostumeSize((prevSize) => prevSize - 5);
+  const decreaseCostumeSize = (id: any, category: any) => {
+    switch (category) {
+      case "S":
+        setCostumeSizesS((prevSizes) => ({
+          ...prevSizes,
+          [id]: (prevSizes[id] || 150) - 5,
+        }));
+        break;
+      case "SS":
+        setCostumeSizesSS((prevSizes) => ({
+          ...prevSizes,
+          [id]: (prevSizes[id] || 150) - 5,
+        }));
+        break;
+      case "A":
+        setCostumeSizesA((prevSizes) => ({
+          ...prevSizes,
+          [id]: (prevSizes[id] || 150) - 5,
+        }));
+        break;
+      case "Ass":
+        setCostumeSizesAss((prevSizes) => ({
+          ...prevSizes,
+          [id]: (prevSizes[id] || 150) - 5,
+        }));
+        break;
+      default:
+        break;
+    }
   };
-
   const increaseImgSize = () => {
     setImgSize((prevSize) => prevSize + 5);
   };
@@ -483,9 +546,10 @@ const EditorPage: React.FC = () => {
     setDraggedImageId(null);
   };
 
-  const handleCostumeClick = (position: any) => {
+  const handleCostumeClick = (position: any, index: any) => {
     setModalPosition({ x: position.x, y: position.y - 100 });
     setContextModalCostumes(true);
+    setActiveCostumeIndex(index);
   };
 
   const handleTextClick = (position: any) => {
@@ -647,7 +711,7 @@ const EditorPage: React.FC = () => {
           onMouseUp={handleMouseUp}
         >
           <div className="costumes-container" style={{ position: "relative" }}>
-            {contextModalCostumes && (
+            {contextModalCostumes && activeCostumeIndex !== null && (
               <div
                 className="context-modal"
                 style={{
@@ -656,14 +720,6 @@ const EditorPage: React.FC = () => {
                   top: modalPosition.y,
                 }}
               >
-                <div className="fz">
-                  <h6>Размер</h6>
-                  <div className="btns">
-                    <button onClick={increaseCostumeSize}>+</button>
-                    <span>{costumeSize}</span>
-                    <button onClick={decreaseCostumeSize}>-</button>
-                  </div>
-                </div>
                 <div className="deleteCostume">
                   <h6>Удалить</h6>
                   <img src={deleteIcon} alt="" />
@@ -691,7 +747,13 @@ const EditorPage: React.FC = () => {
                     width: "10px",
                     cursor: "pointer",
                   }}
-                  onClick={() => setContextModalCostumes(false)}
+                  onClick={() => {
+                    setContextModalCostumes(false);
+                    setShowCostumeSizeS(false);
+                    setShowCostumeSizeSS(false);
+                    setShowCostumeSizeA(false);
+                    setShowCostumeSizeAss(false);
+                  }}
                 />
               </div>
             )}
@@ -716,13 +778,44 @@ const EditorPage: React.FC = () => {
                         position: "relative",
                         left: costume.x || 0,
                         top: costume.y || 0,
+                        height: `${costumeSizesS[Number(costume.id)] || 150}px`,
                       }}
                     >
+                      {showCostumeSizeS && (
+                        <div className="fz">
+                          <div className="btns">
+                            <button
+                              onClick={() =>
+                                increaseCostumeSize(costume.id, "S")
+                              }
+                            >
+                              +
+                            </button>
+                            <span>
+                              {costumeSizesS[Number(costume.id)] || 150}
+                            </span>
+                            <button
+                              onClick={() =>
+                                decreaseCostumeSize(costume.id, "S")
+                              }
+                            >
+                              -
+                            </button>
+                          </div>
+                        </div>
+                      )}
                       <img
                         src={costume.costume}
                         alt="Costume"
-                        onClick={() => handleCostumeClick(costumeSPosition)}
-                        style={{ height: `${costumeSize}px` }}
+                        onClick={() => {
+                          handleCostumeClick(costumeSPosition, costume.id);
+                          setShowCostumeSizeS(true);
+                        }}
+                        style={{
+                          height: `${
+                            costumeSizesS[Number(costume.id)] || 150
+                          }px`,
+                        }}
                       />
                     </div>
                   ))}
@@ -748,13 +841,46 @@ const EditorPage: React.FC = () => {
                       style={{
                         left: costume.x || 0,
                         top: costume.y || 0,
+                        height: `${
+                          costumeSizesSS[Number(costume.id)] || 150
+                        }px`,
                       }}
                     >
+                      {showCostumeSizeSS && (
+                        <div className="fz">
+                          <div className="btns">
+                            <button
+                              onClick={() =>
+                                increaseCostumeSize(costume.id, "SS")
+                              }
+                            >
+                              +
+                            </button>
+                            <span>
+                              {costumeSizesSS[Number(costume.id)] || 150}
+                            </span>
+                            <button
+                              onClick={() =>
+                                decreaseCostumeSize(costume.id, "SS")
+                              }
+                            >
+                              -
+                            </button>
+                          </div>
+                        </div>
+                      )}
                       <img
                         src={costume.costume}
                         alt="Costume"
-                        onClick={() => handleCostumeClick(costumeSSPosition)}
-                        style={{ height: `${costumeSize}px` }}
+                        onClick={() => {
+                          handleCostumeClick(costumeSSPosition, costume.id);
+                          setShowCostumeSizeSS(true);
+                        }}
+                        style={{
+                          height: `${
+                            costumeSizesSS[Number(costume.id)] || 150
+                          }px`,
+                        }}
                       />
                     </div>
                   ))}
@@ -780,13 +906,44 @@ const EditorPage: React.FC = () => {
                       style={{
                         left: costume.x || 0,
                         top: costume.y || 0,
+                        height: `${costumeSizesA[Number(costume.id)] || 150}px`,
                       }}
                     >
+                      {showCostumeSizeA && (
+                        <div className="fz">
+                          <div className="btns">
+                            <button
+                              onClick={() =>
+                                increaseCostumeSize(costume.id, "A")
+                              }
+                            >
+                              +
+                            </button>
+                            <span>
+                              {costumeSizesA[Number(costume.id)] || 150}
+                            </span>
+                            <button
+                              onClick={() =>
+                                decreaseCostumeSize(costume.id, "A")
+                              }
+                            >
+                              -
+                            </button>
+                          </div>
+                        </div>
+                      )}
                       <img
                         src={costume.costume}
                         alt="Costume"
-                        onClick={() => handleCostumeClick(costumeAPosition)}
-                        style={{ height: `${costumeSize}px` }}
+                        onClick={() => {
+                          handleCostumeClick(costumeAPosition, costume.id);
+                          setShowCostumeSizeA(true);
+                        }}
+                        style={{
+                          height: `${
+                            costumeSizesA[Number(costume.id)] || 150
+                          }px`,
+                        }}
                       />
                     </div>
                   ))}
@@ -810,19 +967,42 @@ const EditorPage: React.FC = () => {
                     style={{
                       left: ass.x || 0,
                       top: ass.y || 0,
+                      height: `${costumeSizesAss[Number(ass.id)] || 150}px`,
                     }}
                   >
+                    {showCostumeSizeAss && (
+                      <div className="fz">
+                        <div className="btns">
+                          <button
+                            onClick={() => increaseCostumeSize(ass.id, "Ass")}
+                          >
+                            +
+                          </button>
+                          <span>{costumeSizesAss[Number(ass.id)] || 150}</span>
+                          <button
+                            onClick={() => decreaseCostumeSize(ass.id, "Ass")}
+                          >
+                            -
+                          </button>
+                        </div>
+                      </div>
+                    )}
+
                     <img
                       src={ass.assessoir}
-                      alt="Assessoir"
-                      style={{ height: `${costumeSize}px` }}
-                      onClick={() => handleCostumeClick(costumeAPosition)}
+                      alt="Costume"
+                      onClick={() => {
+                        handleCostumeClick(assPosition, ass.id);
+                        setShowCostumeSizeAss(true);
+                      }}
+                      style={{
+                        height: `${costumeSizesAss[Number(ass.id)] || 150}px`,
+                      }}
                     />
                   </div>
                 ))}
             </div>
           </div>
-
           <div className="account-all">
             {contextModalText && (
               <div
@@ -1003,7 +1183,7 @@ const EditorPage: React.FC = () => {
                 position: "absolute",
                 left: modalPosition.x,
                 top: modalPosition.y,
-                width: "250px"
+                width: "250px",
               }}
             >
               <div className="fz">
@@ -1049,7 +1229,8 @@ const EditorPage: React.FC = () => {
               onMouseDown={(e) => handleMouseDownText(element.id, e)}
               onMouseMove={handleMouseMoveText}
               onMouseUp={handleMouseUpText}
-              onClick={() => handleTextClick(element.x && element.y)}
+              onMouseEnter={() => handleTextClick(element.x && element.y)}
+              onMouseLeave={() => setContextModalText(false)}
             >
               {editingTextElementId === element.id ? (
                 <input
