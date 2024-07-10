@@ -778,7 +778,7 @@ const EditorPage: React.FC = () => {
                         position: "relative",
                         left: costume.x || 0,
                         top: costume.y || 0,
-                        height: `${costumeSizesS[Number(costume.id)] || 150}px`,
+                        height: `${costumeSizesS[Number(costume.id)] || 155}px`,
                       }}
                     >
                       {showCostumeSizeS && (
@@ -792,7 +792,7 @@ const EditorPage: React.FC = () => {
                               +
                             </button>
                             <span>
-                              {costumeSizesS[Number(costume.id)] || 150}
+                              {costumeSizesS[Number(costume.id)] || 155}
                             </span>
                             <button
                               onClick={() =>
@@ -813,7 +813,7 @@ const EditorPage: React.FC = () => {
                         }}
                         style={{
                           height: `${
-                            costumeSizesS[Number(costume.id)] || 150
+                            costumeSizesS[Number(costume.id)] || 155
                           }px`,
                         }}
                       />
@@ -842,7 +842,7 @@ const EditorPage: React.FC = () => {
                         left: costume.x || 0,
                         top: costume.y || 0,
                         height: `${
-                          costumeSizesSS[Number(costume.id)] || 150
+                          costumeSizesSS[Number(costume.id)] || 155
                         }px`,
                       }}
                     >
@@ -857,7 +857,7 @@ const EditorPage: React.FC = () => {
                               +
                             </button>
                             <span>
-                              {costumeSizesSS[Number(costume.id)] || 150}
+                              {costumeSizesSS[Number(costume.id)] || 155}
                             </span>
                             <button
                               onClick={() =>
@@ -878,7 +878,7 @@ const EditorPage: React.FC = () => {
                         }}
                         style={{
                           height: `${
-                            costumeSizesSS[Number(costume.id)] || 150
+                            costumeSizesSS[Number(costume.id)] || 155
                           }px`,
                         }}
                       />
@@ -906,7 +906,7 @@ const EditorPage: React.FC = () => {
                       style={{
                         left: costume.x || 0,
                         top: costume.y || 0,
-                        height: `${costumeSizesA[Number(costume.id)] || 150}px`,
+                        height: `${costumeSizesA[Number(costume.id)] || 155}px`,
                       }}
                     >
                       {showCostumeSizeA && (
@@ -920,7 +920,7 @@ const EditorPage: React.FC = () => {
                               +
                             </button>
                             <span>
-                              {costumeSizesA[Number(costume.id)] || 150}
+                              {costumeSizesA[Number(costume.id)] || 155}
                             </span>
                             <button
                               onClick={() =>
@@ -941,7 +941,7 @@ const EditorPage: React.FC = () => {
                         }}
                         style={{
                           height: `${
-                            costumeSizesA[Number(costume.id)] || 150
+                            costumeSizesA[Number(costume.id)] || 155
                           }px`,
                         }}
                       />
@@ -967,7 +967,7 @@ const EditorPage: React.FC = () => {
                     style={{
                       left: ass.x || 0,
                       top: ass.y || 0,
-                      height: `${costumeSizesAss[Number(ass.id)] || 150}px`,
+                      height: `${costumeSizesAss[Number(ass.id)] || 155}px`,
                     }}
                   >
                     {showCostumeSizeAss && (
@@ -978,7 +978,7 @@ const EditorPage: React.FC = () => {
                           >
                             +
                           </button>
-                          <span>{costumeSizesAss[Number(ass.id)] || 150}</span>
+                          <span>{costumeSizesAss[Number(ass.id)] || 155}</span>
                           <button
                             onClick={() => decreaseCostumeSize(ass.id, "Ass")}
                           >
@@ -996,7 +996,7 @@ const EditorPage: React.FC = () => {
                         setShowCostumeSizeAss(true);
                       }}
                       style={{
-                        height: `${costumeSizesAss[Number(ass.id)] || 150}px`,
+                        height: `${costumeSizesAss[Number(ass.id)] || 155}px`,
                       }}
                     />
                   </div>
