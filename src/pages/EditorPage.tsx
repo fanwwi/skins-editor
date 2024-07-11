@@ -744,6 +744,19 @@ const EditorPage: React.FC = () => {
               }}
               onMouseDown={(e) => handleMouseDown(1, e)}
             >
+              {isDraggingCostumeS && (
+                <div
+                  style={{
+                    position: "absolute",
+                    left: "-5px",
+                    top: "-30px",
+                    padding: "5px",
+                    color: "#5010be",
+                  }}
+                >
+                  Костюмы SS
+                </div>
+              )}
               {costumeS &&
                 userCostumes
                   ?.filter((cost) => cost.category === "S")
@@ -847,6 +860,19 @@ const EditorPage: React.FC = () => {
               }}
               onMouseDown={(e) => handleMouseDown(2, e)}
             >
+              {isDraggingCostumeSS && (
+                <div
+                  style={{
+                    position: "absolute",
+                    left: "-5px",
+                    top: "-30px",
+                    padding: "5px",
+                    color: "#5010be",
+                  }}
+                >
+                  Костюмы SS
+                </div>
+              )}
               {costumeSS &&
                 userCostumes
                   ?.filter((cost) => cost.category === "SS")
@@ -952,6 +978,19 @@ const EditorPage: React.FC = () => {
               }}
               onMouseDown={(e) => handleMouseDown(3, e)}
             >
+              {isDraggingCostumeA && (
+                <div
+                  style={{
+                    position: "absolute",
+                    left: "-5px",
+                    top: "-30px",
+                    padding: "5px",
+                    color: "#5010be",
+                  }}
+                >
+                  Костюмы A
+                </div>
+              )}
               {costumeA &&
                 userCostumes
                   ?.filter((cost) => cost.category === "A")
@@ -1055,6 +1094,19 @@ const EditorPage: React.FC = () => {
               }}
               onMouseDown={(e) => handleMouseDown(4, e)}
             >
+              {isDraggingAss && (
+                <div
+                  style={{
+                    position: "absolute",
+                    left: "-5px",
+                    top: "-30px",
+                    padding: "5px",
+                    color: "#5010be",
+                  }}
+                >
+                  Аксессуары
+                </div>
+              )}
               {ass &&
                 userAss?.map((ass) => (
                   <div
@@ -1154,6 +1206,20 @@ const EditorPage: React.FC = () => {
               onMouseMove={handleAccountMouseMove}
               onMouseUp={handleMouseUpAccount}
             >
+              {isDraggingAccount && (
+                <div
+                  style={{
+                    position: "absolute",
+                    left: "-5px",
+                    top: "-20px",
+                    padding: "5px",
+                    fontSize: "13px",
+                    color: "#5010be",
+                  }}
+                >
+                  Аккаунт
+                </div>
+              )}
               {contextModalAccount && (
                 <div className="context-modal" style={{ marginBottom: "10px" }}>
                   <div className="fz">
@@ -1248,6 +1314,20 @@ const EditorPage: React.FC = () => {
               onMouseMove={handleAccountMouseMove}
               onMouseUp={handleMouseUpAccount}
             >
+              {isDraggingNickname && (
+                <div
+                  style={{
+                    position: "absolute",
+                    left: "-5px",
+                    top: "-20px",
+                    padding: "5px",
+                    fontSize: "13px",
+                    color: "#5010be",
+                  }}
+                >
+                  Никнэйм
+                </div>
+              )}
               {contextModalNickname && (
                 <div className="context-modal" style={{ marginBottom: "10px" }}>
                   <div className="fz">
@@ -1342,6 +1422,20 @@ const EditorPage: React.FC = () => {
               onMouseMove={handleAccountMouseMove}
               onMouseUp={handleMouseUpAccount}
             >
+              {isDraggingId && (
+                <div
+                  style={{
+                    position: "absolute",
+                    left: "-5px",
+                    top: "-20px",
+                    padding: "5px",
+                    fontSize: "13px",
+                    color: "#5010be",
+                  }}
+                >
+                  ID акканута
+                </div>
+              )}
               {contextModalId && (
                 <div className="context-modal" style={{ marginBottom: "10px" }}>
                   <div className="fz">
@@ -1436,6 +1530,20 @@ const EditorPage: React.FC = () => {
               onMouseMove={handleAccountMouseMove}
               onMouseUp={handleMouseUpAccount}
             >
+              {isDraggingServer && (
+                <div
+                  style={{
+                    position: "absolute",
+                    left: "-5px",
+                    top: "-20px",
+                    padding: "5px",
+                    fontSize: "13px",
+                    color: "#5010be",
+                  }}
+                >
+                  Сервер
+                </div>
+              )}
               {contextModalServer && (
                 <div className="context-modal" style={{ marginBottom: "10px" }}>
                   <div className="fz">
