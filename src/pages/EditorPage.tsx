@@ -16,6 +16,7 @@ import alignLeft from "../img/alignLeft.png";
 import alignRight from "../img/alignRight.png";
 import alignCenter from "../img/alignCenter.png";
 import close from "../img/close.png";
+import reset from "../img/reset.png";
 
 interface TextElement {
   id: number;
@@ -135,7 +136,10 @@ const EditorPage: React.FC = () => {
   const [showCostumeSizeSS, setShowCostumeSizeSS] = useState(false);
   const [showCostumeSizeA, setShowCostumeSizeA] = useState(false);
   const [showCostumeSizeAss, setShowCostumeSizeAss] = useState(false);
-  const [contextModalCostumes, setContextModalCostumes] = useState(false);
+  const [contextModalCostumesS, setContextModalCostumesS] = useState(false);
+  const [contextModalCostumesSS, setContextModalCostumesSS] = useState(false);
+  const [contextModalCostumesA, setContextModalCostumesA] = useState(false);
+  const [contextModalAss, setContextModalCostumesAss] = useState(false);
   const [contextModalImage, setContextModalImage] = useState(false);
   const [contextModalText, setContextModalText] = useState(false);
   const initialCostumeSizes = userCostumes ? userCostumes.map(() => 150) : [];
@@ -546,12 +550,6 @@ const EditorPage: React.FC = () => {
     setDraggedImageId(null);
   };
 
-  const handleCostumeClick = (position: any, index: any) => {
-    setModalPosition({ x: position.x, y: position.y - 100 });
-    setContextModalCostumes(true);
-    setActiveCostumeIndex(index);
-  };
-
   const handleTextClick = (position: any) => {
     setTextModal({ x: position.x, y: position.y - 100 });
     setContextModalText(true);
@@ -711,7 +709,7 @@ const EditorPage: React.FC = () => {
           onMouseUp={handleMouseUp}
         >
           <div className="costumes-container" style={{ position: "relative" }}>
-            {contextModalCostumes && activeCostumeIndex !== null && (
+            {/* {contextModalCostumes && activeCostumeIndex !== null && (
               <div
                 className="context-modal"
                 style={{
@@ -756,7 +754,7 @@ const EditorPage: React.FC = () => {
                   }}
                 />
               </div>
-            )}
+            )} */}
             <div
               className="display-costumes"
               style={{
@@ -781,41 +779,80 @@ const EditorPage: React.FC = () => {
                         height: `${costumeSizesS[Number(costume.id)] || 155}px`,
                       }}
                     >
-                      {showCostumeSizeS && (
-                        <div className="fz">
-                          <div className="btns">
-                            <button
-                              onClick={() =>
-                                increaseCostumeSize(costume.id, "S")
-                              }
-                            >
-                              +
-                            </button>
-                            <span>
-                              {costumeSizesS[Number(costume.id)] || 155}
-                            </span>
-                            <button
-                              onClick={() =>
-                                decreaseCostumeSize(costume.id, "S")
-                              }
-                            >
-                              -
-                            </button>
+                      {contextModalCostumesS && (
+                        <div className="context-modal">
+                          <div className="fz">
+                            <div className="btns">
+                              <button
+                                onClick={() =>
+                                  increaseCostumeSize(costume.id, "S")
+                                }
+                              >
+                                +
+                              </button>
+                              <span>
+                                {costumeSizesS[Number(costume.id)] || 155}
+                              </span>
+                              <button
+                                onClick={() =>
+                                  decreaseCostumeSize(costume.id, "S")
+                                }
+                              >
+                                -
+                              </button>
+                            </div>
                           </div>
+
+                          <div
+                            className="del"
+                            onClick={() => {
+                              costumeSizesS[Number(costume.id)] = 155; // Сбрасываем размер
+                              setCostumeSizesS({ ...costumeSizesS }); // Обновляем состояние
+                            }}
+                          >
+                            <h6>Сброс</h6>
+                            <img src={reset} alt="" />
+                          </div>
+
+                          <div
+                            className="del"
+                            onClick={() => setCostumeS(false)}
+                          >
+                            <h6>Удалить</h6>
+                            <img src={deleteIcon} alt="" />
+                          </div>
+
+                          <select name="" id="">
+                            <option value="">Добавить в группу</option>
+                            <option value="">Костюмы SS</option>
+                            <option value="">Костюмы A</option>
+                          </select>
+
+                          <div className="btns">
+                            <img src={alignLeft} alt="" />
+                            <img src={alignCenter} alt="" />
+                            <img src={alignRight} alt="" />
+                          </div>
+
+                          <img
+                            src={close}
+                            alt=""
+                            onClick={() => setContextModalCostumesS(false)}
+                            className="close"
+                            style={{ width: "10px", height: "10px" }}
+                          />
                         </div>
                       )}
+
                       <img
                         src={costume.costume}
                         alt="Costume"
-                        onClick={() => {
-                          handleCostumeClick(costumeSPosition, costume.id);
-                          setShowCostumeSizeS(true);
-                        }}
                         style={{
                           height: `${
                             costumeSizesS[Number(costume.id)] || 155
                           }px`,
                         }}
+                        onClick={() => setContextModalCostumesS(true)}
                       />
                     </div>
                   ))}
@@ -846,35 +883,75 @@ const EditorPage: React.FC = () => {
                         }px`,
                       }}
                     >
-                      {showCostumeSizeSS && (
-                        <div className="fz">
-                          <div className="btns">
-                            <button
-                              onClick={() =>
-                                increaseCostumeSize(costume.id, "SS")
-                              }
-                            >
-                              +
-                            </button>
-                            <span>
-                              {costumeSizesSS[Number(costume.id)] || 155}
-                            </span>
-                            <button
-                              onClick={() =>
-                                decreaseCostumeSize(costume.id, "SS")
-                              }
-                            >
-                              -
-                            </button>
+                      {contextModalCostumesSS && (
+                        <div className="context-modal">
+                          <div className="fz">
+                            <div className="btns">
+                              <button
+                                onClick={() =>
+                                  increaseCostumeSize(costume.id, "SS")
+                                }
+                              >
+                                +
+                              </button>
+                              <span>
+                                {costumeSizesSS[Number(costume.id)] || 155}
+                              </span>
+                              <button
+                                onClick={() =>
+                                  decreaseCostumeSize(costume.id, "SS")
+                                }
+                              >
+                                -
+                              </button>
+                            </div>
                           </div>
+
+                          <div
+                            className="del"
+                            onClick={() => {
+                              costumeSizesSS[Number(costume.id)] = 155; // Сбрасываем размер
+                              setCostumeSizesSS({ ...costumeSizesSS }); // Обновляем состояние
+                            }}
+                          >
+                            <h6>Сброс</h6>
+                            <img src={reset} alt="" />
+                          </div>
+
+                          <div
+                            className="del"
+                            onClick={() => setCostumeSS(false)}
+                          >
+                            <h6>Удалить</h6>
+                            <img src={deleteIcon} alt="" />
+                          </div>
+
+                          <select name="" id="">
+                            <option value="">Добавить в группу</option>
+                            <option value="">Костюмы S</option>
+                            <option value="">Костюмы A</option>
+                          </select>
+
+                          <div className="btns">
+                            <img src={alignLeft} alt="" />
+                            <img src={alignCenter} alt="" />
+                            <img src={alignRight} alt="" />
+                          </div>
+
+                          <img
+                            src={close}
+                            alt=""
+                            onClick={() => setContextModalCostumesSS(false)}
+                            className="close"
+                            style={{ width: "10px", height: "10px" }}
+                          />
                         </div>
                       )}
                       <img
                         src={costume.costume}
                         alt="Costume"
                         onClick={() => {
-                          handleCostumeClick(costumeSSPosition, costume.id);
-                          setShowCostumeSizeSS(true);
+                          setContextModalCostumesSS(true);
                         }}
                         style={{
                           height: `${
@@ -909,35 +986,75 @@ const EditorPage: React.FC = () => {
                         height: `${costumeSizesA[Number(costume.id)] || 155}px`,
                       }}
                     >
-                      {showCostumeSizeA && (
-                        <div className="fz">
-                          <div className="btns">
-                            <button
-                              onClick={() =>
-                                increaseCostumeSize(costume.id, "A")
-                              }
-                            >
-                              +
-                            </button>
-                            <span>
-                              {costumeSizesA[Number(costume.id)] || 155}
-                            </span>
-                            <button
-                              onClick={() =>
-                                decreaseCostumeSize(costume.id, "A")
-                              }
-                            >
-                              -
-                            </button>
+                      {contextModalCostumesA && (
+                        <div className="context-modal">
+                          <div className="fz">
+                            <div className="btns">
+                              <button
+                                onClick={() =>
+                                  increaseCostumeSize(costume.id, "A")
+                                }
+                              >
+                                +
+                              </button>
+                              <span>
+                                {costumeSizesA[Number(costume.id)] || 155}
+                              </span>
+                              <button
+                                onClick={() =>
+                                  decreaseCostumeSize(costume.id, "A")
+                                }
+                              >
+                                -
+                              </button>
+                            </div>
                           </div>
+
+                          <div
+                            className="del"
+                            onClick={() => {
+                              costumeSizesA[Number(costume.id)] = 155; // Сбрасываем размер
+                              setCostumeSizesA({ ...costumeSizesA }); // Обновляем состояние
+                            }}
+                          >
+                            <h6>Сброс</h6>
+                            <img src={reset} alt="" />
+                          </div>
+
+                          <div
+                            className="del"
+                            onClick={() => setCostumeA(false)}
+                          >
+                            <h6>Удалить</h6>
+                            <img src={deleteIcon} alt="" />
+                          </div>
+
+                          <select name="" id="">
+                            <option value="">Добавить в группу</option>
+                            <option value="">Костюмы SS</option>
+                            <option value="">Костюмы S</option>
+                          </select>
+
+                          <div className="btns">
+                            <img src={alignLeft} alt="" />
+                            <img src={alignCenter} alt="" />
+                            <img src={alignRight} alt="" />
+                          </div>
+
+                          <img
+                            src={close}
+                            alt=""
+                            onClick={() => setContextModalCostumesA(false)}
+                            className="close"
+                            style={{ width: "10px", height: "10px" }}
+                          />
                         </div>
                       )}
                       <img
                         src={costume.costume}
                         alt="Costume"
                         onClick={() => {
-                          handleCostumeClick(costumeAPosition, costume.id);
-                          setShowCostumeSizeA(true);
+                          setContextModalCostumesA(true);
                         }}
                         style={{
                           height: `${
@@ -970,21 +1087,61 @@ const EditorPage: React.FC = () => {
                       height: `${costumeSizesAss[Number(ass.id)] || 155}px`,
                     }}
                   >
-                    {showCostumeSizeAss && (
-                      <div className="fz">
-                        <div className="btns">
-                          <button
-                            onClick={() => increaseCostumeSize(ass.id, "Ass")}
-                          >
-                            +
-                          </button>
-                          <span>{costumeSizesAss[Number(ass.id)] || 155}</span>
-                          <button
-                            onClick={() => decreaseCostumeSize(ass.id, "Ass")}
-                          >
-                            -
-                          </button>
+                    {contextModalAss && (
+                      <div className="context-modal">
+                        <div className="fz">
+                          <div className="btns">
+                            <button
+                              onClick={() => increaseCostumeSize(ass.id, "Ass")}
+                            >
+                              +
+                            </button>
+                            <span>
+                              {costumeSizesAss[Number(ass.id)] || 155}
+                            </span>
+                            <button
+                              onClick={() => decreaseCostumeSize(ass.id, "Ass")}
+                            >
+                              -
+                            </button>
+                          </div>
                         </div>
+
+                        <div
+                          className="del"
+                          onClick={() => {
+                            costumeSizesAss[Number(ass.id)] = 155; // Сбрасываем размер
+                            setCostumeSizesAss({ ...costumeSizesAss }); // Обновляем состояние
+                          }}
+                        >
+                          <h6>Сброс</h6>
+                          <img src={reset} alt="" />
+                        </div>
+
+                        <div className="del" onClick={() => setAss(false)}>
+                          <h6>Удалить</h6>
+                          <img src={deleteIcon} alt="" />
+                        </div>
+
+                        <select name="" id="">
+                          <option value="">Добавить в группу</option>
+                          <option value="">Костюмы SS</option>
+                          <option value="">Костюмы S</option>
+                        </select>
+
+                        <div className="btns">
+                          <img src={alignLeft} alt="" />
+                          <img src={alignCenter} alt="" />
+                          <img src={alignRight} alt="" />
+                        </div>
+
+                        <img
+                          src={close}
+                          alt=""
+                          onClick={() => setContextModalCostumesAss(false)}
+                          className="close"
+                          style={{ width: "10px", height: "10px" }}
+                        />
                       </div>
                     )}
 
@@ -992,8 +1149,7 @@ const EditorPage: React.FC = () => {
                       src={ass.assessoir}
                       alt="Costume"
                       onClick={() => {
-                        handleCostumeClick(assPosition, ass.id);
-                        setShowCostumeSizeAss(true);
+                        setContextModalCostumesAss(true);
                       }}
                       style={{
                         height: `${costumeSizesAss[Number(ass.id)] || 155}px`,
