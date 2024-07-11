@@ -3,6 +3,8 @@ import { useNavigate } from "react-router-dom";
 import logo from "../img/logo.png";
 import { Link, useParams } from "react-router-dom";
 import userIcon from "../img/user-image.jpg";
+import top from "../img/top.png";
+import bottom from "../img/bottom.png";
 import editIcon from "../img/edit-icon2.png";
 import { useAppDispatch, useAppSelector } from "../store/store";
 import {
@@ -251,6 +253,51 @@ const EditPage = () => {
     dispatch(addUserAss({ data: selectedAss, id: accountId! }));
     setClickedAss(selectedAss);
     console.log(selectedAss);
+  };
+
+  const [showCostumesS, setShowCostumesS] = useState(false);
+  const [showCostumesSS, setShowCostumesSS] = useState(false);
+  const [showCostumesA, setShowCostumesA] = useState(false);
+  const [showAss, setShowAss] = useState(false);
+
+  const handleToggleCostumesS = () => {
+    setShowCostumesS(!showCostumesS);
+  };
+
+  const handleToggleCostumesSS = () => {
+    setShowCostumesSS(!showCostumesSS);
+  };
+
+  const handleToggleCostumesA = () => {
+    setShowCostumesA(!showCostumesA);
+  };
+
+  const handleToggleAss = () => {
+    setShowAss(!showAss);
+  };
+
+  const costumesSStyle = {
+    height: showCostumesS ? "auto" : "100px",
+    overflow: "hidden",
+    transition: "height 0.3s ease",
+  };
+
+  const costumesSSStyle = {
+    height: showCostumesSS ? "auto" : "100px",
+    overflow: "hidden",
+    transition: "height 0.3s ease",
+  };
+
+  const costumesAStyle = {
+    height: showCostumesA ? "auto" : "100px",
+    overflow: "hidden",
+    transition: "height 0.3s ease",
+  };
+
+  const assStyle = {
+    height: showAss ? "auto" : "100px",
+    overflow: "hidden",
+    transition: "height 0.3s ease",
   };
 
   return (
@@ -589,7 +636,7 @@ const EditPage = () => {
                       id="search"
                       style={{
                         width: "1050px",
-                        height: "50px"
+                        height: "50px",
                       }}
                     />
 
@@ -617,7 +664,7 @@ const EditPage = () => {
                       className="auth__input"
                       style={{
                         backgroundColor: "#000",
-                        color: "#fff"
+                        color: "#fff",
                       }}
                     >
                       <option value="">Все категории</option>
@@ -699,96 +746,126 @@ const EditPage = () => {
             )}
 
             <div className="all-costumes">
-              <div className="costumes">
-                <h2>Костюмы SS</h2>
-                <div className="res">
-                  <img
-                    src={addCostumeImg}
-                    alt=""
-                    className="addIcon"
-                    onClick={() => {
-                      setIsBigModalOpen(true);
-                      setSelectedItem({ ...selectedItem, category: "SS" });
-                    }}
-                  />
-                  {userCostumes
-                    ?.filter((cost) => cost.category === "SS")
-                    ?.map((costume) => (
-                      <div key={costume.id} className="one-costume">
-                        <img src={costume.costume} alt="Costume" />
-                        <span>Персонаж: {costume.author}</span>
-                        <img
-                          src={del}
-                          className="delete"
-                          alt="Delete"
-                          style={{ height: "30px" }}
-                          onClick={() => dispatch(deleteOneCostume(costume.id))}
-                        />
-                      </div>
-                    ))
-                    .reverse()}
+              <div className="costumes" style={costumesSStyle}>
+                <div className="top" onClick={handleToggleCostumesS}>
+                  <h2>Костюмы S</h2>
+                  <img src={showCostumesS ? bottom : top} alt="" />
+                </div>
+                <div className="res" style={costumesSStyle}>
+                  {showCostumesS && (
+                    <>
+                      <img
+                        src={addCostumeImg}
+                        alt=""
+                        className="addIcon"
+                        onClick={() => {
+                          setIsBigModalOpen(true);
+                          setSelectedItem({ ...selectedItem, category: "S" });
+                        }}
+                      />
+                      {userCostumes
+                        ?.filter((cost) => cost.category === "S")
+                        ?.map((costume) => (
+                          <div key={costume.id} className="one-costume">
+                            <img src={costume.costume} alt="Costume" />
+                            <span>Персонаж: {costume.author}</span>
+                            <span>Категория: {costume.category}</span>
+                            <img
+                              src={del}
+                              className="delete"
+                              alt="Delete"
+                              style={{ height: "30px" }}
+                              onClick={() =>
+                                dispatch(deleteOneCostume(costume.id))
+                              }
+                            />
+                          </div>
+                        ))
+                        .reverse()}
+                    </>
+                  )}
                 </div>
               </div>
 
-              <div className="costumes">
-                <h2>Костюмы S</h2>
+              <div className="costumes" style={costumesSSStyle}>
+                <div className="top" onClick={handleToggleCostumesSS}>
+                  <h2>Костюмы SS</h2>
+                  <img src={showCostumesSS ? bottom : top} alt="" />
+                </div>
                 <div className="res">
-                  <img
-                    src={addCostumeImg}
-                    alt=""
-                    className="addIcon"
-                    onClick={() => {
-                      setIsBigModalOpen(true);
-                      setSelectedItem({ ...selectedItem, category: "S" });
-                    }}
-                  />
-                  {userCostumes
-                    ?.filter((cost) => cost.category === "S")
-                    ?.map((costume) => (
-                      <div key={costume.id} className="one-costume">
-                        <img src={costume.costume} alt="Costume" />
-                        <span>Персонаж: {costume.author}</span>
-                        <img
-                          src={del}
-                          className="delete"
-                          alt="Delete"
-                          style={{ height: "30px" }}
-                          onClick={() => dispatch(deleteOneCostume(costume.id))}
-                        />
-                      </div>
-                    ))
-                    .reverse()}
+                  {showCostumesSS && (
+                    <>
+                      <img
+                        src={addCostumeImg}
+                        alt=""
+                        className="addIcon"
+                        onClick={() => {
+                          setIsBigModalOpen(true);
+                          setSelectedItem({ ...selectedItem, category: "SS" });
+                        }}
+                      />
+                      {userCostumes
+                        ?.filter((cost) => cost.category === "SS")
+                        ?.map((costume) => (
+                          <div key={costume.id} className="one-costume">
+                            <img src={costume.costume} alt="Costume" />
+                            <span>Персонаж: {costume.author}</span>
+                            <span>Категория: {costume.category}</span>
+                            <img
+                              src={del}
+                              className="delete"
+                              alt="Delete"
+                              style={{ height: "30px" }}
+                              onClick={() =>
+                                dispatch(deleteOneCostume(costume.id))
+                              }
+                            />
+                          </div>
+                        ))
+                        .reverse()}
+                    </>
+                  )}
                 </div>
               </div>
 
-              <div className="costumes">
-                <h2>Костюмы A</h2>
+              <div className="costumes" style={costumesAStyle}>
+                <div className="top" onClick={handleToggleCostumesA}>
+                  <h2>Костюмы A</h2>
+                  <img src={showCostumesA ? bottom : top} alt="" />
+                </div>
                 <div className="res">
-                  <img
-                    src={addCostumeImg}
-                    alt=""
-                    className="addIcon"
-                    onClick={() => {
-                      setIsBigModalOpen(true);
-                      setSelectedItem({ ...selectedItem, category: "A" });
-                    }}
-                  />
-                  {userCostumes
-                    ?.filter((cost) => cost.category === "A")
-                    ?.map((costume) => (
-                      <div key={costume.id} className="one-costume">
-                        <img src={costume.costume} alt="Costume" />
-                        <span>Персонаж: {costume.author}</span>
-                        <img
-                          src={del}
-                          className="delete"
-                          alt="Delete"
-                          style={{ height: "30px" }}
-                          onClick={() => dispatch(deleteOneCostume(costume.id))}
-                        />
-                      </div>
-                    ))
-                    .reverse()}
+                  {showCostumesA && (
+                    <>
+                      <img
+                        src={addCostumeImg}
+                        alt=""
+                        className="addIcon"
+                        onClick={() => {
+                          setIsBigModalOpen(true);
+                          setSelectedItem({ ...selectedItem, category: "A" });
+                        }}
+                      />
+                      {userCostumes
+                        ?.filter((cost) => cost.category === "A")
+                        ?.map((costume) => (
+                          <div key={costume.id} className="one-costume">
+                            <img src={costume.costume} alt="Costume" />
+                            <span>Персонаж: {costume.author}</span>
+                            <span>Категория: {costume.category}</span>
+                            <img
+                              src={del}
+                              className="delete"
+                              alt="Delete"
+                              style={{ height: "30px" }}
+                              onClick={() =>
+                                dispatch(deleteOneCostume(costume.id))
+                              }
+                            />
+                          </div>
+                        ))
+                        .reverse()}
+                    </>
+                  )}
                 </div>
               </div>
             </div>
@@ -880,32 +957,39 @@ const EditPage = () => {
           )}
 
           <div className="all-costumes">
-            <div className="costumes">
-              <h2>Ваши аксессуары:</h2>
+            <div className="costumes" style={assStyle}>
+              <div className="top" onClick={handleToggleAss}>
+                <h2>Аксессуары</h2>
+                <img src={showAss ? bottom : top} alt="" />
+              </div>
               <div className="res">
-                <img
-                  src={addCostumeImg}
-                  alt=""
-                  className="addIcon"
-                  onClick={() => {
-                    setIsAssModalOpen(true);
-                  }}
-                />
-                {userAss
-                  ?.map((ass) => (
-                    <div key={ass.id} className="one-costume">
-                      <img src={ass.assessoir} alt="Costume" />
-                      <span>Персонаж: {ass.character}</span>
-                      <img
-                        src={del}
-                        className="delete"
-                        alt="Delete"
-                        style={{ height: "30px" }}
-                        onClick={() => dispatch(deleteAss(ass.id))}
-                        />
-                    </div>
-                  ))
-                  .reverse()}
+                {showAss && (
+                  <>
+                    <img
+                      src={addCostumeImg}
+                      alt=""
+                      className="addIcon"
+                      onClick={() => {
+                        setIsAssModalOpen(true);
+                      }}
+                    />
+                    {userAss
+                      ?.map((ass) => (
+                        <div key={ass.id} className="one-costume">
+                          <img src={ass.assessoir} alt="Costume" />
+                          <span>Персонаж: {ass.character}</span>
+                          <img
+                            src={del}
+                            className="delete"
+                            alt="Delete"
+                            style={{ height: "30px" }}
+                            onClick={() => dispatch(deleteAss(ass.id))}
+                          />
+                        </div>
+                      ))
+                      .reverse()}
+                  </>
+                )}
               </div>
             </div>
           </div>

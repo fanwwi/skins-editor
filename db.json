@@ -92,6 +92,15 @@
       "gameServer": "VALVE",
       "gameAccount": "burn",
       "author": "\"1718361546427\""
+    },
+    {
+      "game": "DOTA2",
+      "gameId": "98875678345671",
+      "gameNickname": "fanwwi",
+      "gameserver": "DeadSide",
+      "gameAccount": "fanwwi_the_best",
+      "author": "\"1718441497986\"",
+      "id": "X7crZP6"
     }
   ],
   "details": [
@@ -157,6 +166,13 @@
       "author": "Апостол",
       "bigAuthor": "bUOVcVv",
       "id": 2
+    },
+    {
+      "costume": "https://www.identityv.ru/wp-content/uploads/2018/09/doctor.jpg",
+      "category": "SS",
+      "author": "Воин",
+      "bigAuthor": "X7crZP6",
+      "id": 3
     }
   ],
   "assessoirs": [
@@ -178,6 +194,12 @@
       "character": "Апостол",
       "bigAuthor": "6RPZKKN",
       "id": 2
+    },
+    {
+      "assessoir": "https://www.mangadori.com/photo/katana/2000000025004_3_400.jpg",
+      "character": "Апостол",
+      "bigAuthor": "X7crZP6",
+      "id": 3
     }
   ],
   "userCards": []

@@ -541,7 +541,7 @@ select {
   gap: 10px;
   border: 1px solid #000;
   position: relative;
-  height: 340px;
+  height: 350px;
   border: 1px solid #000;
   border-radius: 10px;
   padding: 20px;
@@ -563,7 +563,7 @@ select {
 }
 
 .addIcon {
-  height: 340px;
+  height: 350px;
   width: 200px;
   border-radius: 10px;
   cursor: pointer;
@@ -578,6 +578,15 @@ select {
     opacity: 1;
   }
   filter: brightness(90%);
+}
+
+.top {
+  display: flex;
+  justify-content: space-between;
+}
+
+.top img {
+  width: 30px;
 }
 
 /*! modal */
@@ -661,7 +670,7 @@ select {
   height: 260px;
   display: block;
   margin-bottom: 10px;
-  width: 180px;
+  width: 170px;
 }
 
 .costumes__search__modal span,
