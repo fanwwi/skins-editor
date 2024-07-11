@@ -85,15 +85,6 @@
   ],
   "accounts": [
     {
-      "game": "ConterStrike",
-      "gameId": "98875678345671",
-      "gameNickname": "fanwwi",
-      "gameServer": "Server",
-      "gameAccount": "fanwwi_the_best",
-      "author": "\"1718441497986\"",
-      "id": "1"
-    },
-    {
       "id": "2bd7",
       "game": "DOTA2",
       "gameId": "1",
@@ -103,13 +94,13 @@
       "author": "\"1718361546427\""
     },
     {
-      "game": "Identity Vvvvvv",
+      "game": "StarCraft II",
       "gameId": "98875678345671",
-      "gameNickname": "miri",
-      "gameserver": "Asia",
-      "gameAccount": "miri1",
-      "author": "\"1720442239568\"",
-      "id": "xpibncF"
+      "gameNickname": "fanwwi",
+      "gameserver": "Discord",
+      "gameAccount": "fanwwi_the_best",
+      "author": "\"1718441497986\"",
+      "id": "bUOVcVv"
     }
   ],
   "details": [
@@ -163,53 +154,18 @@
   ],
   "userCostumes": [
     {
-      "costume": "https://pics.craiyon.com/2023-11-05/b115349ab092402f96a02d0d8d863697.webp",
-      "category": "SS",
-      "author": "Апостол",
-      "bigAuthor": "1",
-      "id": 3
-    },
-    {
-      "costume": "https://www.identityv.ru/wp-content/uploads/2018/09/doctor.jpg",
-      "category": "SS",
-      "author": "Воин",
-      "bigAuthor": "1",
-      "id": 4
-    },
-    {
-      "costume": "https://pbs.twimg.com/media/FkFrqtCakAElA-I.jpg",
-      "category": "A",
-      "author": "Наяда",
-      "bigAuthor": "1",
-      "id": 5
-    },
-    {
       "costume": "https://pbs.twimg.com/media/GNAc4VLWYAAI_pg.jpg",
       "category": "S",
       "author": "Найт",
-      "bigAuthor": "1",
-      "id": 6
+      "bigAuthor": "bUOVcVv",
+      "id": 1
     },
     {
-      "costume": "https://www.identityv.ru/wp-content/uploads/2018/09/doctor.jpg",
+      "costume": "https://pics.craiyon.com/2023-11-05/b115349ab092402f96a02d0d8d863697.webp",
       "category": "SS",
-      "author": "Воин",
-      "bigAuthor": "Twqoq2P",
-      "id": 7
-    },
-    {
-      "costume": "https://www.identityv.ru/wp-content/uploads/2018/09/doctor.jpg",
-      "category": "SS",
-      "author": "Воин",
-      "bigAuthor": "pKikQ1L",
-      "id": 8
-    },
-    {
-      "costume": "https://www.identityv.ru/wp-content/uploads/2018/09/doctor.jpg",
-      "category": "SS",
-      "author": "Воин",
-      "bigAuthor": "xpibncF",
-      "id": 9
+      "author": "Апостол",
+      "bigAuthor": "bUOVcVv",
+      "id": 2
     }
   ],
   "assessoirs": [
@@ -237,6 +193,12 @@
       "character": "Воин",
       "bigAuthor": "pKikQ1L",
       "id": 3
+    },
+    {
+      "assessoir": "https://files.vgtimes.ru/posts/2015-07/thumbs/1436030863_14.jpg",
+      "character": "Воин",
+      "bigAuthor": "bUOVcVv",
+      "id": 4
     }
   ],
   "userCards": []

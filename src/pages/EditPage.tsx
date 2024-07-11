@@ -728,7 +728,7 @@ const EditPage = () => {
       {isBigModalOpen && (
         <div className="modal-overlay" onClick={handleCloseModal}>
           <div className="modal">
-            <div className="results">
+            <div className="resultss">
               <h2>{`Выберите костюм из категории ${selectedItem.category}:`}</h2>
               <div className="res">
                 {allCostumes!
@@ -774,6 +774,41 @@ const EditPage = () => {
             </>
           )}
 
+          {isModalOpen && (
+            <div className="modal-overlay" onClick={handleCloseModal}>
+              <div className="modal">
+                <div
+                  className="modal-content"
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  <input
+                    type="text"
+                    className="auth__input"
+                    value={searchAss}
+                    onChange={searchAssValue}
+                    placeholder="Поиск..."
+                    onClick={(e) => e.stopPropagation()}
+                    id="search"
+                  />
+                </div>
+                <div className="results">
+                  {hasAss
+                    ? filteresAssessoirs.map((ass: AssessoirsType) => (
+                        <div
+                          key={ass.id}
+                          className="cost"
+                          onClick={() => handleAssClick(ass)}
+                        >
+                          <img src={ass.assessoir} alt={`Costume ${ass.id}`} />
+                          <span>Персонаж: {ass.character}</span>
+                        </div>
+                      ))
+                    : ""}
+                </div>
+              </div>
+            </div>
+          )}
+
           <div className="all-costumes">
             <div className="costumes">
               <h2>Ваши аксессуары:</h2>
@@ -809,7 +844,7 @@ const EditPage = () => {
       {isAssModalOpen && (
         <div className="modal-overlay" onClick={handleCloseModal}>
           <div className="modal">
-            <div className="results">
+            <div className="resultss">
               <h2>Выберите аксессуар:</h2>
               <div className="res">
                 {allAssessoirs!.map((item) => (
