@@ -37,6 +37,12 @@ export type AccountType = {
   id: string;
 };
 
+export type GameType = {
+  name: string;
+  img: string;
+  id: string;
+};
+
 export type AccountChange = {
   game: string;
   gameId: string;

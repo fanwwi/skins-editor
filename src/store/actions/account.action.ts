@@ -41,6 +41,24 @@ export const createAccount = createAsyncThunk(
   }
 );
 
+export const getGames = createAsyncThunk("account/getGames", async () => {
+  try {
+    const { data } = await axios.get("http://localhost:8001/games");
+    return data;
+  } catch (error) {
+    console.log(error);
+  }
+});
+
+export const getServers = createAsyncThunk("account/getServers", async () => {
+  try {
+    const { data } = await axios.get("http://localhost:8001/servers");
+    return data;
+  } catch (error) {
+    console.log(error);
+  }
+});
+
 export const getAccounts = createAsyncThunk(
   "accounts/getAccounts",
   async () => {

@@ -97,6 +97,7 @@ const EditPage = () => {
     id: "",
   });
   const [isAssModalOpen, setIsAssModalOpen] = useState(false);
+  const [value, setValue] = useState("");
 
   useEffect(() => {
     if (account) {
@@ -134,10 +135,13 @@ const EditPage = () => {
     }
   };
 
-  const handleNewDataChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleNewDataChange = (e: any) => {
     const { name, value } = e.target;
-    setNewData({ ...newData, [name]: value });
 
+    if (/^\d*$/.test(value)) {
+      setNewData({ ...newData, [name]: value });
+      setValue(value);
+    }
     setIsInputActive(true);
   };
 
@@ -328,20 +332,8 @@ const EditPage = () => {
                 </>
               ) : (
                 <>
-                  <input
-                    type="text"
-                    name="game"
-                    value={formData.game}
-                    className="auth__input"
-                    onChange={handleInputChange}
-                  />
-                  <input
-                    type="text"
-                    name="gameId"
-                    value={formData.gameId}
-                    className="auth__input"
-                    onChange={handleInputChange}
-                  />
+                  <span>{account?.game || "Ошибка сети"}</span>
+                  <span>{account?.gameId || "Ошибка сети"}</span>
                   <input
                     type="text"
                     name="gameNickname"
@@ -412,7 +404,7 @@ const EditPage = () => {
                     </div>
                     <span>DMM</span>
                   </div>
-                  <p>Пояснение в переключатель</p>
+                  <p>{getStateLabel(dmmState)}</p>
                 </div>
 
                 <div className="toggle">
@@ -433,7 +425,7 @@ const EditPage = () => {
                     </div>
                     <span>Transfer</span>
                   </div>
-                  <p>Пояснение в переключатель</p>
+                  <p>{getStateLabel(transferState)}</p>
                 </div>
 
                 <div className="toggle">
@@ -452,7 +444,7 @@ const EditPage = () => {
                     </div>
                     <span>Email</span>
                   </div>
-                  <p>Пояснение в переключатель</p>
+                  <p>{getStateLabel(emailState)}</p>
                 </div>
               </div>
             </div>
@@ -536,11 +528,16 @@ const EditPage = () => {
                   />
                 </div>
               </div>
+              {isInputActive && (
+                <button
+                  onClick={handleDetailsSubmit}
+                  className="auth-btn"
+                  style={{ marginTop: "20px" }}
+                >
+                  Отправить детали
+                </button>
+              )}
             </div>
-
-            {isInputActive && (
-              <button onClick={handleDetailsSubmit}>Отправить детали</button>
-            )}
           </>
         )}
 

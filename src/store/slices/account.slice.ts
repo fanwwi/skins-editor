@@ -5,7 +5,7 @@ import {
   CardsType,
   CostumesType,
   DetailsType,
-  IconsType,
+  GameType,
 } from "../../types";
 import {
   accountDetails,
@@ -13,14 +13,18 @@ import {
   getAssessoirs,
   getCard,
   getCostume,
+  getGames,
   getOneAccount,
   getUserAss,
+  getServers,
   getUserCostumes,
 } from "../actions/account.action";
 
 type StatesType = {
   error: null | string;
   allAccounts: AccountType[] | null;
+  allGames: GameType[] | null;
+  allServers: GameType[] | null;
   account: AccountType | null;
   details: DetailsType | null;
   allCostumes: CostumesType[] | null;
@@ -33,6 +37,8 @@ type StatesType = {
 const INIT_STATE: StatesType = {
   error: null,
   allAccounts: null,
+  allGames: null,
+  allServers: null,
   account: null,
   details: null,
   allCostumes: null,
@@ -55,6 +61,24 @@ export const accountsSlice = createSlice({
         state.error = action.error.message ?? "Ошибка при загрузки аккаунтов";
       })
       .addCase(getAccounts.pending, (state) => {
+        state.error = null;
+      })
+      .addCase(getGames.fulfilled, (state, action) => {
+        state.allGames = action.payload;
+      })
+      .addCase(getGames.rejected, (state, action) => {
+        state.error = action.error.message ?? "Ошибка при загрузки аккаунтов";
+      })
+      .addCase(getGames.pending, (state) => {
+        state.error = null;
+      })
+      .addCase(getServers.fulfilled, (state, action) => {
+        state.allServers = action.payload;
+      })
+      .addCase(getServers.rejected, (state, action) => {
+        state.error = action.error.message ?? "Ошибка при загрузки аккаунтов";
+      })
+      .addCase(getServers.pending, (state) => {
         state.error = null;
       })
       .addCase(getOneAccount.fulfilled, (state, action) => {

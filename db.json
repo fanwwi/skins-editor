@@ -19,6 +19,70 @@
       "id": "1720442239568"
     }
   ],
+  "games": [
+    {
+      "name": "DOTA2",
+      "img": "https://steamuserimages-a.akamaihd.net/ugc/561010670011569246/D3F5500E09D74421F532745FC0C5DA81F0AD56BE/",
+      "id": "1"
+    },
+    {
+      "name": "League of Legends",
+      "img": "https://i.pinimg.com/originals/d1/b1/1d/d1b11d5e4dbae547ac0d651476cec488.png",
+      "id": "2"
+    },
+    {
+      "name": "EVE Online",
+      "img": "https://lookingforclan.com/sites/default/files/styles/icon/public/2017-02/logo_5.png.jpg?itok=aKjD4Yfp",
+      "id": "3"
+    },
+    {
+      "name": "World of Warcraft",
+      "img": "https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/d38376a4-f04f-4573-a98f-afe72802dd8f/d4yzua4-7cc07924-dbee-49cc-bd6a-a898ab0a9597.png?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7InBhdGgiOiJcL2ZcL2QzODM3NmE0LWYwNGYtNDU3My1hOThmLWFmZTcyODAyZGQ4ZlwvZDR5enVhNC03Y2MwNzkyNC1kYmVlLTQ5Y2MtYmQ2YS1hODk4YWIwYTk1OTcucG5nIn1dXSwiYXVkIjpbInVybjpzZXJ2aWNlOmZpbGUuZG93bmxvYWQiXX0.cbvE5zlW4kAMwqNrX6W0EUHmtLoIbz1nzXVJY2qTnLI",
+      "id": "4"
+    },
+    {
+      "name": "Diablo III",
+      "img": "https://d2gz6tdybs0ggb.cloudfront.net/ru/d3/original/1X/0496d16829e21ce21db763a418598e903efd0a4c.png",
+      "id": "5"
+    },
+    {
+      "name": "StarCraft II",
+      "img": "https://d3lslehffatu2m.cloudfront.net/ru/sc2/original/1X/ab1b44146efca2c793cc5acf03e37c2202f4676c.png",
+      "id": "6"
+    }
+  ],
+  "servers": [
+    {
+      "name": "Dayz",
+      "img": "https://dayz.com/img/dayz_thumb.jpg",
+      "id": "1"
+    },
+    {
+      "name": "Rust",
+      "img": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQNTKDBLiDnNtb6KXroWWgFvU50s1bhf4D5Bg&s",
+      "id": "2"
+    },
+    {
+      "name": "ARK Survival Evolved",
+      "img": "https://64.media.tumblr.com/2a66fd3cf8dd05331bd3cf57c1c5d8f8/tumblr_o43fp4Z1vQ1svwk0co1_1280.png",
+      "id": "3"
+    },
+    {
+      "name": "Scum",
+      "img": "https://styles.redditmedia.com/t5_pml1n/styles/communityIcon_3nwx39ooi3l81.png",
+      "id": "4"
+    },
+    {
+      "name": "Discord",
+      "img": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR8KcPW7zH09DDgLkFV4w2TeniiHTS_YOoyaA&s",
+      "id": "5"
+    },
+    {
+      "name": "DeadSide",
+      "img": "https://ru.top-games.net/images/cards/jpg/deadside.jpg",
+      "id": "6"
+    }
+  ],
   "accounts": [
     {
       "game": "ConterStrike",

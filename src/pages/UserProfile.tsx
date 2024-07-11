@@ -112,6 +112,13 @@ const UserProfile = () => {
           <>
             <h1 style={{ marginTop: "30px" }}>Список аккаунтов</h1>
             <div className="all-accs">
+              <div className="acc-list">
+                <span id="one">Игра</span>
+                <span id="two">ID акканута</span>
+                <span id="three">Никнэйм</span>
+                <span id="four">Сервер</span>
+                <span id="five">Имя акканута</span>
+              </div>
               {filteredAccounts
                 .map((account: AccountType, index: any) => (
                   <div className="one-acc" key={index}>
@@ -138,10 +145,7 @@ const UserProfile = () => {
                         onClick={() => handleCopyAccount(account.id)}
                         style={{ cursor: "pointer" }}
                       />
-                      <img
-                        src={downloadIcon}
-                        alt="download"
-                      />
+                      <img src={downloadIcon} alt="download" id="down"/>
                       <img src={cardIcon} alt="card" />
                       <img
                         src={deleteIcon}
