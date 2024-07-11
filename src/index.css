@@ -146,12 +146,16 @@
 
 .modal-content {
   display: flex;
-  flex-direction: column;
-  align-items: flex-start;
+  gap: 20px;
 }
 
-.modal-content img {
+.modal-contentt img {
   width: 20px;
+}
+
+.modal-contentt {
+  display: flex;
+  flex-direction: column;
 }
 
 .modal-top {
@@ -1128,7 +1132,7 @@ select {
 
 .modal-content {
   display: flex;
-  flex-direction: column;
+  width: 1350px;
   align-items: center;
   padding: 20px;
   border-radius: 8px;

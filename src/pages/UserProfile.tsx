@@ -173,7 +173,7 @@ const UserProfile = () => {
       </div>
       {isModalOpen && (
         <div className="modal-style" ref={modalRef} onClick={handleModalClick}>
-          <div className="modal-content">
+          <div className="modal-contentt">
             <div className="modal-top">
               <img src={userIcon} alt="" style={{ width: "50px" }} />
               <div className="modal-top__name">

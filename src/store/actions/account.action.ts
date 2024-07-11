@@ -248,37 +248,26 @@ export const addUserAss = createAsyncThunk(
 );
 
 export const deleteOneCostume = createAsyncThunk(
-  "accounts/deleteAccount",
-  async (id: string, { rejectWithValue }) => {
+  "accounts/deleteCostume",
+  async (id: string) => {
     try {
       await axios.delete(`http://localhost:8001/userCostumes/${id}`);
-      window.location.reload();
       return id;
     } catch (error) {
       console.error(error);
-      if (axios.isAxiosError(error) && error.response) {
-        return rejectWithValue(error.response.data);
-      } else {
-        return rejectWithValue("Ошибка удаления костюма!");
-      }
     }
   }
 );
 
 export const deleteAss = createAsyncThunk(
   "accounts/deleteAss",
-  async (id: string, { rejectWithValue }) => {
+  async (id: string) => {
     try {
       await axios.delete(`http://localhost:8001/userAssesoirs/${id}`);
       window.location.reload();
       return id;
     } catch (error) {
       console.error(error);
-      if (axios.isAxiosError(error) && error.response) {
-        return rejectWithValue(error.response.data);
-      } else {
-        return rejectWithValue("Ошибка удаления костюма!");
-      }
     }
   }
 );

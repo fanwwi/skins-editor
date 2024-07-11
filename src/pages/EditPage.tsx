@@ -98,6 +98,9 @@ const EditPage = () => {
   });
   const [isAssModalOpen, setIsAssModalOpen] = useState(false);
   const [value, setValue] = useState("");
+  const [s, setS] = useState(false);
+  const [ss, setSS] = useState(false);
+  const [a, setA] = useState(false);
 
   useEffect(() => {
     if (account) {
@@ -186,26 +189,6 @@ const EditPage = () => {
       return "True";
     } else {
       return "False";
-    }
-  };
-
-  const handleDeleteAccount = (accountId: string) => {
-    if (window.confirm("Вы уверены, что хотите удалить этот костюм?")) {
-      dispatch(deleteOneCostume(accountId))
-        .unwrap()
-        .catch((error) => {
-          console.error("Ошибка при удалении аккаунта:", error);
-        });
-    }
-  };
-
-  const handleDeleteAss = (accountId: string) => {
-    if (window.confirm("Вы уверены, что хотите удалить этот костюм?")) {
-      dispatch(deleteAss(accountId))
-        .unwrap()
-        .catch((error) => {
-          console.error("Ошибка при удалении аккаунта:", error);
-        });
     }
   };
 
@@ -604,25 +587,112 @@ const EditPage = () => {
                       placeholder="Поиск..."
                       onClick={(e) => e.stopPropagation()}
                       id="search"
+                      style={{
+                        width: "1050px",
+                        height: "50px"
+                      }}
                     />
+
+                    <select
+                      onChange={(e) => {
+                        const category = e.target.value;
+                        if (category === "S") {
+                          setS(true);
+                          setSS(false);
+                          setA(false);
+                        } else if (category === "SS") {
+                          setS(false);
+                          setSS(true);
+                          setA(false);
+                        } else if (category === "A") {
+                          setS(false);
+                          setSS(false);
+                          setA(true);
+                        } else {
+                          setS(false);
+                          setSS(false);
+                          setA(false);
+                        }
+                      }}
+                      className="auth__input"
+                      style={{
+                        backgroundColor: "#000",
+                        color: "#fff"
+                      }}
+                    >
+                      <option value="">Все категории</option>
+                      <option value="S">Костюмы S</option>
+                      <option value="SS">Костюмы SS</option>
+                      <option value="A">Костюмы A</option>
+                    </select>
                   </div>
                   <div className="results">
-                    {hasResults
-                      ? filteredCostumes.map((item) => (
-                          <div
-                            key={item.id}
-                            className="cost"
-                            onClick={() => handleItemClick(item)}
-                          >
-                            <img
-                              src={item.costume}
-                              alt={`Costume ${item.id}`}
-                            />
-                            <span>Персонаж: {item.author}</span>
-                            <span>Категория: {item.category}</span>
-                          </div>
-                        ))
-                      : ""}
+                    {hasResults &&
+                      (s
+                        ? filteredCostumes
+                            .filter((item) => item.category === "S")
+                            .map((item) => (
+                              <div
+                                key={item.id}
+                                className="cost"
+                                onClick={() => handleItemClick(item)}
+                              >
+                                <img
+                                  src={item.costume}
+                                  alt={`Costume ${item.id}`}
+                                />
+                                <span>Персонаж: {item.author}</span>
+                                <span>Категория: {item.category}</span>
+                              </div>
+                            ))
+                        : ss
+                        ? filteredCostumes
+                            .filter((item) => item.category === "SS")
+                            .map((item) => (
+                              <div
+                                key={item.id}
+                                className="cost"
+                                onClick={() => handleItemClick(item)}
+                              >
+                                <img
+                                  src={item.costume}
+                                  alt={`Costume ${item.id}`}
+                                />
+                                <span>Персонаж: {item.author}</span>
+                                <span>Категория: {item.category}</span>
+                              </div>
+                            ))
+                        : a
+                        ? filteredCostumes
+                            .filter((item) => item.category === "A")
+                            .map((item) => (
+                              <div
+                                key={item.id}
+                                className="cost"
+                                onClick={() => handleItemClick(item)}
+                              >
+                                <img
+                                  src={item.costume}
+                                  alt={`Costume ${item.id}`}
+                                />
+                                <span>Персонаж: {item.author}</span>
+                                <span>Категория: {item.category}</span>
+                              </div>
+                            ))
+                        : filteredCostumes.map((item) => (
+                            <div
+                              key={item.id}
+                              className="cost"
+                              onClick={() => handleItemClick(item)}
+                            >
+                              <img
+                                src={item.costume}
+                                alt={`Costume ${item.id}`}
+                              />
+                              <span>Персонаж: {item.author}</span>
+                              <span>Категория: {item.category}</span>
+                            </div>
+                          )))}
                   </div>
                 </div>
               </div>
@@ -652,7 +722,7 @@ const EditPage = () => {
                           className="delete"
                           alt="Delete"
                           style={{ height: "30px" }}
-                          onClick={() => handleDeleteAccount(costume.id)}
+                          onClick={() => dispatch(deleteOneCostume(costume.id))}
                         />
                       </div>
                     ))
@@ -683,7 +753,7 @@ const EditPage = () => {
                           className="delete"
                           alt="Delete"
                           style={{ height: "30px" }}
-                          onClick={() => handleDeleteAccount(costume.id)}
+                          onClick={() => dispatch(deleteOneCostume(costume.id))}
                         />
                       </div>
                     ))
@@ -714,7 +784,7 @@ const EditPage = () => {
                           className="delete"
                           alt="Delete"
                           style={{ height: "30px" }}
-                          onClick={() => handleDeleteAccount(costume.id)}
+                          onClick={() => dispatch(deleteOneCostume(costume.id))}
                         />
                       </div>
                     ))
@@ -831,8 +901,8 @@ const EditPage = () => {
                         className="delete"
                         alt="Delete"
                         style={{ height: "30px" }}
-                        onClick={() => handleDeleteAss(ass.id)}
-                      />
+                        onClick={() => dispatch(deleteAss(ass.id))}
+                        />
                     </div>
                   ))
                   .reverse()}

@@ -92,15 +92,6 @@
       "gameServer": "VALVE",
       "gameAccount": "burn",
       "author": "\"1718361546427\""
-    },
-    {
-      "game": "StarCraft II",
-      "gameId": "98875678345671",
-      "gameNickname": "fanwwi",
-      "gameserver": "Discord",
-      "gameAccount": "fanwwi_the_best",
-      "author": "\"1718441497986\"",
-      "id": "bUOVcVv"
     }
   ],
   "details": [
@@ -170,35 +161,23 @@
   ],
   "assessoirs": [
     {
-      "assessoir": "https://files.vgtimes.ru/posts/2015-07/thumbs/1436030863_14.jpg",
-      "character": "Воин",
-      "id": 1
+      "assessoir": "https://www.mangadori.com/photo/katana/2000000025004_3_400.jpg",
+      "character": "Апостол",
+      "id": "1"
     }
   ],
   "userAssesoirs": [
     {
-      "assessoir": "https://files.vgtimes.ru/posts/2015-07/thumbs/1436030863_14.jpg",
-      "character": "Воин",
-      "bigAuthor": "1",
+      "assessoir": "https://www.mangadori.com/photo/katana/2000000025004_3_400.jpg",
+      "character": "Апостол",
+      "bigAuthor": "V0a5a1D",
       "id": 1
     },
     {
-      "assessoir": "https://files.vgtimes.ru/posts/2015-07/thumbs/1436030863_14.jpg",
-      "character": "Воин",
-      "bigAuthor": "Twqoq2P",
+      "assessoir": "https://www.mangadori.com/photo/katana/2000000025004_3_400.jpg",
+      "character": "Апостол",
+      "bigAuthor": "6RPZKKN",
       "id": 2
-    },
-    {
-      "assessoir": "https://files.vgtimes.ru/posts/2015-07/thumbs/1436030863_14.jpg",
-      "character": "Воин",
-      "bigAuthor": "pKikQ1L",
-      "id": 3
-    },
-    {
-      "assessoir": "https://files.vgtimes.ru/posts/2015-07/thumbs/1436030863_14.jpg",
-      "character": "Воин",
-      "bigAuthor": "bUOVcVv",
-      "id": 4
     }
   ],
   "userCards": []
