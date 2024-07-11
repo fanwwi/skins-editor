@@ -585,6 +585,177 @@ const EditorPage: React.FC = () => {
     setSelectedColorNickname(event.target.value);
   };
 
+  const [nicknameAlign, setNicknameAlign] = useState<any>("left");
+  const [idAlign, setIdAlign] = useState<any>("left");
+  const [accountAlign, setAccountAlign] = useState<any>("left");
+  const [serverAlign, setServerAlign] = useState<any>("left");
+
+  const [nicknameFont, setNicknameFont] = useState<string>("Arial");
+  const [idFont, setIdFont] = useState<string>("Arial");
+  const [accountFont, setAccountFont] = useState<string>("Arial");
+  const [serverFont, setServerFont] = useState<string>("Arial");
+
+  const [sAlign, setSAlign] = useState<any>("left");
+  const [ssAlign, setSSAlign] = useState<any>("left");
+  const [aAlign, setAAlign] = useState<any>("left");
+
+  const handleNicknameAlignLeft = () => {
+    setNicknameAlign("left");
+  };
+
+  const handleNicknameAlignCenter = () => {
+    setNicknameAlign("center");
+  };
+
+  const handleNicknameAlignRight = () => {
+    setNicknameAlign("right");
+  };
+
+  // ------------------------
+
+  const handleAccountAlignLeft = () => {
+    setAccountAlign("left");
+  };
+
+  const handleAccountAlignCenter = () => {
+    setAccountAlign("center");
+  };
+
+  const handleAccountAlignRight = () => {
+    setAccountAlign("right");
+  };
+
+  // -------------------------
+
+  const handleServerAlignLeft = () => {
+    setServerAlign("left");
+  };
+
+  const handleServerAlignCenter = () => {
+    setServerAlign("center");
+  };
+
+  const handleServerAlignRight = () => {
+    setServerAlign("right");
+  };
+
+  // -------------------------
+
+  const handleIdAlignLeft = () => {
+    setIdAlign("left");
+  };
+
+  const handleIdAlignCenter = () => {
+    setIdAlign("center");
+  };
+
+  const handleIdAlignRight = () => {
+    setIdAlign("right");
+  };
+
+  // ----------------
+  // ----------------
+
+  const handleArialAccount = () => {
+    setAccountFont("Arial");
+  };
+
+  const handleOpenSansAccount = () => {
+    setAccountFont("Open Sans");
+  };
+
+  const handleInterAccount = () => {
+    setAccountFont("Inter");
+  };
+
+  // -----------------
+
+  const handleArialNickname = () => {
+    setNicknameFont("Arial");
+  };
+
+  const handleOpenSansNickname = () => {
+    setNicknameFont("Open Sans");
+  };
+
+  const handleInterNickname = () => {
+    setNicknameFont("Inter");
+  };
+
+  // -----------------
+
+  const handleArialServer = () => {
+    setServerFont("Arial");
+  };
+
+  const handleOpenSansServer = () => {
+    setServerFont("Open Sans");
+  };
+
+  const handleInterServer = () => {
+    setServerFont("Inter");
+  };
+
+  // -----------------
+
+  const handleArialId = () => {
+    setIdFont("Arial");
+  };
+
+  const handleOpenSansId = () => {
+    setIdFont("Open Sans");
+  };
+
+  const handleInterId = () => {
+    setIdFont("Inter");
+  };
+
+  //
+  //
+  //
+  //
+  //
+
+  const handleSAlignLeft = () => {
+    setSAlign("left");
+  };
+
+  const handleSAlignCenter = () => {
+    setSAlign("center");
+  };
+
+  const handleSAlignRight = () => {
+    setSAlign("right");
+  };
+
+  // ------------------------
+
+  const handleSSAlignLeft = () => {
+    setSSAlign("left");
+  };
+
+  const handleSSAlignCenter = () => {
+    setSSAlign("center");
+  };
+
+  const handleSSAlignRight = () => {
+    setSSAlign("right");
+  };
+
+  // -------------------------
+
+  const handleAAlignLeft = () => {
+    setAAlign("left");
+  };
+
+  const handleAAlignCenter = () => {
+    setAAlign("center");
+  };
+
+  const handleAAlignRight = () => {
+    setAAlign("right");
+  };
+
   return (
     <div className="list">
       <div
@@ -779,6 +950,7 @@ const EditorPage: React.FC = () => {
                         left: costume.x || 0,
                         top: costume.y || 0,
                         height: `${costumeSizesS[Number(costume.id)] || 155}px`,
+                        textAlign: sAlign,
                       }}
                     >
                       {contextModalCostumesS && (
@@ -826,14 +998,30 @@ const EditorPage: React.FC = () => {
 
                           <select name="" id="">
                             <option value="">Добавить в группу</option>
-                            <option value="">Костюмы SS</option>
-                            <option value="">Костюмы A</option>
+                            <option value="" onClick={() => setCostumeSS(true)}>
+                              Костюмы SS
+                            </option>
+                            <option value="" onClick={() => setCostumeA(true)}>
+                              Костюмы A
+                            </option>
                           </select>
 
                           <div className="btns">
-                            <img src={alignLeft} alt="" />
-                            <img src={alignCenter} alt="" />
-                            <img src={alignRight} alt="" />
+                            <img
+                              src={alignLeft}
+                              alt=""
+                              onClick={handleSAlignLeft}
+                            />
+                            <img
+                              src={alignCenter}
+                              alt=""
+                              onClick={handleSAlignCenter}
+                            />
+                            <img
+                              src={alignRight}
+                              alt=""
+                              onClick={handleSAlignRight}
+                            />
                           </div>
 
                           <img
@@ -845,7 +1033,6 @@ const EditorPage: React.FC = () => {
                           />
                         </div>
                       )}
-
                       <img
                         src={costume.costume}
                         alt="Costume"
@@ -1208,6 +1395,7 @@ const EditorPage: React.FC = () => {
                 left: gameAccountPosition.x,
                 top: gameAccountPosition.y,
                 fontSize: fontSize,
+                textAlign: accountAlign,
                 cursor: isDraggingAccount ? "grabbing" : "default",
               }}
               onMouseDown={(e) => {
@@ -1270,15 +1458,33 @@ const EditorPage: React.FC = () => {
 
                   <select name="" id="">
                     <option value="">Выберите шрифт</option>
-                    <option value="Arial">Arial</option>
-                    <option value="Open Sans">Open Sans</option>
-                    <option value="Inter">Inter</option>
+                    <option value="Arial" onClick={handleArialAccount}>
+                      Arial
+                    </option>
+                    <option value="Open Sans" onClick={handleOpenSansAccount}>
+                      Open Sans
+                    </option>
+                    <option value="Inter" onClick={handleInterAccount}>
+                      Inter
+                    </option>
                   </select>
 
                   <div className="btns">
-                    <img src={alignLeft} alt="" />
-                    <img src={alignCenter} alt="" />
-                    <img src={alignRight} alt="" />
+                    <img
+                      src={alignLeft}
+                      alt=""
+                      onClick={handleAccountAlignLeft}
+                    />
+                    <img
+                      src={alignCenter}
+                      alt=""
+                      onClick={handleAccountAlignCenter}
+                    />
+                    <img
+                      src={alignRight}
+                      alt=""
+                      onClick={handleAccountAlignRight}
+                    />
                   </div>
                   <img
                     src={close}
@@ -1302,6 +1508,7 @@ const EditorPage: React.FC = () => {
                   style={{
                     fontSize: `${accountSize}px`,
                     color: selectedColorAccount,
+                    fontFamily: accountFont,
                   }}
                 >
                   {account?.gameAccount}
@@ -1378,15 +1585,33 @@ const EditorPage: React.FC = () => {
 
                   <select name="" id="">
                     <option value="">Выберите шрифт</option>
-                    <option value="">Arial</option>
-                    <option value="">Open Sans</option>
-                    <option value="">Inter</option>
+                    <option value="Arial" onClick={handleArialNickname}>
+                      Arial
+                    </option>
+                    <option value="Open Sans" onClick={handleOpenSansNickname}>
+                      Open Sans
+                    </option>
+                    <option value="Inter" onClick={handleInterNickname}>
+                      Inter
+                    </option>
                   </select>
 
                   <div className="btns">
-                    <img src={alignLeft} alt="" />
-                    <img src={alignCenter} alt="" />
-                    <img src={alignRight} alt="" />
+                    <img
+                      src={alignLeft}
+                      alt=""
+                      onClick={handleNicknameAlignLeft}
+                    />
+                    <img
+                      src={alignCenter}
+                      alt=""
+                      onClick={handleNicknameAlignCenter}
+                    />
+                    <img
+                      src={alignRight}
+                      alt=""
+                      onClick={handleNicknameAlignRight}
+                    />
                   </div>
                   <img
                     src={close}
@@ -1410,6 +1635,8 @@ const EditorPage: React.FC = () => {
                   style={{
                     fontSize: `${nicknameSize}px`,
                     color: selectedColorNickname,
+                    textAlign: nicknameAlign,
+                    fontFamily: nicknameFont,
                   }}
                 >
                   Никнэйм: {account?.gameNickname}
@@ -1486,15 +1713,25 @@ const EditorPage: React.FC = () => {
 
                   <select name="" id="">
                     <option value="">Выберите шрифт</option>
-                    <option value="Arial">Arial</option>
-                    <option value="Open Sans">Open Sans</option>
-                    <option value="Inter">Inter</option>
+                    <option value="Arial" onClick={handleArialId}>
+                      Arial
+                    </option>
+                    <option value="Open Sans" onClick={handleOpenSansId}>
+                      Open Sans
+                    </option>
+                    <option value="Inter" onClick={handleInterId}>
+                      Inter
+                    </option>
                   </select>
 
                   <div className="btns">
-                    <img src={alignLeft} alt="" />
-                    <img src={alignCenter} alt="" />
-                    <img src={alignRight} alt="" />
+                    <img src={alignLeft} alt="" onClick={handleIdAlignLeft} />
+                    <img
+                      src={alignCenter}
+                      alt=""
+                      onClick={handleIdAlignCenter}
+                    />
+                    <img src={alignRight} alt="" onClick={handleIdAlignRight} />
                   </div>
                   <img
                     src={close}
@@ -1518,6 +1755,8 @@ const EditorPage: React.FC = () => {
                   style={{
                     fontSize: `${idSize}px`,
                     color: selectedColorId,
+                    fontFamily: idFont,
+                    textAlign: idAlign,
                   }}
                 >
                   ID: {account?.gameId}
@@ -1594,15 +1833,33 @@ const EditorPage: React.FC = () => {
 
                   <select name="" id="">
                     <option value="">Выберите шрифт</option>
-                    <option value="Arial">Arial</option>
-                    <option value="Open Sans">Open Sans</option>
-                    <option value="Inter">Inter</option>
+                    <option value="Arial" onClick={handleArialServer}>
+                      Arial
+                    </option>
+                    <option value="Open Sans" onClick={handleOpenSansServer}>
+                      Open Sans
+                    </option>
+                    <option value="Inter" onClick={handleInterServer}>
+                      Inter
+                    </option>
                   </select>
 
                   <div className="btns">
-                    <img src={alignLeft} alt="" />
-                    <img src={alignCenter} alt="" />
-                    <img src={alignRight} alt="" />
+                    <img
+                      src={alignLeft}
+                      alt=""
+                      onClick={handleServerAlignLeft}
+                    />
+                    <img
+                      src={alignCenter}
+                      alt=""
+                      onClick={handleServerAlignCenter}
+                    />
+                    <img
+                      src={alignRight}
+                      alt=""
+                      onClick={handleServerAlignRight}
+                    />
                   </div>
                   <img
                     src={close}
@@ -1626,6 +1883,8 @@ const EditorPage: React.FC = () => {
                   style={{
                     fontSize: `${serverSize}px`,
                     color: selectedColorServer,
+                    fontFamily: serverFont,
+                    textAlign: serverAlign,
                   }}
                 >
                   Сервер: {account?.gameServer}
