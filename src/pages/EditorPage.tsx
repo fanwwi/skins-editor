@@ -118,7 +118,6 @@ const EditorPage: React.FC = () => {
   const [activeTab, setActiveTab] = useState("content");
 
   const [modalPosition, setModalPosition] = useState({ x: 0, y: 0 });
-  const [textModal, setTextModal] = useState({ x: 0, y: 0 });
   const [imageModal, setImageModal] = useState({ x: 0, y: 0 });
 
   const [mousePosition, setMousePosition] = useState<{ x: number; y: number }>({
@@ -132,24 +131,27 @@ const EditorPage: React.FC = () => {
   const [editingText, setEditingText] = useState<string>("");
   const [modal, setModal] = useState(false);
 
-  const [showCostumeSizeS, setShowCostumeSizeS] = useState(false);
-  const [showCostumeSizeSS, setShowCostumeSizeSS] = useState(false);
-  const [showCostumeSizeA, setShowCostumeSizeA] = useState(false);
-  const [showCostumeSizeAss, setShowCostumeSizeAss] = useState(false);
+  const initialCostumeSizes = userCostumes ? userCostumes.map(() => 150) : [];
+
   const [contextModalCostumesS, setContextModalCostumesS] = useState(false);
   const [contextModalCostumesSS, setContextModalCostumesSS] = useState(false);
   const [contextModalCostumesA, setContextModalCostumesA] = useState(false);
   const [contextModalAss, setContextModalCostumesAss] = useState(false);
   const [contextModalImage, setContextModalImage] = useState(false);
-  const [contextModalText, setContextModalText] = useState(false);
-  const initialCostumeSizes = userCostumes ? userCostumes.map(() => 150) : [];
+  const [contextModalNickname, setContextModalNickname] = useState(false);
+  const [contextModalServer, setContextModalServer] = useState(false);
+  const [contextModalAccount, setContextModalAccount] = useState(false);
+  const [contextModalId, setContextModalId] = useState(false);
+
+  const [nicknameSize, setNicknameSize] = useState(16);
+  const [serverSize, setServerSize] = useState(16);
+  const [accountSize, setAccountSize] = useState(16);
+  const [idSize, setIdSize] = useState(16);
   const [costumeSizesS, setCostumeSizesS] = useState(initialCostumeSizes);
   const [costumeSizesSS, setCostumeSizesSS] = useState(initialCostumeSizes);
   const [costumeSizesA, setCostumeSizesA] = useState(initialCostumeSizes);
   const [costumeSizesAss, setCostumeSizesAss] = useState(initialCostumeSizes);
-  const [activeCostumeIndex, setActiveCostumeIndex] = useState<number | null>(
-    null
-  );
+
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
@@ -169,32 +171,6 @@ const EditorPage: React.FC = () => {
     if (canvasSize > 500) {
       setCanvasSize(canvasSize - 100);
     }
-  };
-
-  const increaseFontSize = () => {
-    setTextElements((prevElements) =>
-      prevElements.map((element) => ({
-        ...element,
-        fontSize:
-          element.fontSize < 50 ? element.fontSize + 2 : element.fontSize,
-      }))
-    );
-    setFontSize((prevFontSize) =>
-      prevFontSize < 50 ? prevFontSize + 2 : prevFontSize
-    );
-  };
-
-  const decreaseFontSize = () => {
-    setTextElements((prevElements) =>
-      prevElements.map((element) => ({
-        ...element,
-        fontSize:
-          element.fontSize > 8 ? element.fontSize - 2 : element.fontSize,
-      }))
-    );
-    setFontSize((prevFontSize) =>
-      prevFontSize > 8 ? prevFontSize - 2 : prevFontSize
-    );
   };
 
   const increaseCostumeSize = (id: any, category: any) => {
@@ -258,6 +234,39 @@ const EditorPage: React.FC = () => {
         break;
     }
   };
+
+  const increaseAccountSize = () => {
+    setAccountSize((prevSize) => prevSize + 2);
+  };
+
+  const decreaseAccountSize = () => {
+    setAccountSize((prevSize) => prevSize - 2);
+  };
+
+  const increaseNicknameSize = () => {
+    setNicknameSize((prevSize) => prevSize + 2);
+  };
+
+  const decreaseNicknameSize = () => {
+    setNicknameSize((prevSize) => prevSize - 2);
+  };
+
+  const increaseServerSize = () => {
+    setServerSize((prevSize) => prevSize + 2);
+  };
+
+  const decreaseServerSize = () => {
+    setServerSize((prevSize) => prevSize - 2);
+  };
+
+  const increaseIdSize = () => {
+    setIdSize((prevSize) => prevSize + 2);
+  };
+
+  const decreaseIdSize = () => {
+    setIdSize((prevSize) => prevSize - 2);
+  };
+
   const increaseImgSize = () => {
     setImgSize((prevSize) => prevSize + 5);
   };
@@ -550,14 +559,30 @@ const EditorPage: React.FC = () => {
     setDraggedImageId(null);
   };
 
-  const handleTextClick = (position: any) => {
-    setTextModal({ x: position.x, y: position.y - 100 });
-    setContextModalText(true);
-  };
-
   const handleImageClick = (position: any) => {
     setImageModal({ x: position.x, y: position.y - 100 });
     setContextModalImage(true);
+  };
+
+  const [selectedColorServer, setSelectedColorServer] = useState("#000000"); // начальный цвет
+  const [selectedColorId, setSelectedColorId] = useState("#000000"); // начальный цвет
+  const [selectedColorAccount, setSelectedColorAccount] = useState("#000000"); // начальный цвет
+  const [selectedColorNickname, setSelectedColorNickname] = useState("#000000"); // начальный цвет
+
+  const handleColorServerChange = (event: any) => {
+    setSelectedColorServer(event.target.value);
+  };
+
+  const handleColorIdChange = (event: any) => {
+    setSelectedColorId(event.target.value);
+  };
+
+  const handleColorAccountChange = (event: any) => {
+    setSelectedColorAccount(event.target.value);
+  };
+
+  const handleColorNicknameChange = (event: any) => {
+    setSelectedColorNickname(event.target.value);
   };
 
   return (
@@ -709,52 +734,6 @@ const EditorPage: React.FC = () => {
           onMouseUp={handleMouseUp}
         >
           <div className="costumes-container" style={{ position: "relative" }}>
-            {/* {contextModalCostumes && activeCostumeIndex !== null && (
-              <div
-                className="context-modal"
-                style={{
-                  position: "absolute",
-                  left: modalPosition.x,
-                  top: modalPosition.y,
-                }}
-              >
-                <div className="deleteCostume">
-                  <h6>Удалить</h6>
-                  <img src={deleteIcon} alt="" />
-                </div>
-                <div className="group">
-                  <h6>Добавить в группу + </h6>
-                  <select>
-                    <option>Костюмы SS</option>
-                    <option>Костюмы S</option>
-                    <option>Костюмы A</option>
-                  </select>
-                </div>
-                <div className="btns">
-                  <img src={alignLeft} alt="" />
-                  <img src={alignCenter} alt="" />
-                  <img src={alignRight} alt="" />
-                </div>
-                <img
-                  src={close}
-                  alt=""
-                  style={{
-                    position: "absolute",
-                    right: "5px",
-                    top: "5px",
-                    width: "10px",
-                    cursor: "pointer",
-                  }}
-                  onClick={() => {
-                    setContextModalCostumes(false);
-                    setShowCostumeSizeS(false);
-                    setShowCostumeSizeSS(false);
-                    setShowCostumeSizeA(false);
-                    setShowCostumeSizeAss(false);
-                  }}
-                />
-              </div>
-            )} */}
             <div
               className="display-costumes"
               style={{
@@ -1160,68 +1139,6 @@ const EditorPage: React.FC = () => {
             </div>
           </div>
           <div className="account-all">
-            {contextModalText && (
-              <div
-                className="context-modal"
-                style={{
-                  position: "absolute",
-                  left: textModal.x,
-                  top: textModal.y,
-                }}
-              >
-                <div className="fz">
-                  <h6>Размер шрифта</h6>
-                  <div className="btns">
-                    <button onClick={increaseFontSize}>+</button>
-                    <span>{fontSize}</span>
-                    <button onClick={decreaseFontSize}>-</button>
-                  </div>
-                </div>
-                <div className="deleteCostume">
-                  <h6>Удалить</h6>
-                  <img src={deleteIcon} alt="" />
-                </div>
-                <div
-                  id="color"
-                  style={{
-                    display: "flex",
-                    flexDirection: "column",
-                    alignItems: "center",
-                  }}
-                >
-                  <h6>Цвет</h6>
-                  <img src={rainbow} alt="" />
-                </div>
-
-                <div className="group">
-                  <h6>Шрифт</h6>
-                  <select name="" id="">
-                    <option value="">Arial</option>
-                    <option value="">Open Sans</option>
-                    <option value="">Inter</option>
-                  </select>
-                </div>
-
-                <div className="btns">
-                  <img src={alignLeft} alt="" />
-                  <img src={alignCenter} alt="" />
-                  <img src={alignRight} alt="" />
-                </div>
-                <img
-                  src={close}
-                  alt=""
-                  style={{
-                    position: "absolute",
-                    right: "5px",
-                    top: "5px",
-                    width: "10px",
-                    cursor: "pointer",
-                  }}
-                  onClick={() => setContextModalText(false)}
-                />
-              </div>
-            )}
-
             <div
               className="account-details"
               style={{
@@ -1237,8 +1154,80 @@ const EditorPage: React.FC = () => {
               onMouseMove={handleAccountMouseMove}
               onMouseUp={handleMouseUpAccount}
             >
+              {contextModalAccount && (
+                <div className="context-modal" style={{ marginBottom: "10px" }}>
+                  <div className="fz">
+                    <h6>Размер шрифта</h6>
+                    <div className="btns">
+                      <button onClick={increaseAccountSize}>+</button>
+                      <span>{accountSize}</span>
+                      <button onClick={decreaseAccountSize}>-</button>
+                    </div>
+                  </div>
+                  <div
+                    className="del"
+                    onClick={() => {
+                      setGameAccount(false);
+                      setContextModalAccount(false);
+                    }}
+                  >
+                    <h6>Удалить</h6>
+                    <img src={deleteIcon} alt="" />
+                  </div>
+                  <div
+                    id="color"
+                    style={{
+                      display: "flex",
+                      flexDirection: "column",
+                      alignItems: "center",
+                    }}
+                  >
+                    <h6>Цвет</h6>
+                    <img src={rainbow} alt="" style={{ width: "20px" }} />
+                    <input
+                      type="color"
+                      value={selectedColorAccount}
+                      onChange={handleColorAccountChange}
+                      style={{ width: "20px" }}
+                    />
+                  </div>
+
+                  <select name="" id="">
+                    <option value="">Выберите шрифт</option>
+                    <option value="Arial">Arial</option>
+                    <option value="Open Sans">Open Sans</option>
+                    <option value="Inter">Inter</option>
+                  </select>
+
+                  <div className="btns">
+                    <img src={alignLeft} alt="" />
+                    <img src={alignCenter} alt="" />
+                    <img src={alignRight} alt="" />
+                  </div>
+                  <img
+                    src={close}
+                    alt=""
+                    style={{
+                      position: "absolute",
+                      right: "5px",
+                      top: "5px",
+                      width: "10px",
+                      height: "10px",
+                      cursor: "pointer",
+                    }}
+                    onClick={() => setContextModalAccount(false)}
+                  />
+                </div>
+              )}
+
               {gameAccount && (
-                <h3 onClick={() => handleTextClick(gameAccountPosition)}>
+                <h3
+                  onClick={() => setContextModalAccount(true)}
+                  style={{
+                    fontSize: `${accountSize}px`,
+                    color: selectedColorAccount,
+                  }}
+                >
                   {account?.gameAccount}
                 </h3>
               )}
@@ -1258,10 +1247,81 @@ const EditorPage: React.FC = () => {
               }}
               onMouseMove={handleAccountMouseMove}
               onMouseUp={handleMouseUpAccount}
-              onClick={() => setContextModalText(true)}
             >
+              {contextModalNickname && (
+                <div className="context-modal" style={{ marginBottom: "10px" }}>
+                  <div className="fz">
+                    <h6>Размер шрифта</h6>
+                    <div className="btns">
+                      <button onClick={increaseNicknameSize}>+</button>
+                      <span>{nicknameSize}</span>
+                      <button onClick={decreaseNicknameSize}>-</button>
+                    </div>
+                  </div>
+                  <div
+                    className="del"
+                    onClick={() => {
+                      setNickname(false);
+                      setContextModalNickname(false);
+                    }}
+                  >
+                    <h6>Удалить</h6>
+                    <img src={deleteIcon} alt="" />
+                  </div>
+                  <div
+                    id="color"
+                    style={{
+                      display: "flex",
+                      flexDirection: "column",
+                      alignItems: "center",
+                    }}
+                  >
+                    <h6>Цвет</h6>
+                    <img src={rainbow} alt="" style={{ width: "20px" }} />
+                    <input
+                      type="color"
+                      value={selectedColorNickname}
+                      onChange={handleColorNicknameChange}
+                      style={{ width: "20px" }}
+                    />
+                  </div>
+
+                  <select name="" id="">
+                    <option value="">Выберите шрифт</option>
+                    <option value="">Arial</option>
+                    <option value="">Open Sans</option>
+                    <option value="">Inter</option>
+                  </select>
+
+                  <div className="btns">
+                    <img src={alignLeft} alt="" />
+                    <img src={alignCenter} alt="" />
+                    <img src={alignRight} alt="" />
+                  </div>
+                  <img
+                    src={close}
+                    alt=""
+                    style={{
+                      position: "absolute",
+                      right: "5px",
+                      top: "5px",
+                      width: "10px",
+                      height: "10px",
+                      cursor: "pointer",
+                    }}
+                    onClick={() => setContextModalNickname(false)}
+                  />
+                </div>
+              )}
+
               {nickname && (
-                <span onClick={() => handleTextClick(nicknamePosition)}>
+                <span
+                  onClick={() => setContextModalNickname(true)}
+                  style={{
+                    fontSize: `${nicknameSize}px`,
+                    color: selectedColorNickname,
+                  }}
+                >
                   Никнэйм: {account?.gameNickname}
                 </span>
               )}
@@ -1281,10 +1341,81 @@ const EditorPage: React.FC = () => {
               }}
               onMouseMove={handleAccountMouseMove}
               onMouseUp={handleMouseUpAccount}
-              onClick={() => setContextModalText(true)}
             >
+              {contextModalId && (
+                <div className="context-modal" style={{ marginBottom: "10px" }}>
+                  <div className="fz">
+                    <h6>Размер шрифта</h6>
+                    <div className="btns">
+                      <button onClick={increaseIdSize}>+</button>
+                      <span>{idSize}</span>
+                      <button onClick={decreaseIdSize}>-</button>
+                    </div>
+                  </div>
+                  <div
+                    className="del"
+                    onClick={() => {
+                      setId(false);
+                      setContextModalId(false);
+                    }}
+                  >
+                    <h6>Удалить</h6>
+                    <img src={deleteIcon} alt="" />
+                  </div>
+                  <div
+                    id="color"
+                    style={{
+                      display: "flex",
+                      flexDirection: "column",
+                      alignItems: "center",
+                    }}
+                  >
+                    <h6>Цвет</h6>
+                    <img src={rainbow} alt="" style={{ width: "20px" }} />
+                    <input
+                      type="color"
+                      value={selectedColorId}
+                      onChange={handleColorIdChange}
+                      style={{ width: "20px" }}
+                    />
+                  </div>
+
+                  <select name="" id="">
+                    <option value="">Выберите шрифт</option>
+                    <option value="Arial">Arial</option>
+                    <option value="Open Sans">Open Sans</option>
+                    <option value="Inter">Inter</option>
+                  </select>
+
+                  <div className="btns">
+                    <img src={alignLeft} alt="" />
+                    <img src={alignCenter} alt="" />
+                    <img src={alignRight} alt="" />
+                  </div>
+                  <img
+                    src={close}
+                    alt=""
+                    style={{
+                      position: "absolute",
+                      right: "5px",
+                      top: "5px",
+                      width: "10px",
+                      height: "10px",
+                      cursor: "pointer",
+                    }}
+                    onClick={() => setContextModalId(false)}
+                  />
+                </div>
+              )}
+
               {id && (
-                <span onClick={() => handleTextClick(idPosition)}>
+                <span
+                  onClick={() => setContextModalId(true)}
+                  style={{
+                    fontSize: `${idSize}px`,
+                    color: selectedColorId,
+                  }}
+                >
                   ID: {account?.gameId}
                 </span>
               )}
@@ -1304,10 +1435,81 @@ const EditorPage: React.FC = () => {
               }}
               onMouseMove={handleAccountMouseMove}
               onMouseUp={handleMouseUpAccount}
-              onClick={() => setContextModalText(true)}
             >
+              {contextModalServer && (
+                <div className="context-modal" style={{ marginBottom: "10px" }}>
+                  <div className="fz">
+                    <h6>Размер шрифта</h6>
+                    <div className="btns">
+                      <button onClick={increaseServerSize}>+</button>
+                      <span>{serverSize}</span>
+                      <button onClick={decreaseServerSize}>-</button>
+                    </div>
+                  </div>
+                  <div
+                    className="del"
+                    onClick={() => {
+                      setServer(false);
+                      setContextModalServer(false);
+                    }}
+                  >
+                    <h6>Удалить</h6>
+                    <img src={deleteIcon} alt="" />
+                  </div>
+                  <div
+                    id="color"
+                    style={{
+                      display: "flex",
+                      flexDirection: "column",
+                      alignItems: "center",
+                    }}
+                  >
+                    <h6>Цвет</h6>
+                    <img src={rainbow} alt="" style={{ width: "20px" }} />
+                    <input
+                      type="color"
+                      value={selectedColorServer}
+                      onChange={handleColorServerChange}
+                      style={{ width: "20px" }}
+                    />
+                  </div>
+
+                  <select name="" id="">
+                    <option value="">Выберите шрифт</option>
+                    <option value="Arial">Arial</option>
+                    <option value="Open Sans">Open Sans</option>
+                    <option value="Inter">Inter</option>
+                  </select>
+
+                  <div className="btns">
+                    <img src={alignLeft} alt="" />
+                    <img src={alignCenter} alt="" />
+                    <img src={alignRight} alt="" />
+                  </div>
+                  <img
+                    src={close}
+                    alt=""
+                    style={{
+                      position: "absolute",
+                      right: "5px",
+                      top: "5px",
+                      width: "10px",
+                      height: "10px",
+                      cursor: "pointer",
+                    }}
+                    onClick={() => setContextModalServer(false)}
+                  />
+                </div>
+              )}
+
               {server && (
-                <span onClick={() => handleTextClick(serverPosition)}>
+                <span
+                  onClick={() => setContextModalServer(true)}
+                  style={{
+                    fontSize: `${serverSize}px`,
+                    color: selectedColorServer,
+                  }}
+                >
                   Сервер: {account?.gameServer}
                 </span>
               )}
@@ -1385,8 +1587,7 @@ const EditorPage: React.FC = () => {
               onMouseDown={(e) => handleMouseDownText(element.id, e)}
               onMouseMove={handleMouseMoveText}
               onMouseUp={handleMouseUpText}
-              onMouseEnter={() => handleTextClick(element.x && element.y)}
-              onMouseLeave={() => setContextModalText(false)}
+              // onMouseEnter={() => handleTextClick(element.x && element.y)}
             >
               {editingTextElementId === element.id ? (
                 <input
