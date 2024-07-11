@@ -697,12 +697,22 @@ const EditorPage: React.FC = () => {
             )}
             {activeTab === "account-data" && (
               <div className="costumes-block">
-                <button onClick={() => setNickname(true)}>Никнэйм</button>
+                <button onClick={() => setNickname(true)}>
+                  Никнэйм
+                  <span>{account?.gameNickname}</span>
+                </button>
                 <button onClick={() => setGameAccount(true)}>
                   Имя акканута
+                  <span>{account?.gameAccount}</span>
                 </button>
-                <button onClick={() => setServer(true)}>Сервер</button>
-                <button onClick={() => setId(true)}>ID</button>
+                <button onClick={() => setServer(true)}>
+                  Сервер
+                  <span>{account?.gameServer}</span>
+                </button>
+                <button onClick={() => setId(true)}>
+                  ID
+                  <span>{account?.gameId}</span>
+                </button>
               </div>
             )}
             {activeTab === "elements" && (
