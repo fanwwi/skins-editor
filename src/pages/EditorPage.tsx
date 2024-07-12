@@ -598,6 +598,7 @@ const EditorPage: React.FC = () => {
   const [sAlign, setSAlign] = useState<any>("left");
   const [ssAlign, setSSAlign] = useState<any>("left");
   const [aAlign, setAAlign] = useState<any>("left");
+  const [assAlign, setAssAlign] = useState<any>("left");
 
   const handleNicknameAlignLeft = () => {
     setNicknameAlign("left");
@@ -754,6 +755,20 @@ const EditorPage: React.FC = () => {
 
   const handleAAlignRight = () => {
     setAAlign("right");
+  };
+
+  // ----------------------
+
+  const handleAssAlignLeft = () => {
+    setAssAlign("left");
+  };
+
+  const handleAssAlignCenter = () => {
+    setAssAlign("center");
+  };
+
+  const handleAssAlignRight = () => {
+    setAssAlign("right");
   };
 
   return (
@@ -922,6 +937,7 @@ const EditorPage: React.FC = () => {
                 left: costumeSPosition.x,
                 top: costumeSPosition.y,
                 cursor: isDraggingCostumeS ? "grabbing" : "default",
+                textAlign: sAlign,
               }}
               onMouseDown={(e) => handleMouseDown(1, e)}
             >
@@ -998,12 +1014,8 @@ const EditorPage: React.FC = () => {
 
                           <select name="" id="">
                             <option value="">Добавить в группу</option>
-                            <option value="" onClick={() => setCostumeSS(true)}>
-                              Костюмы SS
-                            </option>
-                            <option value="" onClick={() => setCostumeA(true)}>
-                              Костюмы A
-                            </option>
+                            <option value="">Костюмы SS</option>
+                            <option value="">Костюмы A</option>
                           </select>
 
                           <div className="btns">
@@ -1033,6 +1045,7 @@ const EditorPage: React.FC = () => {
                           />
                         </div>
                       )}
+
                       <img
                         src={costume.costume}
                         alt="Costume"
@@ -1054,6 +1067,7 @@ const EditorPage: React.FC = () => {
                 left: costumeSSPosition.x,
                 top: costumeSSPosition.y,
                 cursor: isDraggingCostumeSS ? "grabbing" : "default",
+                textAlign: ssAlign,
               }}
               onMouseDown={(e) => handleMouseDown(2, e)}
             >
@@ -1135,9 +1149,21 @@ const EditorPage: React.FC = () => {
                           </select>
 
                           <div className="btns">
-                            <img src={alignLeft} alt="" />
-                            <img src={alignCenter} alt="" />
-                            <img src={alignRight} alt="" />
+                            <img
+                              src={alignLeft}
+                              alt=""
+                              onClick={handleSSAlignLeft}
+                            />
+                            <img
+                              src={alignCenter}
+                              alt=""
+                              onClick={handleSSAlignCenter}
+                            />
+                            <img
+                              src={alignRight}
+                              alt=""
+                              onClick={handleSSAlignRight}
+                            />
                           </div>
 
                           <img
@@ -1172,6 +1198,7 @@ const EditorPage: React.FC = () => {
                 left: costumeAPosition.x,
                 top: costumeAPosition.y,
                 cursor: isDraggingCostumeA ? "grabbing" : "default",
+                textAlign: aAlign,
               }}
               onMouseDown={(e) => handleMouseDown(3, e)}
             >
@@ -1251,9 +1278,21 @@ const EditorPage: React.FC = () => {
                           </select>
 
                           <div className="btns">
-                            <img src={alignLeft} alt="" />
-                            <img src={alignCenter} alt="" />
-                            <img src={alignRight} alt="" />
+                            <img
+                              src={alignLeft}
+                              alt=""
+                              onClick={handleAAlignLeft}
+                            />
+                            <img
+                              src={alignCenter}
+                              alt=""
+                              onClick={handleAAlignCenter}
+                            />
+                            <img
+                              src={alignRight}
+                              alt=""
+                              onClick={handleAAlignRight}
+                            />
                           </div>
 
                           <img
@@ -1288,6 +1327,7 @@ const EditorPage: React.FC = () => {
                 left: assPosition.x,
                 top: assPosition.y,
                 cursor: isDraggingAss ? "grabbing" : "default",
+                textAlign: assAlign,
               }}
               onMouseDown={(e) => handleMouseDown(4, e)}
             >
@@ -1358,9 +1398,21 @@ const EditorPage: React.FC = () => {
                         </select>
 
                         <div className="btns">
-                          <img src={alignLeft} alt="" />
-                          <img src={alignCenter} alt="" />
-                          <img src={alignRight} alt="" />
+                          <img
+                            src={alignLeft}
+                            alt=""
+                            onClick={handleAssAlignLeft}
+                          />
+                          <img
+                            src={alignCenter}
+                            alt=""
+                            onClick={handleAssAlignCenter}
+                          />
+                          <img
+                            src={alignRight}
+                            alt=""
+                            onClick={handleAssAlignRight}
+                          />
                         </div>
 
                         <img
@@ -1368,7 +1420,10 @@ const EditorPage: React.FC = () => {
                           alt=""
                           onClick={() => setContextModalCostumesAss(false)}
                           className="close"
-                          style={{ width: "10px", height: "10px" }}
+                          style={{
+                            width: "10px",
+                            height: "10px",
+                          }}
                         />
                       </div>
                     )}
