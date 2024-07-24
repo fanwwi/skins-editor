@@ -771,6 +771,12 @@ const EditorPage: React.FC = () => {
     setAssAlign("right");
   };
 
+  const [showSSCostumes, setShowSSCostumes] = useState(false);
+
+  const handleAddToGroup = () => {
+    setShowSSCostumes(true);
+  };
+
   return (
     <div className="list">
       <div
@@ -969,6 +975,22 @@ const EditorPage: React.FC = () => {
                         textAlign: sAlign,
                       }}
                     >
+                      {showSSCostumes && (
+                        <div className="display-costumes">
+                          {userCostumes
+                            .filter((costume) => costume.category === "SS")
+                            .map((costume) => (
+                              <div key={costume.id} className="display-cost">
+                                <img
+                                  src={costume.costume}
+                                  alt="Costume"
+                                  style={{ height: "155px" }}
+                                />
+                              </div>
+                            ))}
+                        </div>
+                      )}
+
                       {contextModalCostumesS && (
                         <div className="context-modal">
                           <div className="fz">
@@ -1013,7 +1035,9 @@ const EditorPage: React.FC = () => {
                           </div>
 
                           <select name="" id="">
-                            <option value="">Добавить в группу</option>
+                            <option value="" onClick={handleAddToGroup}>
+                              Добавить в группу
+                            </option>
                             <option value="">Костюмы SS</option>
                             <option value="">Костюмы A</option>
                           </select>

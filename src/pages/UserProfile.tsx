@@ -84,11 +84,12 @@ const UserProfile = () => {
   return (
     <div className="profile">
       <div className="profile-header">
-        <img src={logo} alt="logo" className="logo" style={{ width: "70px" }} />
+        <img src={logo} alt="logo" className="logo12" />
         <img
           src={userIcon}
           alt="userIcon"
-          style={{ width: "70px", cursor: "pointer" }}
+          className="logo12"
+          style={{ cursor: "pointer" }}
           onClick={handleProfileClick}
         />
       </div>
@@ -110,24 +111,28 @@ const UserProfile = () => {
           </h1>
         ) : (
           <>
-            <h1 style={{ marginTop: "30px" }}>Список аккаунтов</h1>
+            <h1>Список аккаунтов</h1>
             <div className="all-accs">
               <div className="acc-list">
                 <span id="one">Игра</span>
                 <span id="two">ID акканута</span>
                 <span id="three">Никнэйм</span>
                 <span id="four">Сервер</span>
-                <span id="five">Имя акканута</span>
+                <span id="five">
+                  Имя <span>акканута</span>
+                </span>
               </div>
               {filteredAccounts
                 .map((account: AccountType, index: any) => (
                   <div className="one-acc" key={index}>
                     <div className="acc-names">
-                      <h4>{account.game}</h4>
-                      <span>{account.gameId}</span>
-                      <span>{account.gameNickname}</span>
-                      <span>{account.gameServer}</span>
-                      <span>{account.gameAccount}</span>
+                      <h4 id="h4">{account.game}</h4>
+                      <div className="acc-cont">
+                        <span id="span1">{account.gameId}</span>
+                        <span id="span2">{account.gameNickname}</span>
+                        <span id="span3">{account.gameServer}</span>
+                        <span id="span4">{account.gameAccount}</span>
+                      </div>
                     </div>
                     <div className="acc-icons">
                       <Link to={`/edit/${account.id}/`}>
@@ -145,7 +150,7 @@ const UserProfile = () => {
                         onClick={() => handleCopyAccount(account.id)}
                         style={{ cursor: "pointer" }}
                       />
-                      <img src={downloadIcon} alt="download" id="down"/>
+                      <img src={downloadIcon} alt="download" id="down" />
                       <img src={cardIcon} alt="card" />
                       <img
                         src={deleteIcon}
