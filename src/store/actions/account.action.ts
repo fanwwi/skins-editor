@@ -24,7 +24,7 @@ export const createAccount = createAsyncThunk(
       game: data.game,
       gameId: data.gameId,
       gameNickname: data.gameNickname,
-      gameserver: data.gameServer,
+      gameServer: data.gameServer,
       gameAccount: data.gameAccount,
       author: id,
     };
@@ -108,7 +108,7 @@ export const copyAccount = createAsyncThunk(
 
 export const deleteAccount = createAsyncThunk(
   "accounts/deleteAccount",
-  async (id: string, { rejectWithValue }) => {
+  async (id: number, { rejectWithValue }) => {
     try {
       await axios.delete(`http://localhost:8001/accounts/${id}`);
       window.location.reload();

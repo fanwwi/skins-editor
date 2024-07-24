@@ -120,7 +120,7 @@ const EditPage = () => {
         crystals: details?.crystals || "",
         unlockS: details?.unlockS || "",
         unlockA: details?.unlockA || "",
-        author: account.id || "",
+        author: account.id.toString() || "",
       });
 
       setGameAccount(account.gameAccount || "");

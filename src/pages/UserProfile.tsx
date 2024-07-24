@@ -10,7 +10,7 @@ import exitIcon from "../img/icon-exit.png";
 import settingsIcon from "../img/icon-settings.png";
 import { useAppDispatch, useAppSelector } from "../store/store";
 import { getCurrentUser } from "../store/actions/user.action";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import {
   getAccounts,
   copyAccount,
@@ -21,10 +21,11 @@ import { AccountType } from "../types";
 import Loader from "../components/Loader";
 
 const UserProfile = () => {
-  const accountId = localStorage.getItem("currentAccount");
+  const accountId = Number(localStorage.getItem("currentAccount"));
   const [isModalOpen, setIsModalOpen] = useState(false);
   const modalRef = useRef(null);
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
   const { currentUser } = useAppSelector((state) => state.users);
   const { allAccounts, error } = useAppSelector((state) => state.accounts);
   const { loading } = useAppSelector((state) => state.users);
@@ -40,7 +41,7 @@ const UserProfile = () => {
   useEffect(() => {
     if (id) {
       dispatch(getAccounts());
-      dispatch(getCard(accountId!));
+      dispatch(getCard(accountId.toString()!));
     }
   }, [dispatch]);
 
@@ -57,8 +58,8 @@ const UserProfile = () => {
     e.stopPropagation();
   };
 
-  const handleCopyAccount = (accountId: string) => {
-    dispatch(copyAccount(accountId))
+  const handleCopyAccount = (accountId: number) => {
+    dispatch(copyAccount(accountId.toString()))
       .unwrap()
       .then((copiedAccount: AccountType) => {
         console.log("Аккаунт скопирован:", copiedAccount);
@@ -68,7 +69,7 @@ const UserProfile = () => {
       });
   };
 
-  const handleDeleteAccount = (accountId: string) => {
+  const handleDeleteAccount = (accountId: number) => {
     if (window.confirm("Вы уверены, что хотите удалить этот аккаунт?")) {
       dispatch(deleteAccount(accountId))
         .unwrap()
@@ -83,7 +84,7 @@ const UserProfile = () => {
 
   return (
     <div className="profile">
-      <div className="profile-header">
+      <div className="profile-header prr">
         <img src={logo} alt="logo" className="logo12" />
         <img
           src={userIcon}
@@ -93,22 +94,14 @@ const UserProfile = () => {
           onClick={handleProfileClick}
         />
       </div>
-      <hr />
+      <hr className="hr" />
       <div className="container">
         {loading ? (
           <Loader />
         ) : error ? (
           <p>{error}</p>
         ) : filteredAccounts.length === 0 ? (
-          <h1
-            style={{
-              marginTop: "150px",
-              marginLeft: "500px",
-              color: "#8c8c8c",
-            }}
-          >
-            Список аккаунтов пуст
-          </h1>
+          <h1 className="h1Gray">Список аккаунтов пуст</h1>
         ) : (
           <>
             <h1>Список аккаунтов</h1>
@@ -135,19 +128,18 @@ const UserProfile = () => {
                       </div>
                     </div>
                     <div className="acc-icons">
-                      <Link to={`/edit/${account.id}/`}>
-                        <img
-                          src={editIcon}
-                          alt="edit"
-                          onClick={() => {
-                            localStorage.setItem("currentAccount", account.id);
-                          }}
-                        />
-                      </Link>
+                      <img
+                        src={editIcon}
+                        alt="edit"
+                        onClick={() => {
+                          localStorage.setItem("currentAccount", account.id.toString());
+                          navigate(`/edit/${account.id}/`);
+                        }}
+                      />
                       <img
                         src={copyIcon}
                         alt="copy"
-                        onClick={() => handleCopyAccount(account.id)}
+                        onClick={() => handleCopyAccount(Number(account.id))}
                         style={{ cursor: "pointer" }}
                       />
                       <img src={downloadIcon} alt="download" id="down" />
@@ -155,7 +147,7 @@ const UserProfile = () => {
                       <img
                         src={deleteIcon}
                         alt="delete"
-                        onClick={() => handleDeleteAccount(account.id)}
+                        onClick={() => handleDeleteAccount(Number(account.id))}
                         style={{ cursor: "pointer" }}
                       />
                     </div>
@@ -166,16 +158,12 @@ const UserProfile = () => {
           </>
         )}
       </div>
-      <div>
-        <Link to="/add-page/add-account">
-          <button
-            className="auth-btn"
-            style={{ marginTop: "30px", marginLeft: "650px" }}
-          >
-            + Добавить аккаунт
-          </button>
-        </Link>
-      </div>
+      <button
+        className="auth-btn auth-btn12"
+        onClick={() => navigate("/add-page/add-account")}
+      >
+        + Добавить аккаунт
+      </button>
       {isModalOpen && (
         <div className="modal-style" ref={modalRef} onClick={handleModalClick}>
           <div className="modal-contentt">

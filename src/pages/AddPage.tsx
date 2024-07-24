@@ -26,7 +26,7 @@ const AddPage: React.FC = () => {
     gameServer: "",
     gameAccount: "",
     author: "",
-    id: "",
+    id: Number(""),
   });
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -40,7 +40,7 @@ const AddPage: React.FC = () => {
         gameServer: "",
         gameAccount: "",
         author: "",
-        id: "",
+        id: Number(""),
       });
       navigate(`/${id}/profile`);
     } catch (error) {
@@ -88,10 +88,11 @@ const AddPage: React.FC = () => {
         }}
       >
         <div className="profile-left">
-          <img src={logo} alt="logo" style={{ width: "70px" }} />
+          <img src={logo} alt="logo" className="logo12" />
           <Link
             to={`/${id}/profile`}
-            style={{ fontSize: "18px", color: "#6232ff" }}
+            style={{ color: "#6232ff" }}
+            className="nadpis"
           >
             Мои аккаунты
           </Link>
@@ -99,7 +100,9 @@ const AddPage: React.FC = () => {
         <img
           src={userIcon}
           alt="userIcon"
-          style={{ width: "70px", cursor: "pointer" }}
+          style={{cursor: "pointer" }}
+          className="logo12"
+          id="userIcon"
         />
       </div>
 

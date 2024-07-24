@@ -34,7 +34,7 @@ export type AccountType = {
   gameServer: string;
   gameAccount: string;
   author: string;
-  id: string;
+  id: number;
 };
 
 export type GameType = {

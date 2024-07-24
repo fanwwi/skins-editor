@@ -85,22 +85,13 @@
   ],
   "accounts": [
     {
-      "id": "2bd7",
       "game": "DOTA2",
       "gameId": "1",
       "gameNickname": "BURN",
       "gameServer": "VALVE",
       "gameAccount": "burn",
-      "author": "\"1718361546427\""
-    },
-    {
-      "game": "DOTA2",
-      "gameId": "988756",
-      "gameNickname": "fanwwi",
-      "gameServer": "DeadSide",
-      "gameAccount": "fanwwi_the_best",
-      "author": "\"1718441497986\"",
-      "id": "X7crZP6"
+      "author": "\"1718361546427\"",
+      "id": 1
     }
   ],
   "details": [

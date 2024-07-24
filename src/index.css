@@ -109,36 +109,57 @@
 h1 {
   margin-top: 30px;
 }
-@media (max-width: 351px) {
+@media (max-width: 461px) {
   h1 {
-    font-size: 16px;
+    font-size: 15px;
     margin-left: 20px;
     margin-top: 10px;
     margin-bottom: -10px;
   }
+
   .one-acc {
     display: flex;
-    width: 320px;
+    width: 310px;
     margin-left: 20px;
     font-size: 9px;
     flex-direction: column;
+    height: 60px !important;
   }
+
   .acc-names h4 {
     margin-left: 200px;
   }
+
   .acc-cont {
-    position: absolute;
-    left: 250px;
+    margin-left: 30px !important;
     display: flex;
-    gap: 20px;
+    gap: 20px !important;
   }
+
+  .acc-icons img {
+    height: 15px;
+    width: 15px !important;
+  }
+
   .profile-header img {
     width: 50px;
   }
+
   .profile-header {
+    width: 320px !important;
     height: 70px;
-    gap: 250px;
+    gap: 225px;
     margin-left: -50px;
+  }
+
+  .hr {
+    width: 320px !important;
+  }
+
+  .acc-icons {
+    margin-left: 30px;
+    margin-bottom: 5px;
+    width: 290px !important;
   }
 
   .acc-list {
@@ -166,12 +187,40 @@ h1 {
   }
 
   .acc-names {
-    width: 300px;
+    width: 280px !important;
     margin-right: 30px;
     padding-top: 10px;
-    font-size: 9px;
+    font-size: 8.5px;
     position: relative;
+    margin-left: -385px !important;
   }
+  .auth-btn12 {
+    margin-left: 90px !important;
+    height: 30px;
+    width: 150px;
+    font-size: 10px;
+  }
+
+  .acc-list {
+    width: 350px !important;
+  }
+
+  .container {
+    width: 350px;
+    margin-left: -10px;
+  }
+}
+
+.acc-cont {
+  width: 700px;
+  display: flex;
+  gap: 70px;
+  margin-left: 130px;
+}
+
+.auth-btn12 {
+  margin-top: 30px;
+  margin-left: 650px;
 }
 
 .all-accs {
@@ -265,6 +314,42 @@ h1 {
   justify-content: space-between;
 }
 
+.nadpis {
+  font-size: 18px !important;
+}
+
+.h1Gray {
+  margin-top: 150px;
+  margin-left: 500px;
+  color: #8c8c8c;
+}
+
+@media (max-width: 461px) {
+  .profile-left img {
+    width: 60px;
+    margin-left: 20px !important;
+  }
+  .profile-left {
+    width: 350px !important;
+  }
+  .nadpis {
+    margin-left: 20px !important;
+  }
+  .auth-form {
+    margin-left: 200px !important;
+    width: 350px !important;
+  }
+  #userIcon {
+    margin-left: -20px !important;
+  }
+  .h1Gray {
+    margin-left: 80px;
+  }
+  .auth {
+    width: 350px !important;
+  }
+}
+
 .label-input {
   font-size: 12px;
   font-weight: 500;
@@ -310,6 +395,25 @@ h1 {
 .acc-list span {
   font-weight: 500;
   color: #8d8d8d;
+}
+
+@media (max-width: 461px) {
+  .modal-open {
+    width: 400px;
+    height: 1200px !important;
+    margin-left: 200px;
+  }
+  .modal-open__content {
+    width: 300px !important;
+    height: 300px !important;
+    margin-top: 500px !important;
+  }
+  .modal-open__content img {
+    width: 70px !important;
+  }
+  .modal-open__content span {
+    font-size: 10px;
+  }
 }
 
 .modal-open {
