@@ -26,9 +26,27 @@
   gap: 50px;
 }
 
+.auth-acc {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-align: center;
+  align-items: center;
+  padding-top: 100px;
+  gap: 50px;
+}
+
+.auth-acc p {
+  font-size: 15px;
+  margin-top: -30px;
+}
+
 @media (max-width: 351px) {
   .auth {
     margin-left: -30px;
+  }
+  .auth-acc p {
+    font-size: 12px !important;
   }
 }
 
@@ -573,6 +591,11 @@ h1 {
   }
   .costumes {
     width: 350px !important;
+    padding-left: 0px !important;
+    padding-bottom: 0 !important;
+  }
+  .costumes h2 {
+    margin-left: 20px;
   }
   .top {
     width: 310px;
@@ -1575,4 +1598,116 @@ select {
 }
 .btns img:nth-child(2) {
   width: 30px;
+}
+
+/*! payment */
+
+.cards-pay {
+  display: flex;
+  width: 600px;
+  margin: 0 auto;
+  justify-content: space-between;
+}
+.blockk {
+  display: flex;
+  align-items: center;
+  gap: 25px;
+  width: 550px;
+  text-align: left;
+  margin-top: 7px;
+}
+.blockk p {
+  font-size: 20px;
+  color: rgb(167, 0, 0);
+  font-weight: 500;
+}
+.blockk img {
+  width: 40px;
+  margin-top: -30px;
+}
+.cards-pay li {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  list-style-type: none;
+  margin-left: 30px;
+}
+
+.cards-pay img {
+  height: 80px;
+}
+
+.pay-h3 {
+  font-size: 23px;
+  margin-left: 20px;
+  font-weight: 450;
+  letter-spacing: 3px;
+}
+
+.cards-pay li > div {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 30px;
+}
+
+.cards-pay input {
+  margin-top: -30px;
+}
+
+.pay-h1 {
+  font-size: 50px;
+}
+
+@media (max-width: 461px) {
+  .pay-h1 {
+    margin-left: 170px !important;
+    margin-top: 100px;
+    margin-bottom: 20px;
+  }
+
+  .pay-p {
+    margin-right: -180px;
+    margin-bottom: 10px;
+  }
+
+  .blockk {
+    margin-right: -200px;
+  }
+
+  .pay-h3 {
+    margin-right: -150px;
+  }
+
+  .pay-h2 {
+    margin-right: -150px;
+  }
+
+  .cards-pay {
+    display: flex;
+  }
+
+  .addIcon {
+    height: 250px;
+    width: 140px;
+  }
+
+  .res {
+    display: flex;
+    flex-wrap: wrap;
+    margin-left: 15px !important;
+    margin-right: -20px;
+    gap: 30px;
+    padding-right: -20px;
+  }
+  .one-costume {
+    width: 150px;
+    padding-top: 7px;
+    font-size: 10px;
+    height: 250px;
+  }
+  .one-costume img {
+    height: 190px;
+    width: 130px;
+  }
 }

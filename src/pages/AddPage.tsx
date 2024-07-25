@@ -29,7 +29,7 @@ const AddPage: React.FC = () => {
     id: Number(""),
   });
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmitt = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
       await dispatch(createAccount({ data: formData, navigate }));
@@ -106,14 +106,14 @@ const AddPage: React.FC = () => {
         />
       </div>
 
-      <form className="auth-form" onSubmit={handleSubmit}>
+      <form className="auth-form" onSubmit={handleSubmitt}>
         <h2>Добавить аккаунт</h2>
         <label htmlFor="game" className="label-input">
           Название игры
         </label>
         <input
           type="text"
-          className="auth__input"
+          className="auth__inputt"
           id="game"
           value={formData.game}
           onClick={() => setModalOpen(true)}
@@ -124,7 +124,7 @@ const AddPage: React.FC = () => {
         </label>
         <input
           type="text"
-          className="auth__input"
+          className="auth__inputt"
           id="gameId"
           onChange={handleInputChange}
           value={formData.gameId}
@@ -134,7 +134,7 @@ const AddPage: React.FC = () => {
         </label>
         <input
           type="text"
-          className="auth__input"
+          className="auth__inputt"
           id="gameNickname"
           onChange={handleInputChange}
           value={formData.gameNickname}
@@ -144,7 +144,7 @@ const AddPage: React.FC = () => {
         </label>
         <input
           type="text"
-          className="auth__input"
+          className="auth__inputt"
           id="gameServer"
           onClick={() => setModalServerOpen(true)}
           value={formData.gameServer}
@@ -155,7 +155,7 @@ const AddPage: React.FC = () => {
         </label>
         <input
           type="text"
-          className="auth__input"
+          className="auth__inputt"
           id="gameAccount"
           onChange={handleInputChange}
           value={formData.gameAccount}

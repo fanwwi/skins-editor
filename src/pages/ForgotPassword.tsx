@@ -16,7 +16,7 @@ const ForgotPassword = () => {
   };
 
   return (
-    <div className="auth">
+    <div className="auth-acc">
       <img src={logo} alt="" className="logo" style={{ marginLeft: "-30px" }} />
       <h2>Восстановление пароля</h2>
       <span
@@ -26,7 +26,7 @@ const ForgotPassword = () => {
       </span>
       <input
         type="email"
-        className="auth__input"
+        className="auth__inputt"
         placeholder="Email"
         value={email}
         onChange={(e) => setEmail(e.target.value)}

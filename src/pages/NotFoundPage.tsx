@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 
 const NotFoundPage = () => {
   return (
-    <div className="auth">
+    <div className="auth-acc">
       <img src={logo} alt="" className="logo" style={{ marginLeft: "-30px" }} />
       <img
         src={notFound}

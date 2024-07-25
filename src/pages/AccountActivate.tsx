@@ -5,12 +5,12 @@ import { Link } from "react-router-dom";
 const AccountActivate = () => {
   const id = localStorage.getItem("currentUser");
   return (
-    <div className="auth">
+    <div className="auth-acc" style={{marginTop: "100px"}}>
       <img
         src={logo}
         alt=""
         className="logo"
-        style={{ marginLeft: "-70px", width: "300px" }}
+        style={{ marginLeft: "-40px" }}
       />
       <p style={{ fontSize: "20px", marginBottom: "-30px" }}>
         Ваш аккаунт активирован!

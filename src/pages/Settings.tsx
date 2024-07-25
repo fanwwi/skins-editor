@@ -94,7 +94,7 @@ const Settings: React.FC = () => {
         </label>
         <input
           type="password"
-          className="auth__input"
+          className="auth__inputt"
           id="oldPassword"
           value={oldPassword}
           onChange={(e) => setOldPassword(e.target.value)}
@@ -104,7 +104,7 @@ const Settings: React.FC = () => {
         </label>
         <input
           type="password"
-          className="auth__input"
+          className="auth__inputt"
           id="newPassword"
           value={newPassword}
           onChange={(e) => setNewPassword(e.target.value)}
@@ -114,7 +114,7 @@ const Settings: React.FC = () => {
         </label>
         <input
           type="password"
-          className="auth__input"
+          className="auth__inputt"
           id="confirmNewPassword"
           value={confirmNewPassword}
           onChange={(e) => setConfirmNewPassword(e.target.value)}
