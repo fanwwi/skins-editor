@@ -310,10 +310,11 @@ const EditPage = () => {
         }}
       >
         <div className="profile-left">
-          <img src={logo} alt="" style={{ width: "70px" }} />
+          <img src={logo} alt="" className="logo12" />
           <Link
             to={`/${id}/profile`}
-            style={{ fontSize: "18px", color: "#6232ff" }}
+            style={{ color: "#6232ff" }}
+            className="nadpis"
           >
             Мои аккаунты
           </Link>
@@ -321,11 +322,12 @@ const EditPage = () => {
         <img
           src={userIcon}
           alt="userIcon"
-          style={{ width: "70px", cursor: "pointer" }}
+          style={{ cursor: "pointer" }}
+          className="none"
         />
       </div>
       <hr />
-      <div className="container">
+      <div className="container prof">
         <div className="details-block">
           <div className="right">
             <div className="text-block">
@@ -350,13 +352,13 @@ const EditPage = () => {
                   </h2>
                 )}
               </div>
-              <p>В этой форме вы редактируете аккаунт</p>
+              <p className="p">В этой форме вы редактируете аккаунт</p>
               {!isEditing ? (
                 <>
                   <span>{account?.game || "Ошибка сети"}</span>
                   <span>{account?.gameId || "Ошибка сети"}</span>
                   <span>{account?.gameNickname || "Ошибка сети"}</span>
-                  <button onClick={handleEditClick}>
+                  <button onClick={handleEditClick} className="blue-btn">
                     <img src={editIcon} alt="" />
                   </button>
                 </>
@@ -521,7 +523,7 @@ const EditPage = () => {
                   />
                 </div>
 
-                <div className="wrapp">
+                <div className="wrapp" id="crs">
                   <div className="header-wrapper">
                     <h6>Кристаллы</h6>
                     <img src={iconBrilliant} alt="" />
@@ -534,7 +536,7 @@ const EditPage = () => {
                   />
                 </div>
 
-                <div className="wrapp">
+                <div className="wrapp" id="s-card">
                   <div className="header-wrapper">
                     <h6>Анлок карты S</h6>
                   </div>
@@ -546,7 +548,7 @@ const EditPage = () => {
                   />
                 </div>
 
-                <div className="wrapp">
+                <div className="wrapp" id="a-card">
                   <div className="header-wrapper">
                     <h6>Анлок карты A</h6>
                   </div>
@@ -611,9 +613,8 @@ const EditPage = () => {
                 <br />
                 <input
                   type="text"
-                  className="auth__input"
+                  className="auth__input long"
                   placeholder="Поиск..."
-                  style={{ width: "1350px" }}
                   onClick={handleInputClick}
                 />
               </>
@@ -635,7 +636,7 @@ const EditPage = () => {
                       onClick={(e) => e.stopPropagation()}
                       id="search"
                       style={{
-                        width: "1050px",
+                        width: "1500px",
                         height: "50px",
                       }}
                     />
@@ -899,7 +900,7 @@ const EditPage = () => {
         </div>
       )}
       {account && activeTab == "accountAssessoirs" && (
-        <div className="container">
+        <div className="container prof">
           {!isModalOpen && (
             <>
               <label
@@ -913,9 +914,8 @@ const EditPage = () => {
               <br />
               <input
                 type="text"
-                className="auth__input"
+                className="auth__input long"
                 placeholder="Поиск..."
-                style={{ width: "1350px" }}
                 onClick={handleInputClick}
               />
             </>

@@ -72,12 +72,12 @@ const Login = () => {
         <Loader />
       ) : (
         <>
-          <img src={logo} alt="logo" className="logo" />
+          <img src={logo} alt="logo" className="logoo" />
           <form className="auth-form" onSubmit={handleSubmit}>
             <h2>Войти</h2>
             <input
               type="email"
-              className="auth__input"
+              className="auth__inputt"
               placeholder="Email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
@@ -85,7 +85,7 @@ const Login = () => {
             />
             <input
               type="password"
-              className="auth__input"
+              className="auth__inputt"
               placeholder="Пароль"
               value={password}
               onChange={(e) => setPassword(e.target.value)}

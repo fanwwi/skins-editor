@@ -92,6 +92,24 @@
       "gameAccount": "burn",
       "author": "\"1718361546427\"",
       "id": 1
+    },
+    {
+      "game": "DOTA2",
+      "gameId": "98875678345671",
+      "gameNickname": "fanwwi",
+      "gameServer": "Rust",
+      "gameAccount": "fanwwi",
+      "author": "\"1718441497986\"",
+      "id": 2
+    },
+    {
+      "game": "DOTA2",
+      "gameId": "98875678345671",
+      "gameNickname": "fanwwi",
+      "gameServer": "Rust",
+      "gameAccount": "fanwwi",
+      "author": "\"1718441497986\"",
+      "id": 3
     }
   ],
   "details": [
@@ -171,6 +189,13 @@
       "author": "Воин",
       "bigAuthor": "X7crZP6",
       "id": 3
+    },
+    {
+      "costume": "https://pbs.twimg.com/media/GLkx9gOXwAAsaa9.jpg:large",
+      "category": "A",
+      "author": "Кошмар",
+      "bigAuthor": "3",
+      "id": 8
     }
   ],
   "assessoirs": [

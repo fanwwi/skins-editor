@@ -97,7 +97,7 @@ const RegisterComponent = () => {
         <Loader />
       ) : (
         <>
-          <img src={logo} alt="logo" className="logo" />
+          <img src={logo} alt="logo" className="logoo" />
           <form
             className="auth-form"
             onSubmit={handleSubmit}
@@ -106,7 +106,7 @@ const RegisterComponent = () => {
             <h2>Регистрация</h2>
             <input
               type="email"
-              className="auth__input"
+              className="auth__inputt"
               placeholder="Email"
               name="email"
               value={email}
@@ -115,7 +115,7 @@ const RegisterComponent = () => {
             />
             <input
               type="text"
-              className="auth__input"
+              className="auth__inputt"
               placeholder="Никнэйм"
               name="nickname"
               value={nickname}
@@ -124,7 +124,7 @@ const RegisterComponent = () => {
             />
             <input
               type="password"
-              className="auth__input"
+              className="auth__inputt"
               placeholder="Пароль"
               name="password"
               value={password}
@@ -133,7 +133,7 @@ const RegisterComponent = () => {
             />
             <input
               type="password"
-              className="auth__input"
+              className="auth__inputt"
               placeholder="Повторный пароль"
               name="passwordRepeat"
               value={passwordRepeat}

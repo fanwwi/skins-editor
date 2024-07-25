@@ -11,7 +11,7 @@
 }
 
 .container {
-  width: 1400px;
+  width: 1500px;
   margin: 0 auto;
 }
 
@@ -44,11 +44,40 @@
 .logo {
   width: 150px;
 }
+
+.logoo {
+  width: 150px;
+}
+
+@media (max-width: 461px) {
+  .logoo {
+    margin-left: 170px;
+    width: 100px;
+    margin-top: 50px;
+  }
+}
+
+.prof {
+  margin-left: 10px !important;
+}
+
+.none {
+  display: none;
+}
+
 .logo12 {
   width: 70px;
 }
 
 .auth__input {
+  width: 250px;
+  padding: 10px 10px;
+  border: 3px solid #c6c6c6;
+  border-radius: 5px;
+  outline: none;
+}
+
+.auth__inputt {
   width: 250px;
   padding: 10px 10px;
   border: 3px solid #c6c6c6;
@@ -414,6 +443,11 @@ h1 {
   .modal-open__content span {
     font-size: 10px;
   }
+
+  .details-block {
+    display: flex;
+    flex-direction: column;
+  }
 }
 
 .modal-open {
@@ -465,6 +499,90 @@ h1 {
   margin-top: 30px;
   padding: 20px;
   justify-content: space-between;
+}
+
+.long {
+  width: 1350px !important;
+}
+
+@media (max-width: 461px) {
+  .account-name h2 {
+    font-size: 18px;
+  }
+  .p {
+    font-size: 14px !important;
+  }
+  .blue-btn {
+    position: absolute;
+    top: 270px;
+  }
+  .blue-text {
+    font-size: 18px !important;
+  }
+  .text-block span {
+    font-size: 14px;
+  }
+  .visual-card {
+    margin-left: 50px;
+    font-size: 15px !important;
+    display: flex;
+    text-align: center;
+    padding: 20px;
+    margin-top: 80px;
+    margin-left: 2px;
+    width: 300px !important;
+  }
+  .auth__input {
+    width: 100px;
+  }
+  .main-header {
+    display: flex;
+    text-align: center;
+  }
+  .wrapp input {
+    width: 120px;
+  }
+  .wrapper {
+    display: flex;
+    flex-wrap: wrap !important;
+    width: 350px;
+  }
+  #crs,
+  #s-card,
+  #a-card {
+    display: none;
+  }
+  .long {
+    width: 350px !important;
+  }
+
+  .modal-content {
+    margin-top: 100px !important;
+    width: 350px !important;
+    margin-left: -85px !important;
+    height: 80px;
+  }
+  .results {
+    width: 350px !important;
+    margin-left: -85px;
+    height: 400px !important;
+  }
+  .cost {
+    margin-left: 50px;
+    margin-bottom: 30px;
+  }
+  .costumes {
+    width: 350px !important;
+  }
+  .top {
+    width: 310px;
+  }
+  .resultss {
+    width: 320px !important;
+    padding: 10px !important;
+    margin-left: -60px;
+    margin-top: 80px !important;
+  }
 }
 
 .blue-text {
@@ -704,7 +822,7 @@ select {
   gap: 50px;
   padding: 30px;
   margin-top: -20px;
-  width: 1350px;
+  width: 1500px;
   border: 1px solid #000;
 }
 
