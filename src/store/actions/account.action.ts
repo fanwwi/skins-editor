@@ -251,8 +251,9 @@ export const deleteOneCostume = createAsyncThunk(
   "accounts/deleteCostume",
   async (id: string) => {
     try {
-      await axios.delete(`http://localhost:8001/userCostumes/${id}`);
-      return id;
+      const res = await axios.delete(`http://localhost:8001/userCostumes/${id}`);
+    
+      return res.data;
     } catch (error) {
       console.error(error);
     }
@@ -263,9 +264,8 @@ export const deleteAss = createAsyncThunk(
   "accounts/deleteAss",
   async (id: string) => {
     try {
-      await axios.delete(`http://localhost:8001/userAssesoirs/${id}`);
-      window.location.reload();
-      return id;
+      const res = await axios.delete(`http://localhost:8001/userAssesoirs/${id}`);
+      return res;
     } catch (error) {
       console.error(error);
     }

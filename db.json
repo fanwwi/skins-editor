@@ -95,10 +95,10 @@
     },
     {
       "game": "League of Legends",
-      "gameId": "12345678",
-      "gameNickname": "abdulloh",
-      "gameServer": "Dayz",
-      "gameAccount": "fanwii",
+      "gameId": " 12ad ",
+      "gameNickname": "12312",
+      "gameServer": "Discord",
+      "gameAccount": "1111",
       "author": "\"1718441497986\"",
       "id": 2
     }
@@ -124,9 +124,16 @@
       "id": 3
     },
     {
-      "costume": "https://www.identityv.ru/wp-content/uploads/2018/09/doctor.jpg",
+      "costume": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTajN_NyfVig72xfXjooZIKx_b-ApOQ0mnQREywrCVP2gePrqQn97LGr6Fn2C5nXqk_K94&usqp=CAU",
       "category": "SS",
-      "author": "Воин",
+      "author": "Пациент",
+      "bigAuthor": "1",
+      "id": 4
+    },
+    {
+      "costume": "https://sun9-37.userapi.com/impg/Ljuu65Plp2a2mx0_0ti73ZgqaMvC_7sBkB6eQQ/aLtlUrgeXvI.jpg?size=393x604&quality=96&sign=e4e61d860af28e4305182d13be1fc2ec&type=album",
+      "category": "SS",
+      "author": "Психолог",
       "bigAuthor": "1",
       "id": 4
     },
@@ -154,46 +161,39 @@
   ],
   "userCostumes": [
     {
-      "costume": "https://pbs.twimg.com/media/GNAc4VLWYAAI_pg.jpg",
-      "category": "S",
-      "author": "Найт",
-      "bigAuthor": "bUOVcVv",
+      "costume": "https://sun9-37.userapi.com/impg/Ljuu65Plp2a2mx0_0ti73ZgqaMvC_7sBkB6eQQ/aLtlUrgeXvI.jpg?size=393x604&quality=96&sign=e4e61d860af28e4305182d13be1fc2ec&type=album",
+      "category": "SS",
+      "author": "Психолог",
+      "bigAuthor": "2",
       "id": 1
     },
     {
       "costume": "https://pics.craiyon.com/2023-11-05/b115349ab092402f96a02d0d8d863697.webp",
       "category": "SS",
       "author": "Апостол",
-      "bigAuthor": "bUOVcVv",
+      "bigAuthor": "2",
       "id": 2
     },
     {
-      "costume": "https://pbs.twimg.com/media/GNAc4VLWYAAI_pg.jpg",
-      "category": "S",
-      "author": "Найт",
-      "bigAuthor": "X7crZP6",
-      "id": 7
-    },
-    {
-      "costume": "https://www.identityv.ru/wp-content/uploads/2018/09/doctor.jpg",
+      "costume": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTajN_NyfVig72xfXjooZIKx_b-ApOQ0mnQREywrCVP2gePrqQn97LGr6Fn2C5nXqk_K94&usqp=CAU",
       "category": "SS",
-      "author": "Воин",
-      "bigAuthor": "X7crZP6",
+      "author": "Пациент",
+      "bigAuthor": "2",
       "id": 3
-    },
-    {
-      "costume": "https://pbs.twimg.com/media/GLkx9gOXwAAsaa9.jpg:large",
-      "category": "A",
-      "author": "Кошмар",
-      "bigAuthor": "3",
-      "id": 8
     },
     {
       "costume": "https://pbs.twimg.com/media/GNAc4VLWYAAI_pg.jpg",
       "category": "S",
       "author": "Найт",
       "bigAuthor": "2",
-      "id": 9
+      "id": 4
+    },
+    {
+      "costume": "https://pbs.twimg.com/media/FkFrqtCakAElA-I.jpg",
+      "category": "A",
+      "author": "Наяда",
+      "bigAuthor": "2",
+      "id": 5
     }
   ],
   "assessoirs": [
@@ -221,6 +221,12 @@
       "character": "Апостол",
       "bigAuthor": "X7crZP6",
       "id": 3
+    },
+    {
+      "assessoir": "https://www.mangadori.com/photo/katana/2000000025004_3_400.jpg",
+      "character": "Апостол",
+      "bigAuthor": "2",
+      "id": 4
     }
   ],
   "userCards": [

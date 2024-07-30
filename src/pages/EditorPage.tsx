@@ -943,7 +943,8 @@ const EditorPage: React.FC = () => {
                 left: costumeSPosition.x,
                 top: costumeSPosition.y,
                 cursor: isDraggingCostumeS ? "grabbing" : "default",
-                textAlign: sAlign,
+                justifyItems: sAlign,
+                width: "200px",
               }}
               onMouseDown={(e) => handleMouseDown(1, e)}
             >
@@ -972,7 +973,7 @@ const EditorPage: React.FC = () => {
                         left: costume.x || 0,
                         top: costume.y || 0,
                         height: `${costumeSizesS[Number(costume.id)] || 155}px`,
-                        textAlign: sAlign,
+                        justifyItems: sAlign,
                       }}
                     >
                       {showSSCostumes && (
@@ -1018,8 +1019,8 @@ const EditorPage: React.FC = () => {
                           <div
                             className="del"
                             onClick={() => {
-                              costumeSizesS[Number(costume.id)] = 155; // Сбрасываем размер
-                              setCostumeSizesS({ ...costumeSizesS }); // Обновляем состояние
+                              costumeSizesS[Number(costume.id)] = 155;
+                              setCostumeSizesS({ ...costumeSizesS });
                             }}
                           >
                             <h6>Сброс</h6>
@@ -1091,7 +1092,8 @@ const EditorPage: React.FC = () => {
                 left: costumeSSPosition.x,
                 top: costumeSSPosition.y,
                 cursor: isDraggingCostumeSS ? "grabbing" : "default",
-                textAlign: ssAlign,
+                justifyItems: ssAlign,
+                width: "300px",
               }}
               onMouseDown={(e) => handleMouseDown(2, e)}
             >
@@ -1222,7 +1224,7 @@ const EditorPage: React.FC = () => {
                 left: costumeAPosition.x,
                 top: costumeAPosition.y,
                 cursor: isDraggingCostumeA ? "grabbing" : "default",
-                textAlign: aAlign,
+                justifyItems: aAlign,
               }}
               onMouseDown={(e) => handleMouseDown(3, e)}
             >
@@ -1351,7 +1353,7 @@ const EditorPage: React.FC = () => {
                 left: assPosition.x,
                 top: assPosition.y,
                 cursor: isDraggingAss ? "grabbing" : "default",
-                textAlign: assAlign,
+                justifyItems: assAlign,
               }}
               onMouseDown={(e) => handleMouseDown(4, e)}
             >
@@ -1474,7 +1476,7 @@ const EditorPage: React.FC = () => {
                 left: gameAccountPosition.x,
                 top: gameAccountPosition.y,
                 fontSize: fontSize,
-                textAlign: accountAlign,
+                justifyItems: accountAlign,
                 cursor: isDraggingAccount ? "grabbing" : "default",
               }}
               onMouseDown={(e) => {
@@ -1714,7 +1716,7 @@ const EditorPage: React.FC = () => {
                   style={{
                     fontSize: `${nicknameSize}px`,
                     color: selectedColorNickname,
-                    textAlign: nicknameAlign,
+                    justifyItems: nicknameAlign,
                     fontFamily: nicknameFont,
                   }}
                 >
@@ -1835,7 +1837,7 @@ const EditorPage: React.FC = () => {
                     fontSize: `${idSize}px`,
                     color: selectedColorId,
                     fontFamily: idFont,
-                    textAlign: idAlign,
+                    justifyItems: idAlign,
                   }}
                 >
                   ID: {account?.gameId}
@@ -1963,7 +1965,7 @@ const EditorPage: React.FC = () => {
                     fontSize: `${serverSize}px`,
                     color: selectedColorServer,
                     fontFamily: serverFont,
-                    textAlign: serverAlign,
+                    justifyItems: serverAlign,
                   }}
                 >
                   Сервер: {account?.gameServer}

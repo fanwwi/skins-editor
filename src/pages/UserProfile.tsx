@@ -74,7 +74,7 @@ const UserProfile = () => {
       dispatch(deleteAccount(accountId))
         .unwrap()
         .then(() => {
-          console.log("Аккаунт удален");
+          dispatch(getAccounts())
         })
         .catch((error) => {
           console.error("Ошибка при удалении аккаунта:", error);
