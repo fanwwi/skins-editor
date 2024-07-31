@@ -10,7 +10,7 @@ const AccountData = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    setGameAccount(account!.gameAccount || "");
+    setGameAccount(account?.gameAccount || "");
   }, [dispatch]);
 
   const [isEditing, setIsEditing] = useState(false);

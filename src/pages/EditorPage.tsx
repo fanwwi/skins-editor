@@ -57,25 +57,40 @@ interface IconType {
 
 const EditorPage: React.FC = () => {
   const accountId = localStorage.getItem("currentAccount");
+  const idUser = localStorage.getItem("currentUser");
   const { userCostumes } = useAppSelector((state) => state.accounts);
   const { userAss } = useAppSelector((state) => state.accounts);
   const { account } = useAppSelector((state) => state.accounts);
 
-  const [costumeS, setCostumeS] = useState(false);
-  const [costumeSS, setCostumeSS] = useState(false);
-  const [costumeA, setCostumeA] = useState(false);
-  const [ass, setAss] = useState(false);
-  const [nickname, setNickname] = useState(false);
-  const [gameAccount, setGameAccount] = useState(false);
-  const [id, setId] = useState(false);
-  const [server, setServer] = useState(false);
+  const [isShownState, setIsShownState] = useState({
+    costumeS: false,
+    costumeSS: false,
+    costumeA: false,
+    ass: false,
+    nickname: false,
+    gameAccount: false,
+    id: false,
+    server: false,
+  });
+
+  const openCostumes = (modalName: any) => {
+    setIsShownState((prevState) => ({
+      ...prevState,
+      [modalName]: true,
+    }));
+  };
+
+  const closeCostumes = (modalName: any) => {
+    setIsShownState((prevState: any) => ({
+      ...prevState,
+      [modalName]: false,
+    }));
+  };
 
   const [showModal, setShowModal] = useState(false);
   const [backgroundColor, setBackgroundColor] = useState("#ffffff");
   const [backgroundImage, setBackgroundImage] = useState<string | null>(null);
   const [textElements, setTextElements] = useState<TextElement[]>([]);
-  const [canvasSize, setCanvasSize] = useState(700);
-  const [fontSize, setFontSize] = useState(16);
   const [isDraggingText, setIsDraggingText] = useState(false);
   const [draggedTextId, setDraggedTextId] = useState<number | null>(null);
   const [startDragOffset, setStartDragOffset] = useState<{
@@ -114,7 +129,6 @@ const EditorPage: React.FC = () => {
   const [isDraggingAccount, setIsDraggingAccount] = useState(false);
   const [isDraggingId, setIsDraggingId] = useState(false);
   const [isDraggingServer, setIsDraggingServer] = useState(false);
-  const [imgSize, setImgSize] = useState(150);
   const [activeTab, setActiveTab] = useState("content");
 
   const [modalPosition, setModalPosition] = useState({ x: 0, y: 0 });
@@ -131,26 +145,52 @@ const EditorPage: React.FC = () => {
   const [editingText, setEditingText] = useState<string>("");
   const [modal, setModal] = useState(false);
 
-  const initialCostumeSizes = userCostumes ? userCostumes.map(() => 150) : [];
+  const [contextModals, setContextModals] = useState({
+    costumeS: false,
+    costumeSS: false,
+    costumeA: false,
+    ass: false,
+    image: false,
+    nickname: false,
+    server: false,
+    gameAccount: false,
+    id: false,
+  });
 
-  const [contextModalCostumesS, setContextModalCostumesS] = useState(false);
-  const [contextModalCostumesSS, setContextModalCostumesSS] = useState(false);
-  const [contextModalCostumesA, setContextModalCostumesA] = useState(false);
-  const [contextModalAss, setContextModalCostumesAss] = useState(false);
-  const [contextModalImage, setContextModalImage] = useState(false);
-  const [contextModalNickname, setContextModalNickname] = useState(false);
-  const [contextModalServer, setContextModalServer] = useState(false);
-  const [contextModalAccount, setContextModalAccount] = useState(false);
-  const [contextModalId, setContextModalId] = useState(false);
+  const openContextModal = (modalName: any) => {
+    setContextModals((prevState: any) => ({
+      ...prevState,
+      [modalName]: true,
+    }));
+  };
 
-  const [nicknameSize, setNicknameSize] = useState(16);
-  const [serverSize, setServerSize] = useState(16);
-  const [accountSize, setAccountSize] = useState(16);
-  const [idSize, setIdSize] = useState(16);
-  const [costumeSizesS, setCostumeSizesS] = useState(initialCostumeSizes);
-  const [costumeSizesSS, setCostumeSizesSS] = useState(initialCostumeSizes);
-  const [costumeSizesA, setCostumeSizesA] = useState(initialCostumeSizes);
-  const [costumeSizesAss, setCostumeSizesAss] = useState(initialCostumeSizes);
+  const closeContextModal = (modalName: any) => {
+    setContextModals((prevState: any) => ({
+      ...prevState,
+      [modalName]: false,
+    }));
+  };
+
+  const [sizes, setSizes] = useState({
+    nickname: 16,
+    server: 16,
+    gameAccount: 16,
+    id: 16,
+    image: 155,
+    text: 16,
+    canvas: 700,
+    costumeS: 155,
+    costumeSS: 155,
+    costumeA: 155,
+    ass: 155,
+  });
+
+  const updateSize = (key: any, newSize: any) => {
+    setSizes((prevSizes) => ({
+      ...prevSizes,
+      [key]: newSize,
+    }));
+  };
 
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
@@ -161,131 +201,9 @@ const EditorPage: React.FC = () => {
     dispatch(getUserAss(accountId!));
   }, [dispatch]);
 
-  const increaseCanvasSize = () => {
-    if (canvasSize < 1000) {
-      setCanvasSize(canvasSize + 100);
-    }
-  };
-
-  const decreaseCanvasSize = () => {
-    if (canvasSize > 500) {
-      setCanvasSize(canvasSize - 100);
-    }
-  };
-
-  const increaseCostumeSize = (id: any, category: any) => {
-    switch (category) {
-      case "S":
-        setCostumeSizesS((prevSizes) => ({
-          ...prevSizes,
-          [id]: (prevSizes[id] || 150) + 5,
-        }));
-        break;
-      case "SS":
-        setCostumeSizesSS((prevSizes) => ({
-          ...prevSizes,
-          [id]: (prevSizes[id] || 150) + 5,
-        }));
-        break;
-      case "A":
-        setCostumeSizesA((prevSizes) => ({
-          ...prevSizes,
-          [id]: (prevSizes[id] || 150) + 5,
-        }));
-        break;
-      case "Ass":
-        setCostumeSizesAss((prevSizes) => ({
-          ...prevSizes,
-          [id]: (prevSizes[id] || 150) + 5,
-        }));
-        break;
-      default:
-        break;
-    }
-  };
-
-  const decreaseCostumeSize = (id: any, category: any) => {
-    switch (category) {
-      case "S":
-        setCostumeSizesS((prevSizes) => ({
-          ...prevSizes,
-          [id]: (prevSizes[id] || 150) - 5,
-        }));
-        break;
-      case "SS":
-        setCostumeSizesSS((prevSizes) => ({
-          ...prevSizes,
-          [id]: (prevSizes[id] || 150) - 5,
-        }));
-        break;
-      case "A":
-        setCostumeSizesA((prevSizes) => ({
-          ...prevSizes,
-          [id]: (prevSizes[id] || 150) - 5,
-        }));
-        break;
-      case "Ass":
-        setCostumeSizesAss((prevSizes) => ({
-          ...prevSizes,
-          [id]: (prevSizes[id] || 150) - 5,
-        }));
-        break;
-      default:
-        break;
-    }
-  };
-
-  const increaseAccountSize = () => {
-    setAccountSize((prevSize) => prevSize + 2);
-  };
-
-  const decreaseAccountSize = () => {
-    setAccountSize((prevSize) => prevSize - 2);
-  };
-
-  const increaseNicknameSize = () => {
-    setNicknameSize((prevSize) => prevSize + 2);
-  };
-
-  const decreaseNicknameSize = () => {
-    setNicknameSize((prevSize) => prevSize - 2);
-  };
-
-  const increaseServerSize = () => {
-    setServerSize((prevSize) => prevSize + 2);
-  };
-
-  const decreaseServerSize = () => {
-    setServerSize((prevSize) => prevSize - 2);
-  };
-
-  const increaseIdSize = () => {
-    setIdSize((prevSize) => prevSize + 2);
-  };
-
-  const decreaseIdSize = () => {
-    setIdSize((prevSize) => prevSize - 2);
-  };
-
-  const increaseImgSize = () => {
-    setImgSize((prevSize) => prevSize + 5);
-  };
-
-  const decreaseImgSize = () => {
-    setImgSize((prevSize) => prevSize - 5);
-  };
-
-  const handleOpenModal = () => {
-    setShowModal(true);
-  };
-
-  const handleCloseModal = () => {
-    setShowModal(false);
-  };
-
-  const handleChangeColor = (color: string) => {
+  const handleChangeBgColor = (color: string) => {
     setBackgroundColor(color);
-    handleCloseModal();
+    setShowModal(false);
   };
 
   const handleBackgroundImageChange = (
@@ -301,7 +219,7 @@ const EditorPage: React.FC = () => {
       isEditing: false,
       x: 50,
       y: 50,
-      fontSize: fontSize,
+      fontSize: sizes.text,
     };
     setTextElements([...textElements, newTextElement]);
   };
@@ -561,220 +479,53 @@ const EditorPage: React.FC = () => {
 
   const handleImageClick = (position: any) => {
     setImageModal({ x: position.x, y: position.y - 100 });
-    setContextModalImage(true);
+    openContextModal("image");
   };
 
-  const [selectedColorServer, setSelectedColorServer] = useState("#000000"); // начальный цвет
-  const [selectedColorId, setSelectedColorId] = useState("#000000"); // начальный цвет
-  const [selectedColorAccount, setSelectedColorAccount] = useState("#000000"); // начальный цвет
-  const [selectedColorNickname, setSelectedColorNickname] = useState("#000000"); // начальный цвет
+  const [colors, setColors] = useState({
+    server: "#000000",
+    id: "#000000",
+    account: "#000000",
+    nickname: "#000000",
+  });
 
-  const handleColorServerChange = (event: any) => {
-    setSelectedColorServer(event.target.value);
+  const handleColorChange = (key: any) => (event: any) => {
+    setColors((prevColors) => ({
+      ...prevColors,
+      [key]: event.target.value
+    }));
   };
 
-  const handleColorIdChange = (event: any) => {
-    setSelectedColorId(event.target.value);
+  const [alignments, setAlignments] = useState({
+    nickname: "left",
+    id: "left",
+    gameAccount: "left",
+    server: "left",
+    sAlign: "left",
+    ssAlign: "left",
+    aAlign: "left",
+    assAlign: "left",
+  });
+
+  const updateAlignment = (key: any, alignment: any) => {
+    setAlignments((prevAlignments) => ({
+      ...prevAlignments,
+      [key]: alignment,
+    }));
   };
 
-  const handleColorAccountChange = (event: any) => {
-    setSelectedColorAccount(event.target.value);
-  };
+  const [fonts, setFonts] = useState({
+    nickname: "Arial",
+    id: "Arial",
+    gameAccount: "Arial",
+    server: "Arial",
+  });
 
-  const handleColorNicknameChange = (event: any) => {
-    setSelectedColorNickname(event.target.value);
-  };
-
-  const [nicknameAlign, setNicknameAlign] = useState<any>("left");
-  const [idAlign, setIdAlign] = useState<any>("left");
-  const [accountAlign, setAccountAlign] = useState<any>("left");
-  const [serverAlign, setServerAlign] = useState<any>("left");
-
-  const [nicknameFont, setNicknameFont] = useState<string>("Arial");
-  const [idFont, setIdFont] = useState<string>("Arial");
-  const [accountFont, setAccountFont] = useState<string>("Arial");
-  const [serverFont, setServerFont] = useState<string>("Arial");
-
-  const [sAlign, setSAlign] = useState<any>("left");
-  const [ssAlign, setSSAlign] = useState<any>("left");
-  const [aAlign, setAAlign] = useState<any>("left");
-  const [assAlign, setAssAlign] = useState<any>("left");
-
-  const handleNicknameAlignLeft = () => {
-    setNicknameAlign("left");
-  };
-
-  const handleNicknameAlignCenter = () => {
-    setNicknameAlign("center");
-  };
-
-  const handleNicknameAlignRight = () => {
-    setNicknameAlign("right");
-  };
-
-  // ------------------------
-
-  const handleAccountAlignLeft = () => {
-    setAccountAlign("left");
-  };
-
-  const handleAccountAlignCenter = () => {
-    setAccountAlign("center");
-  };
-
-  const handleAccountAlignRight = () => {
-    setAccountAlign("right");
-  };
-
-  // -------------------------
-
-  const handleServerAlignLeft = () => {
-    setServerAlign("left");
-  };
-
-  const handleServerAlignCenter = () => {
-    setServerAlign("center");
-  };
-
-  const handleServerAlignRight = () => {
-    setServerAlign("right");
-  };
-
-  // -------------------------
-
-  const handleIdAlignLeft = () => {
-    setIdAlign("left");
-  };
-
-  const handleIdAlignCenter = () => {
-    setIdAlign("center");
-  };
-
-  const handleIdAlignRight = () => {
-    setIdAlign("right");
-  };
-
-  // ----------------
-  // ----------------
-
-  const handleArialAccount = () => {
-    setAccountFont("Arial");
-  };
-
-  const handleOpenSansAccount = () => {
-    setAccountFont("Open Sans");
-  };
-
-  const handleInterAccount = () => {
-    setAccountFont("Inter");
-  };
-
-  // -----------------
-
-  const handleArialNickname = () => {
-    setNicknameFont("Arial");
-  };
-
-  const handleOpenSansNickname = () => {
-    setNicknameFont("Open Sans");
-  };
-
-  const handleInterNickname = () => {
-    setNicknameFont("Inter");
-  };
-
-  // -----------------
-
-  const handleArialServer = () => {
-    setServerFont("Arial");
-  };
-
-  const handleOpenSansServer = () => {
-    setServerFont("Open Sans");
-  };
-
-  const handleInterServer = () => {
-    setServerFont("Inter");
-  };
-
-  // -----------------
-
-  const handleArialId = () => {
-    setIdFont("Arial");
-  };
-
-  const handleOpenSansId = () => {
-    setIdFont("Open Sans");
-  };
-
-  const handleInterId = () => {
-    setIdFont("Inter");
-  };
-
-  //
-  //
-  //
-  //
-  //
-
-  const handleSAlignLeft = () => {
-    setSAlign("left");
-  };
-
-  const handleSAlignCenter = () => {
-    setSAlign("center");
-  };
-
-  const handleSAlignRight = () => {
-    setSAlign("right");
-  };
-
-  // ------------------------
-
-  const handleSSAlignLeft = () => {
-    setSSAlign("left");
-  };
-
-  const handleSSAlignCenter = () => {
-    setSSAlign("center");
-  };
-
-  const handleSSAlignRight = () => {
-    setSSAlign("right");
-  };
-
-  // -------------------------
-
-  const handleAAlignLeft = () => {
-    setAAlign("left");
-  };
-
-  const handleAAlignCenter = () => {
-    setAAlign("center");
-  };
-
-  const handleAAlignRight = () => {
-    setAAlign("right");
-  };
-
-  // ----------------------
-
-  const handleAssAlignLeft = () => {
-    setAssAlign("left");
-  };
-
-  const handleAssAlignCenter = () => {
-    setAssAlign("center");
-  };
-
-  const handleAssAlignRight = () => {
-    setAssAlign("right");
-  };
-
-  const [showSSCostumes, setShowSSCostumes] = useState(false);
-
-  const handleAddToGroup = () => {
-    setShowSSCostumes(true);
+  const updateFont = (key: any, font: any) => {
+    setFonts((prevFonts) => ({
+      ...prevFonts,
+      [key]: font,
+    }));
   };
 
   return (
@@ -789,7 +540,7 @@ const EditorPage: React.FC = () => {
         <div className="profile-left">
           <img src={logo} alt="" style={{ width: "70px" }} />
           <Link
-            to={`/${id}/profile`}
+            to={`/${idUser}/profile`}
             style={{ fontSize: "18px", color: "#6232ff" }}
           >
             Мои аккаунты
@@ -811,11 +562,16 @@ const EditorPage: React.FC = () => {
       <div className="options">
         <div className="container">
           <div className="block-top">
-            <h3 id="color" onClick={handleOpenModal}>
+            <h3
+              id="color"
+              onClick={() => {
+                setShowModal(true);
+              }}
+            >
               <img src={rainbow} alt="" /> Заливка{" "}
               <input
                 type="color"
-                onChange={(e) => handleChangeColor(e.target.value)}
+                onChange={(e) => handleChangeBgColor(e.target.value)}
               />
             </h3>
             <div className="label">
@@ -830,9 +586,17 @@ const EditorPage: React.FC = () => {
             <div className="canva-size">
               <span>Размер холста:</span>
               <div className="down-block">
-                <button onClick={increaseCanvasSize}>+</button>
-                <div className="fz">{canvasSize}px</div>
-                <button onClick={decreaseCanvasSize}>-</button>
+                <button
+                  onClick={() => updateSize("canvas", sizes.canvas + 100)}
+                >
+                  +
+                </button>
+                <div className="fz">{sizes.canvas}px</div>
+                <button
+                  onClick={() => updateSize("canvas", sizes.canvas - 100)}
+                >
+                  -
+                </button>
               </div>
             </div>
           </div>
@@ -881,27 +645,33 @@ const EditorPage: React.FC = () => {
           <div className="tab-content">
             {activeTab === "content" && (
               <div className="costumes-block">
-                <button onClick={() => setCostumeS(true)}>Костюмы S</button>
-                <button onClick={() => setCostumeSS(true)}>Костюмы SS</button>
-                <button onClick={() => setCostumeA(true)}>Костюмы A</button>
-                <button onClick={() => setAss(true)}>Аксессуары</button>
+                <button onClick={() => openCostumes("costumeS")}>
+                  Костюмы S
+                </button>
+                <button onClick={() => openCostumes("costumeSS")}>
+                  Костюмы SS
+                </button>
+                <button onClick={() => openCostumes("costumeA")}>
+                  Костюмы A
+                </button>
+                <button onClick={() => openCostumes("ass")}>Аксессуары</button>
               </div>
             )}
             {activeTab === "account-data" && (
               <div className="costumes-block">
-                <button onClick={() => setNickname(true)}>
+                <button onClick={() => openCostumes("nickname")}>
                   Никнэйм
                   <span>{account?.gameNickname}</span>
                 </button>
-                <button onClick={() => setGameAccount(true)}>
+                <button onClick={() => openCostumes("ga,eAccount")}>
                   Имя акканута
                   <span>{account?.gameAccount}</span>
                 </button>
-                <button onClick={() => setServer(true)}>
+                <button onClick={() => openCostumes("server")}>
                   Сервер
                   <span>{account?.gameServer}</span>
                 </button>
-                <button onClick={() => setId(true)}>
+                <button onClick={() => openCostumes("id")}>
                   ID
                   <span>{account?.gameId}</span>
                 </button>
@@ -923,14 +693,14 @@ const EditorPage: React.FC = () => {
           className="canva"
           ref={canvasRef}
           style={{
-            width: canvasSize,
+            width: sizes.canvas,
             backgroundColor: backgroundColor,
             backgroundImage: backgroundImage
               ? `url(${backgroundImage})`
               : undefined,
             backgroundSize: "cover",
             position: "absolute",
-            right: `calc(70% - ${canvasSize}px)`,
+            right: `calc(70% - ${sizes.canvas}px)`,
           }}
           onMouseMove={handleMouseMove}
           onMouseUp={handleMouseUp}
@@ -943,7 +713,7 @@ const EditorPage: React.FC = () => {
                 left: costumeSPosition.x,
                 top: costumeSPosition.y,
                 cursor: isDraggingCostumeS ? "grabbing" : "default",
-                justifyItems: sAlign,
+                justifyItems: alignments.sAlign,
                 width: "200px",
               }}
               onMouseDown={(e) => handleMouseDown(1, e)}
@@ -958,10 +728,10 @@ const EditorPage: React.FC = () => {
                     color: "#5010be",
                   }}
                 >
-                  Костюмы SS
+                  Костюмы S
                 </div>
               )}
-              {costumeS &&
+              {isShownState.costumeS &&
                 userCostumes
                   ?.filter((cost) => cost.category === "S")
                   ?.map((costume) => (
@@ -972,43 +742,25 @@ const EditorPage: React.FC = () => {
                         position: "relative",
                         left: costume.x || 0,
                         top: costume.y || 0,
-                        height: `${costumeSizesS[Number(costume.id)] || 155}px`,
-                        justifyItems: sAlign,
+                        height: sizes.costumeS,
+                        justifyItems: alignments.sAlign,
                       }}
                     >
-                      {showSSCostumes && (
-                        <div className="display-costumes">
-                          {userCostumes
-                            .filter((costume) => costume.category === "SS")
-                            .map((costume) => (
-                              <div key={costume.id} className="display-cost">
-                                <img
-                                  src={costume.costume}
-                                  alt="Costume"
-                                  style={{ height: "155px" }}
-                                />
-                              </div>
-                            ))}
-                        </div>
-                      )}
-
-                      {contextModalCostumesS && (
+                      {contextModals.costumeS && (
                         <div className="context-modal">
                           <div className="fz">
                             <div className="btns">
                               <button
                                 onClick={() =>
-                                  increaseCostumeSize(costume.id, "S")
+                                  updateSize("costumeS", sizes.costumeS++)
                                 }
                               >
                                 +
                               </button>
-                              <span>
-                                {costumeSizesS[Number(costume.id)] || 155}
-                              </span>
+                              <span>{sizes.costumeS}</span>
                               <button
                                 onClick={() =>
-                                  decreaseCostumeSize(costume.id, "S")
+                                  updateSize("costumeS", sizes.costumeS--)
                                 }
                               >
                                 -
@@ -1019,8 +771,7 @@ const EditorPage: React.FC = () => {
                           <div
                             className="del"
                             onClick={() => {
-                              costumeSizesS[Number(costume.id)] = 155;
-                              setCostumeSizesS({ ...costumeSizesS });
+                              updateSize("costumeS", "155");
                             }}
                           >
                             <h6>Сброс</h6>
@@ -1029,16 +780,14 @@ const EditorPage: React.FC = () => {
 
                           <div
                             className="del"
-                            onClick={() => setCostumeS(false)}
+                            onClick={() => closeCostumes("costumeS")}
                           >
                             <h6>Удалить</h6>
                             <img src={deleteIcon} alt="" />
                           </div>
 
                           <select name="" id="">
-                            <option value="" onClick={handleAddToGroup}>
-                              Добавить в группу
-                            </option>
+                            <option value="">Добавить в группу</option>
                             <option value="">Костюмы SS</option>
                             <option value="">Костюмы A</option>
                           </select>
@@ -1047,24 +796,26 @@ const EditorPage: React.FC = () => {
                             <img
                               src={alignLeft}
                               alt=""
-                              onClick={handleSAlignLeft}
+                              onClick={() => updateAlignment("sAlign", "left")}
                             />
                             <img
                               src={alignCenter}
                               alt=""
-                              onClick={handleSAlignCenter}
+                              onClick={() =>
+                                updateAlignment("sAlign", "center")
+                              }
                             />
                             <img
                               src={alignRight}
                               alt=""
-                              onClick={handleSAlignRight}
+                              onClick={() => updateAlignment("sAlign", "right")}
                             />
                           </div>
 
                           <img
                             src={close}
                             alt=""
-                            onClick={() => setContextModalCostumesS(false)}
+                            onClick={() => closeContextModal("costumeS")}
                             className="close"
                             style={{ width: "10px", height: "10px" }}
                           />
@@ -1075,11 +826,9 @@ const EditorPage: React.FC = () => {
                         src={costume.costume}
                         alt="Costume"
                         style={{
-                          height: `${
-                            costumeSizesS[Number(costume.id)] || 155
-                          }px`,
+                          height: sizes.costumeS,
                         }}
-                        onClick={() => setContextModalCostumesS(true)}
+                        onClick={() => openContextModal("costumeS")}
                       />
                     </div>
                   ))}
@@ -1092,7 +841,7 @@ const EditorPage: React.FC = () => {
                 left: costumeSSPosition.x,
                 top: costumeSSPosition.y,
                 cursor: isDraggingCostumeSS ? "grabbing" : "default",
-                justifyItems: ssAlign,
+                justifyItems: alignments.ssAlign,
                 width: "300px",
               }}
               onMouseDown={(e) => handleMouseDown(2, e)}
@@ -1110,7 +859,7 @@ const EditorPage: React.FC = () => {
                   Костюмы SS
                 </div>
               )}
-              {costumeSS &&
+              {isShownState.costumeSS &&
                 userCostumes
                   ?.filter((cost) => cost.category === "SS")
                   ?.map((costume) => (
@@ -1120,28 +869,24 @@ const EditorPage: React.FC = () => {
                       style={{
                         left: costume.x || 0,
                         top: costume.y || 0,
-                        height: `${
-                          costumeSizesSS[Number(costume.id)] || 155
-                        }px`,
+                        height: sizes.costumeSS,
                       }}
                     >
-                      {contextModalCostumesSS && (
+                      {contextModals.costumeSS && (
                         <div className="context-modal">
                           <div className="fz">
                             <div className="btns">
                               <button
                                 onClick={() =>
-                                  increaseCostumeSize(costume.id, "SS")
+                                  updateSize("costumeSS", sizes.costumeSS++)
                                 }
                               >
                                 +
                               </button>
-                              <span>
-                                {costumeSizesSS[Number(costume.id)] || 155}
-                              </span>
+                              <span>{sizes.costumeSS}</span>
                               <button
                                 onClick={() =>
-                                  decreaseCostumeSize(costume.id, "SS")
+                                  updateSize("costumeSS", sizes.costumeSS--)
                                 }
                               >
                                 -
@@ -1152,8 +897,7 @@ const EditorPage: React.FC = () => {
                           <div
                             className="del"
                             onClick={() => {
-                              costumeSizesSS[Number(costume.id)] = 155; // Сбрасываем размер
-                              setCostumeSizesSS({ ...costumeSizesSS }); // Обновляем состояние
+                              updateSize("costumeSS", "155");
                             }}
                           >
                             <h6>Сброс</h6>
@@ -1162,7 +906,7 @@ const EditorPage: React.FC = () => {
 
                           <div
                             className="del"
-                            onClick={() => setCostumeSS(false)}
+                            onClick={() => closeCostumes("costumeSS")}
                           >
                             <h6>Удалить</h6>
                             <img src={deleteIcon} alt="" />
@@ -1178,24 +922,28 @@ const EditorPage: React.FC = () => {
                             <img
                               src={alignLeft}
                               alt=""
-                              onClick={handleSSAlignLeft}
+                              onClick={() => updateAlignment("ssAlign", "left")}
                             />
                             <img
                               src={alignCenter}
                               alt=""
-                              onClick={handleSSAlignCenter}
+                              onClick={() =>
+                                updateAlignment("ssAlign", "center")
+                              }
                             />
                             <img
                               src={alignRight}
                               alt=""
-                              onClick={handleSSAlignRight}
+                              onClick={() =>
+                                updateAlignment("ssAlign", "right")
+                              }
                             />
                           </div>
 
                           <img
                             src={close}
                             alt=""
-                            onClick={() => setContextModalCostumesSS(false)}
+                            onClick={() => closeContextModal("costumeSS")}
                             className="close"
                             style={{ width: "10px", height: "10px" }}
                           />
@@ -1205,12 +953,10 @@ const EditorPage: React.FC = () => {
                         src={costume.costume}
                         alt="Costume"
                         onClick={() => {
-                          setContextModalCostumesSS(true);
+                          openContextModal("costumeSS");
                         }}
                         style={{
-                          height: `${
-                            costumeSizesSS[Number(costume.id)] || 155
-                          }px`,
+                          height: sizes.costumeSS,
                         }}
                       />
                     </div>
@@ -1224,7 +970,7 @@ const EditorPage: React.FC = () => {
                 left: costumeAPosition.x,
                 top: costumeAPosition.y,
                 cursor: isDraggingCostumeA ? "grabbing" : "default",
-                justifyItems: aAlign,
+                justifyItems: alignments.aAlign,
               }}
               onMouseDown={(e) => handleMouseDown(3, e)}
             >
@@ -1241,7 +987,7 @@ const EditorPage: React.FC = () => {
                   Костюмы A
                 </div>
               )}
-              {costumeA &&
+              {isShownState.costumeA &&
                 userCostumes
                   ?.filter((cost) => cost.category === "A")
                   ?.map((costume) => (
@@ -1251,26 +997,24 @@ const EditorPage: React.FC = () => {
                       style={{
                         left: costume.x || 0,
                         top: costume.y || 0,
-                        height: `${costumeSizesA[Number(costume.id)] || 155}px`,
+                        height: sizes.costumeA,
                       }}
                     >
-                      {contextModalCostumesA && (
+                      {contextModals.costumeA && (
                         <div className="context-modal">
                           <div className="fz">
                             <div className="btns">
                               <button
                                 onClick={() =>
-                                  increaseCostumeSize(costume.id, "A")
+                                  updateSize("costumeA", sizes.costumeA++)
                                 }
                               >
                                 +
                               </button>
-                              <span>
-                                {costumeSizesA[Number(costume.id)] || 155}
-                              </span>
+                              <span>{sizes.costumeA}</span>
                               <button
                                 onClick={() =>
-                                  decreaseCostumeSize(costume.id, "A")
+                                  updateSize("costumeA", sizes.costumeA--)
                                 }
                               >
                                 -
@@ -1281,8 +1025,7 @@ const EditorPage: React.FC = () => {
                           <div
                             className="del"
                             onClick={() => {
-                              costumeSizesA[Number(costume.id)] = 155; // Сбрасываем размер
-                              setCostumeSizesA({ ...costumeSizesA }); // Обновляем состояние
+                              updateSize("costumeA", "155");
                             }}
                           >
                             <h6>Сброс</h6>
@@ -1291,7 +1034,7 @@ const EditorPage: React.FC = () => {
 
                           <div
                             className="del"
-                            onClick={() => setCostumeA(false)}
+                            onClick={() => closeCostumes("costumeA")}
                           >
                             <h6>Удалить</h6>
                             <img src={deleteIcon} alt="" />
@@ -1307,24 +1050,26 @@ const EditorPage: React.FC = () => {
                             <img
                               src={alignLeft}
                               alt=""
-                              onClick={handleAAlignLeft}
+                              onClick={() => updateAlignment("aAlign", "left")}
                             />
                             <img
                               src={alignCenter}
                               alt=""
-                              onClick={handleAAlignCenter}
+                              onClick={() =>
+                                updateAlignment("aAling", "center")
+                              }
                             />
                             <img
                               src={alignRight}
                               alt=""
-                              onClick={handleAAlignRight}
+                              onClick={() => updateAlignment("aAlign", "right")}
                             />
                           </div>
 
                           <img
                             src={close}
                             alt=""
-                            onClick={() => setContextModalCostumesA(false)}
+                            onClick={() => closeContextModal("costumeA")}
                             className="close"
                             style={{ width: "10px", height: "10px" }}
                           />
@@ -1334,12 +1079,10 @@ const EditorPage: React.FC = () => {
                         src={costume.costume}
                         alt="Costume"
                         onClick={() => {
-                          setContextModalCostumesA(true);
+                          openContextModal("costumeA");
                         }}
                         style={{
-                          height: `${
-                            costumeSizesA[Number(costume.id)] || 155
-                          }px`,
+                          height: sizes.costumeA,
                         }}
                       />
                     </div>
@@ -1353,7 +1096,7 @@ const EditorPage: React.FC = () => {
                 left: assPosition.x,
                 top: assPosition.y,
                 cursor: isDraggingAss ? "grabbing" : "default",
-                justifyItems: assAlign,
+                justifyItems: alignments.assAlign,
               }}
               onMouseDown={(e) => handleMouseDown(4, e)}
             >
@@ -1370,7 +1113,7 @@ const EditorPage: React.FC = () => {
                   Аксессуары
                 </div>
               )}
-              {ass &&
+              {isShownState.ass &&
                 userAss?.map((ass) => (
                   <div
                     key={ass.id}
@@ -1378,23 +1121,21 @@ const EditorPage: React.FC = () => {
                     style={{
                       left: ass.x || 0,
                       top: ass.y || 0,
-                      height: `${costumeSizesAss[Number(ass.id)] || 155}px`,
+                      height: sizes.ass,
                     }}
                   >
-                    {contextModalAss && (
+                    {contextModals.ass && (
                       <div className="context-modal">
                         <div className="fz">
                           <div className="btns">
                             <button
-                              onClick={() => increaseCostumeSize(ass.id, "Ass")}
+                              onClick={() => updateSize("ass", sizes.ass++)}
                             >
                               +
                             </button>
-                            <span>
-                              {costumeSizesAss[Number(ass.id)] || 155}
-                            </span>
+                            <span>{sizes.ass}</span>
                             <button
-                              onClick={() => decreaseCostumeSize(ass.id, "Ass")}
+                              onClick={() => updateSize("ass", sizes.ass--)}
                             >
                               -
                             </button>
@@ -1404,15 +1145,17 @@ const EditorPage: React.FC = () => {
                         <div
                           className="del"
                           onClick={() => {
-                            costumeSizesAss[Number(ass.id)] = 155; // Сбрасываем размер
-                            setCostumeSizesAss({ ...costumeSizesAss }); // Обновляем состояние
+                            updateSize("ass", "155");
                           }}
                         >
                           <h6>Сброс</h6>
                           <img src={reset} alt="" />
                         </div>
 
-                        <div className="del" onClick={() => setAss(false)}>
+                        <div
+                          className="del"
+                          onClick={() => closeCostumes("ass")}
+                        >
                           <h6>Удалить</h6>
                           <img src={deleteIcon} alt="" />
                         </div>
@@ -1427,24 +1170,26 @@ const EditorPage: React.FC = () => {
                           <img
                             src={alignLeft}
                             alt=""
-                            onClick={handleAssAlignLeft}
+                            onClick={() => updateAlignment("assAlign", "left")}
                           />
                           <img
                             src={alignCenter}
                             alt=""
-                            onClick={handleAssAlignCenter}
+                            onClick={() =>
+                              updateAlignment("assAlign", "center")
+                            }
                           />
                           <img
                             src={alignRight}
                             alt=""
-                            onClick={handleAssAlignRight}
+                            onClick={() => updateAlignment("assAlign", "right")}
                           />
                         </div>
 
                         <img
                           src={close}
                           alt=""
-                          onClick={() => setContextModalCostumesAss(false)}
+                          onClick={() => closeContextModal("ass")}
                           className="close"
                           style={{
                             width: "10px",
@@ -1458,10 +1203,10 @@ const EditorPage: React.FC = () => {
                       src={ass.assessoir}
                       alt="Costume"
                       onClick={() => {
-                        setContextModalCostumesAss(true);
+                        openContextModal("ass");
                       }}
                       style={{
-                        height: `${costumeSizesAss[Number(ass.id)] || 155}px`,
+                        height: sizes.ass,
                       }}
                     />
                   </div>
@@ -1475,8 +1220,8 @@ const EditorPage: React.FC = () => {
                 position: "absolute",
                 left: gameAccountPosition.x,
                 top: gameAccountPosition.y,
-                fontSize: fontSize,
-                justifyItems: accountAlign,
+                fontSize: sizes.gameAccount,
+                justifyItems: alignments.gameAccount,
                 cursor: isDraggingAccount ? "grabbing" : "default",
               }}
               onMouseDown={(e) => {
@@ -1499,21 +1244,33 @@ const EditorPage: React.FC = () => {
                   Аккаунт
                 </div>
               )}
-              {contextModalAccount && (
+              {contextModals.gameAccount && (
                 <div className="context-modal" style={{ marginBottom: "10px" }}>
                   <div className="fz">
                     <h6>Размер шрифта</h6>
                     <div className="btns">
-                      <button onClick={increaseAccountSize}>+</button>
-                      <span>{accountSize}</span>
-                      <button onClick={decreaseAccountSize}>-</button>
+                      <button
+                        onClick={() =>
+                          updateSize("gameAccount", sizes.gameAccount++)
+                        }
+                      >
+                        +
+                      </button>
+                      <span>{sizes.gameAccount}</span>
+                      <button
+                        onClick={() =>
+                          updateSize("gameAccount", sizes.gameAccount--)
+                        }
+                      >
+                        -
+                      </button>
                     </div>
                   </div>
                   <div
                     className="del"
                     onClick={() => {
-                      setGameAccount(false);
-                      setContextModalAccount(false);
+                      closeCostumes("gameAccount");
+                      closeContextModal("gameAccount");
                     }}
                   >
                     <h6>Удалить</h6>
@@ -1531,21 +1288,30 @@ const EditorPage: React.FC = () => {
                     <img src={rainbow} alt="" style={{ width: "20px" }} />
                     <input
                       type="color"
-                      value={selectedColorAccount}
-                      onChange={handleColorAccountChange}
+                      value={colors.account}
+                      onChange={() => handleColorChange('account')}
                       style={{ width: "20px" }}
                     />
                   </div>
 
                   <select name="" id="">
                     <option value="">Выберите шрифт</option>
-                    <option value="Arial" onClick={handleArialAccount}>
+                    <option
+                      value="Arial"
+                      onClick={() => updateFont("gameAccount", "Arial")}
+                    >
                       Arial
                     </option>
-                    <option value="Open Sans" onClick={handleOpenSansAccount}>
+                    <option
+                      value="Open Sans"
+                      onClick={() => updateFont("gameAccount", "Open Sans")}
+                    >
                       Open Sans
                     </option>
-                    <option value="Inter" onClick={handleInterAccount}>
+                    <option
+                      value="Inter"
+                      onClick={() => updateFont("gameAccount", "Inter")}
+                    >
                       Inter
                     </option>
                   </select>
@@ -1554,17 +1320,17 @@ const EditorPage: React.FC = () => {
                     <img
                       src={alignLeft}
                       alt=""
-                      onClick={handleAccountAlignLeft}
+                      onClick={() => updateAlignment("gameAccount", "left")}
                     />
                     <img
                       src={alignCenter}
                       alt=""
-                      onClick={handleAccountAlignCenter}
+                      onClick={() => updateAlignment("gameAccount", "center")}
                     />
                     <img
                       src={alignRight}
                       alt=""
-                      onClick={handleAccountAlignRight}
+                      onClick={() => updateAlignment("gameAccount", "right")}
                     />
                   </div>
                   <img
@@ -1578,18 +1344,18 @@ const EditorPage: React.FC = () => {
                       height: "10px",
                       cursor: "pointer",
                     }}
-                    onClick={() => setContextModalAccount(false)}
+                    onClick={() => closeContextModal("gameAccount")}
                   />
                 </div>
               )}
 
-              {gameAccount && (
+              {isShownState.gameAccount && (
                 <h3
-                  onClick={() => setContextModalAccount(true)}
+                  onClick={() => openContextModal("gameAccount")}
                   style={{
-                    fontSize: `${accountSize}px`,
-                    color: selectedColorAccount,
-                    fontFamily: accountFont,
+                    fontSize: `${sizes.gameAccount}px`,
+                    color: colors.account,
+                    fontFamily: fonts.gameAccount,
                   }}
                 >
                   {account?.gameAccount}
@@ -1603,7 +1369,7 @@ const EditorPage: React.FC = () => {
                 position: "absolute",
                 left: nicknamePosition.x,
                 top: nicknamePosition.y,
-                fontSize: fontSize,
+                fontSize: sizes.nickname,
                 cursor: isDraggingAccount ? "grabbing" : "default",
               }}
               onMouseDown={(e) => {
@@ -1626,21 +1392,29 @@ const EditorPage: React.FC = () => {
                   Никнэйм
                 </div>
               )}
-              {contextModalNickname && (
+              {contextModals.nickname && (
                 <div className="context-modal" style={{ marginBottom: "10px" }}>
                   <div className="fz">
                     <h6>Размер шрифта</h6>
                     <div className="btns">
-                      <button onClick={increaseNicknameSize}>+</button>
-                      <span>{nicknameSize}</span>
-                      <button onClick={decreaseNicknameSize}>-</button>
+                      <button
+                        onClick={() => updateSize("nickname", sizes.nickname++)}
+                      >
+                        +
+                      </button>
+                      <span>{sizes.nickname}</span>
+                      <button
+                        onClick={() => updateSize("nickname", sizes.nickname--)}
+                      >
+                        -
+                      </button>
                     </div>
                   </div>
                   <div
                     className="del"
                     onClick={() => {
-                      setNickname(false);
-                      setContextModalNickname(false);
+                      closeCostumes("nickname");
+                      closeContextModal("nickname");
                     }}
                   >
                     <h6>Удалить</h6>
@@ -1658,21 +1432,30 @@ const EditorPage: React.FC = () => {
                     <img src={rainbow} alt="" style={{ width: "20px" }} />
                     <input
                       type="color"
-                      value={selectedColorNickname}
-                      onChange={handleColorNicknameChange}
+                      value={colors.nickname}
+                      onChange={() => handleColorChange('nickname')}
                       style={{ width: "20px" }}
                     />
                   </div>
 
                   <select name="" id="">
                     <option value="">Выберите шрифт</option>
-                    <option value="Arial" onClick={handleArialNickname}>
+                    <option
+                      value="Arial"
+                      onClick={() => updateFont("nickname", "Arial")}
+                    >
                       Arial
                     </option>
-                    <option value="Open Sans" onClick={handleOpenSansNickname}>
+                    <option
+                      value="Open Sans"
+                      onClick={() => updateFont("nickname", "Open Sans")}
+                    >
                       Open Sans
                     </option>
-                    <option value="Inter" onClick={handleInterNickname}>
+                    <option
+                      value="Inter"
+                      onClick={() => updateFont("nickname", "Inter")}
+                    >
                       Inter
                     </option>
                   </select>
@@ -1681,17 +1464,17 @@ const EditorPage: React.FC = () => {
                     <img
                       src={alignLeft}
                       alt=""
-                      onClick={handleNicknameAlignLeft}
+                      onClick={() => updateAlignment("nickname", "left")}
                     />
                     <img
                       src={alignCenter}
                       alt=""
-                      onClick={handleNicknameAlignCenter}
+                      onClick={() => updateAlignment("nickname", "center")}
                     />
                     <img
                       src={alignRight}
                       alt=""
-                      onClick={handleNicknameAlignRight}
+                      onClick={() => updateAlignment("nickname", "right")}
                     />
                   </div>
                   <img
@@ -1705,19 +1488,19 @@ const EditorPage: React.FC = () => {
                       height: "10px",
                       cursor: "pointer",
                     }}
-                    onClick={() => setContextModalNickname(false)}
+                    onClick={() => closeContextModal("nickname")}
                   />
                 </div>
               )}
 
-              {nickname && (
+              {isShownState.nickname && (
                 <span
-                  onClick={() => setContextModalNickname(true)}
+                  onClick={() => openContextModal("nickname")}
                   style={{
-                    fontSize: `${nicknameSize}px`,
-                    color: selectedColorNickname,
-                    justifyItems: nicknameAlign,
-                    fontFamily: nicknameFont,
+                    fontSize: `${sizes.nickname}px`,
+                    color: colors.nickname,
+                    justifyItems: alignments.nickname,
+                    fontFamily: fonts.nickname,
                   }}
                 >
                   Никнэйм: {account?.gameNickname}
@@ -1731,7 +1514,7 @@ const EditorPage: React.FC = () => {
                 position: "absolute",
                 left: idPosition.x,
                 top: idPosition.y,
-                fontSize: fontSize,
+                fontSize: sizes.id,
                 cursor: isDraggingAccount ? "grabbing" : "default",
               }}
               onMouseDown={(e) => {
@@ -1754,21 +1537,25 @@ const EditorPage: React.FC = () => {
                   ID акканута
                 </div>
               )}
-              {contextModalId && (
+              {contextModals.id && (
                 <div className="context-modal" style={{ marginBottom: "10px" }}>
                   <div className="fz">
                     <h6>Размер шрифта</h6>
                     <div className="btns">
-                      <button onClick={increaseIdSize}>+</button>
-                      <span>{idSize}</span>
-                      <button onClick={decreaseIdSize}>-</button>
+                      <button onClick={() => updateSize("id", sizes.id++)}>
+                        +
+                      </button>
+                      <span>{sizes.id}</span>
+                      <button onClick={() => updateSize("id", sizes.id--)}>
+                        -
+                      </button>
                     </div>
                   </div>
                   <div
                     className="del"
                     onClick={() => {
-                      setId(false);
-                      setContextModalId(false);
+                      closeCostumes("id");
+                      closeContextModal("id");
                     }}
                   >
                     <h6>Удалить</h6>
@@ -1786,33 +1573,50 @@ const EditorPage: React.FC = () => {
                     <img src={rainbow} alt="" style={{ width: "20px" }} />
                     <input
                       type="color"
-                      value={selectedColorId}
-                      onChange={handleColorIdChange}
+                      value={colors.id}
+                      onChange={() => handleColorChange('id')}
                       style={{ width: "20px" }}
                     />
                   </div>
 
                   <select name="" id="">
                     <option value="">Выберите шрифт</option>
-                    <option value="Arial" onClick={handleArialId}>
+                    <option
+                      value="Arial"
+                      onClick={() => updateFont("id", "Arial")}
+                    >
                       Arial
                     </option>
-                    <option value="Open Sans" onClick={handleOpenSansId}>
+                    <option
+                      value="Open Sans"
+                      onClick={() => updateFont("id", "Opne Sans")}
+                    >
                       Open Sans
                     </option>
-                    <option value="Inter" onClick={handleInterId}>
+                    <option
+                      value="Inter"
+                      onClick={() => updateFont("id", "Inter")}
+                    >
                       Inter
                     </option>
                   </select>
 
                   <div className="btns">
-                    <img src={alignLeft} alt="" onClick={handleIdAlignLeft} />
+                    <img
+                      src={alignLeft}
+                      alt=""
+                      onClick={() => updateAlignment("id", "left")}
+                    />
                     <img
                       src={alignCenter}
                       alt=""
-                      onClick={handleIdAlignCenter}
+                      onClick={() => updateAlignment("id", "center")}
                     />
-                    <img src={alignRight} alt="" onClick={handleIdAlignRight} />
+                    <img
+                      src={alignRight}
+                      alt=""
+                      onClick={() => updateAlignment("id", "right")}
+                    />
                   </div>
                   <img
                     src={close}
@@ -1825,19 +1629,19 @@ const EditorPage: React.FC = () => {
                       height: "10px",
                       cursor: "pointer",
                     }}
-                    onClick={() => setContextModalId(false)}
+                    onClick={() => closeContextModal("id")}
                   />
                 </div>
               )}
 
-              {id && (
+              {isShownState.id && (
                 <span
-                  onClick={() => setContextModalId(true)}
+                  onClick={() => openContextModal("id")}
                   style={{
-                    fontSize: `${idSize}px`,
-                    color: selectedColorId,
-                    fontFamily: idFont,
-                    justifyItems: idAlign,
+                    fontSize: `${sizes.id}px`,
+                    color: colors.id,
+                    fontFamily: fonts.id,
+                    justifyItems: alignments.id,
                   }}
                 >
                   ID: {account?.gameId}
@@ -1851,7 +1655,7 @@ const EditorPage: React.FC = () => {
                 position: "absolute",
                 left: serverPosition.x,
                 top: serverPosition.y,
-                fontSize: fontSize,
+                fontSize: sizes.server,
                 cursor: isDraggingAccount ? "grabbing" : "default",
               }}
               onMouseDown={(e) => {
@@ -1874,21 +1678,29 @@ const EditorPage: React.FC = () => {
                   Сервер
                 </div>
               )}
-              {contextModalServer && (
+              {contextModals.server && (
                 <div className="context-modal" style={{ marginBottom: "10px" }}>
                   <div className="fz">
                     <h6>Размер шрифта</h6>
                     <div className="btns">
-                      <button onClick={increaseServerSize}>+</button>
-                      <span>{serverSize}</span>
-                      <button onClick={decreaseServerSize}>-</button>
+                      <button
+                        onClick={() => updateSize("server", sizes.server++)}
+                      >
+                        +
+                      </button>
+                      <span>{sizes.server}</span>
+                      <button
+                        onClick={() => updateSize("server", sizes.server--)}
+                      >
+                        -
+                      </button>
                     </div>
                   </div>
                   <div
                     className="del"
                     onClick={() => {
-                      setServer(false);
-                      setContextModalServer(false);
+                      closeCostumes("server");
+                      closeContextModal("server");
                     }}
                   >
                     <h6>Удалить</h6>
@@ -1906,21 +1718,30 @@ const EditorPage: React.FC = () => {
                     <img src={rainbow} alt="" style={{ width: "20px" }} />
                     <input
                       type="color"
-                      value={selectedColorServer}
-                      onChange={handleColorServerChange}
+                      value={colors.server}
+                      onChange={() => handleColorChange('server')}
                       style={{ width: "20px" }}
                     />
                   </div>
 
                   <select name="" id="">
                     <option value="">Выберите шрифт</option>
-                    <option value="Arial" onClick={handleArialServer}>
+                    <option
+                      value="Arial"
+                      onClick={() => updateFont("server", "Arial")}
+                    >
                       Arial
                     </option>
-                    <option value="Open Sans" onClick={handleOpenSansServer}>
+                    <option
+                      value="Open Sans"
+                      onClick={() => updateFont("server", "Open Sans")}
+                    >
                       Open Sans
                     </option>
-                    <option value="Inter" onClick={handleInterServer}>
+                    <option
+                      value="Inter"
+                      onClick={() => updateFont("server", "Inter")}
+                    >
                       Inter
                     </option>
                   </select>
@@ -1929,17 +1750,17 @@ const EditorPage: React.FC = () => {
                     <img
                       src={alignLeft}
                       alt=""
-                      onClick={handleServerAlignLeft}
+                      onClick={() => updateFont("server", "left")}
                     />
                     <img
                       src={alignCenter}
                       alt=""
-                      onClick={handleServerAlignCenter}
+                      onClick={() => updateFont("server", "center")}
                     />
                     <img
                       src={alignRight}
                       alt=""
-                      onClick={handleServerAlignRight}
+                      onClick={() => updateFont("server", "right")}
                     />
                   </div>
                   <img
@@ -1953,19 +1774,19 @@ const EditorPage: React.FC = () => {
                       height: "10px",
                       cursor: "pointer",
                     }}
-                    onClick={() => setContextModalServer(false)}
+                    onClick={() => closeContextModal("server")}
                   />
                 </div>
               )}
 
-              {server && (
+              {isShownState.server && (
                 <span
-                  onClick={() => setContextModalServer(true)}
+                  onClick={() => openContextModal("server")}
                   style={{
-                    fontSize: `${serverSize}px`,
-                    color: selectedColorServer,
-                    fontFamily: serverFont,
-                    justifyItems: serverAlign,
+                    fontSize: `${sizes.server}px`,
+                    color: colors.server,
+                    fontFamily: fonts.server,
+                    justifyItems: alignments.server,
                   }}
                 >
                   Сервер: {account?.gameServer}
@@ -1980,7 +1801,7 @@ const EditorPage: React.FC = () => {
               src={image.src}
               alt={`Image ${index}`}
               style={{
-                width: imgSize,
+                width: sizes.image,
                 position: "absolute",
                 left: image.position.x,
                 top: image.position.y,
@@ -1992,7 +1813,7 @@ const EditorPage: React.FC = () => {
             />
           ))}
 
-          {contextModalImage && (
+          {contextModals.image && (
             <div
               className="context-modal"
               style={{
@@ -2005,9 +1826,13 @@ const EditorPage: React.FC = () => {
               <div className="fz">
                 <h6>Размер картинки</h6>
                 <div className="btns">
-                  <button onClick={increaseImgSize}>+</button>
-                  <span>{imgSize}</span>
-                  <button onClick={decreaseImgSize}>-</button>
+                  <button onClick={() => updateSize("image", sizes.image++)}>
+                    +
+                  </button>
+                  <span>{sizes.image}</span>
+                  <button onClick={() => updateSize("image", sizes.image--)}>
+                    -
+                  </button>
                 </div>
               </div>
               <div className="deleteCostume">
@@ -2024,7 +1849,7 @@ const EditorPage: React.FC = () => {
                   width: "10px",
                   cursor: "pointer",
                 }}
-                onClick={() => setContextModalImage(false)}
+                onClick={() => closeContextModal("image")}
               />
             </div>
           )}
@@ -2040,7 +1865,7 @@ const EditorPage: React.FC = () => {
                   isDraggingText && draggedTextId === element.id
                     ? "grabbing"
                     : "default",
-                fontSize: element.fontSize,
+                fontSize: sizes.text,
               }}
               onMouseDown={(e) => handleMouseDownText(element.id, e)}
               onMouseMove={handleMouseMoveText}
