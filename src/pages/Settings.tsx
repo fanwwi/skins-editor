@@ -4,6 +4,7 @@ import logo from "../img/logo.png";
 import userIcon from "../img/user-image.jpg";
 import { useAppDispatch, useAppSelector } from "../store/store";
 import { getCurrentUser, changePassword } from "../store/actions/user.action";
+import ProfileHeader from "../components/ProfileHeader";
 
 const Settings: React.FC = () => {
   const id = localStorage.getItem("currentUser")?.replace(/"/g, "");
@@ -53,29 +54,7 @@ const Settings: React.FC = () => {
 
   return (
     <div className="auth">
-      <div
-        className="profile-header"
-        style={{
-          marginTop: "-100px",
-          width: "1500px",
-          justifyContent: "space-between",
-        }}
-      >
-        <div className="profile-left">
-          <img src={logo} alt="" style={{ width: "70px" }} />
-          <Link
-            to={`/${id}/profile`}
-            style={{ fontSize: "18px", color: "#6232ff" }}
-          >
-            Мои аккаунты
-          </Link>
-        </div>
-        <img
-          src={userIcon}
-          alt="userIcon"
-          style={{ width: "70px", cursor: "pointer" }}
-        />
-      </div>
+      <ProfileHeader />
       <form className="auth-form" onSubmit={handleChangePassword}>
         <h2>Аккаунт</h2>
         <p style={{ marginTop: "-15px" }}>

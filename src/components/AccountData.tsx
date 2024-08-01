@@ -54,7 +54,7 @@ const AccountData = () => {
               <h2>
                 Детали аккаунта -{" "}
                 <span className="blue-text">
-                  {gameAccount || "Ошибка сети"}
+                  {account ? account.gameAccount : "Ошибка сети!"}
                 </span>
               </h2>
             ) : (

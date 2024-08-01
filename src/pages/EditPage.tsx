@@ -1,14 +1,10 @@
 import React, { useEffect, useState } from "react";
-import logo from "../img/logo.png";
-import { Link } from "react-router-dom";
-import userIcon from "../img/user-image.jpg";
 import bottom from "../img/bottom.png";
 import top from "../img/top.png";
 import addCostumeImg from "../img/add-icon.png";
 import { useAppDispatch, useAppSelector } from "../store/store";
 import {
   addUserAss,
-  addUserCostume,
   deleteAss,
   getAssessoirs,
   getCostume,
@@ -21,6 +17,7 @@ import TechnicalBlock from "../components/TechnicalBlock";
 import AccountContent from "../components/AccountContent";
 import del from "../img/delete-icon.png";
 import AccountData from "../components/AccountData";
+import ProfileHeader from "../components/ProfileHeader";
 
 const EditPage = () => {
   const dispatch = useAppDispatch();
@@ -33,7 +30,6 @@ const EditPage = () => {
     dispatch(getUserAss(accountId!));
   }, [dispatch]);
 
-  const id = localStorage.getItem("currentUser")?.replace(/"/g, "");
   const accountId = localStorage.getItem("currentAccount");
   const [activeMainTab, setActiveMainTab] = useState("accountData");
   const [activeSubTab, setActiveSubTab] = useState("costumes");
@@ -135,30 +131,7 @@ const EditPage = () => {
 
   return (
     <div>
-      <div
-        className="profile-header"
-        style={{
-          width: "1500px",
-          justifyContent: "space-between",
-        }}
-      >
-        <div className="profile-left">
-          <img src={logo} alt="" className="logo12" />
-          <Link
-            to={`/${id}/profile`}
-            style={{ color: "#6232ff" }}
-            className="nadpis"
-          >
-            Мои аккаунты
-          </Link>
-        </div>
-        <img
-          src={userIcon}
-          alt="userIcon"
-          style={{ cursor: "pointer" }}
-          className="none"
-        />
-      </div>
+      <ProfileHeader />
       <hr />
       <div className="container prof">
         <AccountData />

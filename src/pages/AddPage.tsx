@@ -1,7 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import logo from "../img/logo.png";
-import userIcon from "../img/user-image.jpg";
 import { useAppDispatch, useAppSelector } from "../store/store";
 import {
   createAccount,
@@ -9,6 +7,7 @@ import {
   getServers,
 } from "../store/actions/account.action";
 import { AccountType } from "../types";
+import ProfileHeader from "../components/ProfileHeader";
 
 const AddPage: React.FC = () => {
   const id = localStorage.getItem("currentUser")?.replace(/"/g, "");
@@ -79,33 +78,7 @@ const AddPage: React.FC = () => {
 
   return (
     <div className="auth">
-      <div
-        className="profile-header"
-        style={{
-          marginTop: "-100px",
-          width: "1500px",
-          justifyContent: "space-between",
-        }}
-      >
-        <div className="profile-left">
-          <img src={logo} alt="logo" className="logo12" />
-          <Link
-            to={`/${id}/profile`}
-            style={{ color: "#6232ff" }}
-            className="nadpis"
-          >
-            Мои аккаунты
-          </Link>
-        </div>
-        <img
-          src={userIcon}
-          alt="userIcon"
-          style={{cursor: "pointer" }}
-          className="logo12"
-          id="userIcon"
-        />
-      </div>
-
+      <ProfileHeader />
       <form className="auth-form" onSubmit={handleSubmitt}>
         <h2>Добавить аккаунт</h2>
         <label htmlFor="game" className="label-input">

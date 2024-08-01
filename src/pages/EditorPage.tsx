@@ -8,15 +8,14 @@ import {
 } from "../store/actions/account.action";
 import { toJpeg } from "html-to-image";
 import axios from "axios";
-import { Link, useNavigate } from "react-router-dom";
-import userIcon from "../img/user-image.jpg";
-import logo from "../img/logo.png";
+import { useNavigate } from "react-router-dom";
 import deleteIcon from "../img/delete-icon.png";
 import alignLeft from "../img/alignLeft.png";
 import alignRight from "../img/alignRight.png";
 import alignCenter from "../img/alignCenter.png";
 import close from "../img/close.png";
 import reset from "../img/reset.png";
+import ProfileHeader from "../components/ProfileHeader";
 
 interface TextElement {
   id: number;
@@ -57,10 +56,39 @@ interface IconType {
 
 const EditorPage: React.FC = () => {
   const accountId = localStorage.getItem("currentAccount");
-  const idUser = localStorage.getItem("currentUser");
   const { userCostumes } = useAppSelector((state) => state.accounts);
   const { userAss } = useAppSelector((state) => state.accounts);
   const { account } = useAppSelector((state) => state.accounts);
+
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    dispatch(getOneAccount(accountId!));
+    dispatch(getUserCostumes(accountId!));
+    dispatch(getUserAss(accountId!));
+  }, [dispatch]);
+
+  //! States
+  const [backgroundColor, setBackgroundColor] = useState("#ffffff");
+  const [backgroundImage, setBackgroundImage] = useState<string | null>(null);
+  const [textElements, setTextElements] = useState<TextElement[]>([]);
+  const [isDraggingText, setIsDraggingText] = useState(false);
+  const [draggedTextId, setDraggedTextId] = useState<number | null>(null);
+  const [images, setImages] = useState<
+    { id: string; src: string; position: { x: number; y: number } }[]
+  >([]);
+  const [draggedImageId, setDraggedImageId] = useState<string | null>(null);
+  const [activeTab, setActiveTab] = useState("content");
+  const [editingTextElementId, setEditingTextElementId] = useState<
+    number | null
+  >(null);
+  const [editingText, setEditingText] = useState<string>("");
+  const [modal, setModal] = useState(false);
+  const [showModal, setShowModal] = useState(false);
+  const [canvasSize, setCanvasSize] = useState(700);
+
+  //! State Objects
 
   const [isShownState, setIsShownState] = useState({
     costumeS: false,
@@ -72,6 +100,87 @@ const EditorPage: React.FC = () => {
     id: false,
     server: false,
   });
+
+  const [positions, setPositions] = useState({
+    costumeS: { x: 0, y: 0 },
+    costumeSS: { x: 0, y: 0 },
+    costumeA: { x: 0, y: 0 },
+    ass: { x: 0, y: 0 },
+    nickname: { x: 0, y: 0 },
+    gameAccount: { x: 0, y: 0 },
+    id: { x: 0, y: 0 },
+    server: { x: 0, y: 0 },
+    modal: { x: 0, y: 0 },
+    imageModal: { x: 0, y: 0 },
+    mouse: { x: 0, y: 0 },
+    startImageOffset: { x: 0, y: 0 },
+    startDragOffset: { x: 0, y: 0 },
+  });
+
+  const [draggingStates, setDraggingStates] = useState({
+    image: false,
+    general: false,
+    costumeS: false,
+    costumeSS: false,
+    costumeA: false,
+    ass: false,
+    nickname: false,
+    account: false,
+    id: false,
+    server: false,
+  });
+
+  const [contextModals, setContextModals] = useState({
+    costumeS: false,
+    costumeSS: false,
+    costumeA: false,
+    ass: false,
+    image: false,
+    nickname: false,
+    server: false,
+    gameAccount: false,
+    id: false,
+  });
+
+  const [sizes, setSizes] = useState({
+    nickname: 16,
+    server: 16,
+    gameAccount: 16,
+    id: 16,
+    image: 155,
+    text: 16,
+    costumeS: 155,
+    costumeSS: 155,
+    costumeA: 155,
+    ass: 155,
+  });
+
+  const [colors, setColors] = useState({
+    server: "#000000",
+    id: "#000000",
+    account: "#000000",
+    nickname: "#000000",
+  });
+
+  const [alignments, setAlignments] = useState({
+    nickname: "left",
+    id: "left",
+    gameAccount: "left",
+    server: "left",
+    sAlign: "left",
+    ssAlign: "left",
+    aAlign: "left",
+    assAlign: "left",
+  });
+
+  const [fonts, setFonts] = useState({
+    nickname: "Arial",
+    id: "Arial",
+    gameAccount: "Arial",
+    server: "Arial",
+  });
+
+  //! Handlers
 
   const openCostumes = (modalName: any) => {
     setIsShownState((prevState) => ({
@@ -87,75 +196,19 @@ const EditorPage: React.FC = () => {
     }));
   };
 
-  const [showModal, setShowModal] = useState(false);
-  const [backgroundColor, setBackgroundColor] = useState("#ffffff");
-  const [backgroundImage, setBackgroundImage] = useState<string | null>(null);
-  const [textElements, setTextElements] = useState<TextElement[]>([]);
-  const [isDraggingText, setIsDraggingText] = useState(false);
-  const [draggedTextId, setDraggedTextId] = useState<number | null>(null);
-  const [startDragOffset, setStartDragOffset] = useState<{
-    x: number;
-    y: number;
-  }>({ x: 0, y: 0 });
+  const handlePositionChange = (key: any, x: any, y: any) => {
+    setPositions((prevPositions) => ({
+      ...prevPositions,
+      [key]: { x, y },
+    }));
+  };
 
-  const [images, setImages] = useState<
-    { id: string; src: string; position: { x: number; y: number } }[]
-  >([]);
-  const [isDraggingImage, setIsDraggingImage] = useState(false);
-  const [draggedImageId, setDraggedImageId] = useState<string | null>(null);
-  const [startImageOffset, setStartImageOffset] = useState<{
-    x: number;
-    y: number;
-  }>({ x: 0, y: 0 });
-
-  const [costumeSPosition, setCostumeSPosition] = useState({ x: 0, y: 0 });
-  const [costumeSSPosition, setCostumeSSPosition] = useState({ x: 0, y: 0 });
-  const [costumeAPosition, setCostumeAPosition] = useState({ x: 0, y: 0 });
-  const [assPosition, setAssPosition] = useState({ x: 0, y: 0 });
-  const [nicknamePosition, setNicknamePosition] = useState({ x: 0, y: 0 });
-  const [gameAccountPosition, setGameAccountPosition] = useState({
-    x: 0,
-    y: 0,
-  });
-  const [idPosition, setIdPosition] = useState({ x: 0, y: 0 });
-  const [serverPosition, setServerPosition] = useState({ x: 0, y: 0 });
-  const [isDragging, setIsDragging] = useState(false);
-
-  const [isDraggingCostumeS, setIsDraggingCostumeS] = useState(false);
-  const [isDraggingCostumeSS, setIsDraggingCostumeSS] = useState(false);
-  const [isDraggingCostumeA, setIsDraggingCostumeA] = useState(false);
-  const [isDraggingAss, setIsDraggingAss] = useState(false);
-  const [isDraggingNickname, setIsDraggingNickname] = useState(false);
-  const [isDraggingAccount, setIsDraggingAccount] = useState(false);
-  const [isDraggingId, setIsDraggingId] = useState(false);
-  const [isDraggingServer, setIsDraggingServer] = useState(false);
-  const [activeTab, setActiveTab] = useState("content");
-
-  const [modalPosition, setModalPosition] = useState({ x: 0, y: 0 });
-  const [imageModal, setImageModal] = useState({ x: 0, y: 0 });
-
-  const [mousePosition, setMousePosition] = useState<{ x: number; y: number }>({
-    x: 0,
-    y: 0,
-  });
-
-  const [editingTextElementId, setEditingTextElementId] = useState<
-    number | null
-  >(null);
-  const [editingText, setEditingText] = useState<string>("");
-  const [modal, setModal] = useState(false);
-
-  const [contextModals, setContextModals] = useState({
-    costumeS: false,
-    costumeSS: false,
-    costumeA: false,
-    ass: false,
-    image: false,
-    nickname: false,
-    server: false,
-    gameAccount: false,
-    id: false,
-  });
+  const handleDraggingChange = (key: any, isDragging: any) => {
+    setDraggingStates((prevStates) => ({
+      ...prevStates,
+      [key]: isDragging,
+    }));
+  };
 
   const openContextModal = (modalName: any) => {
     setContextModals((prevState: any) => ({
@@ -171,19 +224,13 @@ const EditorPage: React.FC = () => {
     }));
   };
 
-  const [sizes, setSizes] = useState({
-    nickname: 16,
-    server: 16,
-    gameAccount: 16,
-    id: 16,
-    image: 155,
-    text: 16,
-    canvas: 700,
-    costumeS: 155,
-    costumeSS: 155,
-    costumeA: 155,
-    ass: 155,
-  });
+  const increaseCanvasSize = () => {
+    setCanvasSize((prevSize) => Math.min(prevSize + 50, 1000));
+  };
+
+  const decreaseCanvasSize = () => {
+    setCanvasSize((prevSize) => Math.max(prevSize - 50, 500));
+  };
 
   const updateSize = (key: any, newSize: any) => {
     setSizes((prevSizes) => ({
@@ -191,15 +238,6 @@ const EditorPage: React.FC = () => {
       [key]: newSize,
     }));
   };
-
-  const dispatch = useAppDispatch();
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    dispatch(getOneAccount(accountId!));
-    dispatch(getUserCostumes(accountId!));
-    dispatch(getUserAss(accountId!));
-  }, [dispatch]);
 
   const handleChangeBgColor = (color: string) => {
     setBackgroundColor(color);
@@ -211,6 +249,33 @@ const EditorPage: React.FC = () => {
   ) => {
     setBackgroundImage(e.target.value);
   };
+
+  const handleTextChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setEditingText(event.target.value);
+  };
+
+  const handleColorChange = (key: any) => (event: any) => {
+    setColors((prevColors) => ({
+      ...prevColors,
+      [key]: event.target.value,
+    }));
+  };
+
+  const updateAlignment = (key: any, alignment: any) => {
+    setAlignments((prevAlignments) => ({
+      ...prevAlignments,
+      [key]: alignment,
+    }));
+  };
+
+  const updateFont = (key: any, font: any) => {
+    setFonts((prevFonts) => ({
+      ...prevFonts,
+      [key]: font,
+    }));
+  };
+
+  //! Mouses and Clicks
 
   const addTextElement = () => {
     const newTextElement: TextElement = {
@@ -229,20 +294,20 @@ const EditorPage: React.FC = () => {
     event: React.MouseEvent<HTMLDivElement>
   ) => {
     event.stopPropagation();
-    setIsDragging(true);
-    setMousePosition({ x: event.clientX, y: event.clientY });
+    handleDraggingChange("general", true);
+    handlePositionChange("mouse", event.clientX, event.clientY);
     switch (id) {
       case 1:
-        setIsDraggingCostumeS(true);
+        handleDraggingChange("costumeS", true);
         break;
       case 2:
-        setIsDraggingCostumeSS(true);
+        handleDraggingChange("costumeSS", true);
         break;
       case 3:
-        setIsDraggingCostumeA(true);
+        handleDraggingChange("costumeA", true);
         break;
       case 4:
-        setIsDraggingAss(true);
+        handleDraggingChange("ass", true);
         break;
       default:
         break;
@@ -250,45 +315,41 @@ const EditorPage: React.FC = () => {
   };
 
   const handleMouseMove = (event: React.MouseEvent<HTMLDivElement>) => {
-    const dx = event.clientX - mousePosition.x;
-    const dy = event.clientY - mousePosition.y;
-    setMousePosition({ x: event.clientX, y: event.clientY });
-    if (isDraggingCostumeS) {
-      setCostumeSPosition((prevPosition) => ({
-        x: prevPosition.x + dx,
-        y: prevPosition.y + dy,
-      }));
+    const dx = event.clientX - positions.mouse.x;
+    const dy = event.clientY - positions.mouse.y;
+    handlePositionChange("mouse", event.clientX, event.clientY);
+    if (draggingStates.costumeS) {
+      handlePositionChange(
+        "costumeS",
+        positions.costumeS.x + dx,
+        positions.costumeS.y + dy
+      );
     }
-    if (isDraggingCostumeSS) {
-      setCostumeSSPosition((prevPosition) => ({
-        x: prevPosition.x + dx,
-        y: prevPosition.y + dy,
-      }));
+    if (draggingStates.costumeSS) {
+      handlePositionChange(
+        "costumeSS",
+        positions.costumeSS.x + dx,
+        positions.costumeSS.y + dy
+      );
     }
-    if (isDraggingCostumeA) {
-      setCostumeAPosition((prevPosition) => ({
-        x: prevPosition.x + dx,
-        y: prevPosition.y + dy,
-      }));
+    if (draggingStates.costumeA) {
+      handlePositionChange(
+        "costumeA",
+        positions.costumeA.x + dx,
+        positions.costumeA.y + dy
+      );
     }
-    if (isDraggingAss) {
-      setAssPosition((prevPosition) => ({
-        x: prevPosition.x + dx,
-        y: prevPosition.y + dy,
-      }));
+    if (draggingStates.ass) {
+      handlePositionChange("ass", positions.ass.x + dx, positions.ass.y + dy);
     }
   };
 
   const handleMouseUp = () => {
-    setIsDragging(false);
-    setIsDraggingCostumeS(false);
-    setIsDraggingCostumeSS(false);
-    setIsDraggingCostumeA(false);
-    setIsDraggingAss(false);
-  };
-
-  const handleTextChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setEditingText(event.target.value);
+    handleDraggingChange("general", false);
+    handleDraggingChange("costumeS", false);
+    handleDraggingChange("costumeSS", false);
+    handleDraggingChange("costumeA", false);
+    handleDraggingChange("ass", false);
   };
 
   const handleMouseDownText = (
@@ -300,10 +361,11 @@ const EditorPage: React.FC = () => {
     if (element) {
       setIsDraggingText(true);
       setDraggedTextId(id);
-      setStartDragOffset({
-        x: event.clientX - element.x,
-        y: event.clientY - element.y,
-      });
+      handlePositionChange(
+        "startDragOffset",
+        event.clientX - element.x,
+        event.clientY - element.y
+      );
     }
   };
 
@@ -319,8 +381,8 @@ const EditorPage: React.FC = () => {
     if (isDraggingText && draggedTextId !== null) {
       const updatedTextElements = textElements.map((element) => {
         if (element.id === draggedTextId) {
-          const newX = event.clientX - startDragOffset.x;
-          const newY = event.clientY - startDragOffset.y;
+          const newX = event.clientX - positions.startDragOffset.x;
+          const newY = event.clientY - positions.startDragOffset.y;
           return { ...element, x: newX, y: newY };
         }
         return element;
@@ -367,40 +429,40 @@ const EditorPage: React.FC = () => {
   };
 
   const handleAccountMouseMove = (event: React.MouseEvent<HTMLDivElement>) => {
-    const dx = event.clientX - mousePosition.x;
-    const dy = event.clientY - mousePosition.y;
-    setMousePosition({ x: event.clientX, y: event.clientY });
-    if (isDraggingAccount) {
-      setGameAccountPosition((prevPosition) => ({
-        x: prevPosition.x + dx,
-        y: prevPosition.y + dy,
-      }));
+    const dx = event.clientX - positions.mouse.x;
+    const dy = event.clientY - positions.mouse.y;
+    handlePositionChange("mouse", event.clientX, event.clientY);
+    if (draggingStates.account) {
+      handlePositionChange(
+        "gameAccount",
+        positions.gameAccount.x + dx,
+        positions.gameAccount.y + dy
+      );
     }
-    if (isDraggingNickname) {
-      setNicknamePosition((prevPosition) => ({
-        x: prevPosition.x + dx,
-        y: prevPosition.y + dy,
-      }));
+    if (draggingStates.nickname) {
+      handlePositionChange(
+        "nickname",
+        positions.nickname.x + dx,
+        positions.nickname.y + dy
+      );
     }
-    if (isDraggingId) {
-      setIdPosition((prevPosition) => ({
-        x: prevPosition.x + dx,
-        y: prevPosition.y + dy,
-      }));
+    if (draggingStates.id) {
+      handlePositionChange("id", positions.id.x + dx, positions.id.y + dy);
     }
-    if (isDraggingServer) {
-      setServerPosition((prevPosition) => ({
-        x: prevPosition.x + dx,
-        y: prevPosition.y + dy,
-      }));
+    if (draggingStates.server) {
+      handlePositionChange(
+        "server",
+        positions.server.x + dx,
+        positions.server.y + dy
+      );
     }
   };
 
   const handleMouseUpAccount = () => {
-    setIsDraggingAccount(false);
-    setIsDraggingNickname(false);
-    setIsDraggingId(false);
-    setIsDraggingServer(false);
+    handleDraggingChange("account", false);
+    handleDraggingChange("nickname", false);
+    handleDraggingChange("id", false);
+    handleDraggingChange("server", false);
   };
 
   const handleAccountMouseDown = (
@@ -410,16 +472,16 @@ const EditorPage: React.FC = () => {
     event.stopPropagation();
     switch (elementId) {
       case "gameAccount":
-        setIsDraggingAccount(true);
+        handleDraggingChange("account", true);
         break;
       case "nickname":
-        setIsDraggingNickname(true);
+        handleDraggingChange("nickname", true);
         break;
       case "id":
-        setIsDraggingId(true);
+        handleDraggingChange("id", true);
         break;
       case "server":
-        setIsDraggingServer(true);
+        handleDraggingChange("server", true);
         break;
       default:
         break;
@@ -444,25 +506,26 @@ const EditorPage: React.FC = () => {
     event.stopPropagation();
     const image = images.find((img) => img.id === id);
     if (image) {
-      setIsDraggingImage(true);
+      handleDraggingChange("image", true);
       setDraggedImageId(id);
-      setStartImageOffset({
-        x: event.clientX - image.position.x,
-        y: event.clientY - image.position.y,
-      });
+      handlePositionChange(
+        "startImageOffset",
+        event.clientX - image.position.x,
+        event.clientY - image.position.y
+      );
     }
   };
 
   const handleImageMouseMove = (event: React.MouseEvent<HTMLDivElement>) => {
-    setMousePosition({ x: event.clientX, y: event.clientY });
-    if (isDraggingImage && draggedImageId !== null) {
+    handlePositionChange("mouse", event.clientX, event.clientY);
+    if (draggingStates.image && draggedImageId !== null) {
       const updatedImages = images.map((img) => {
         if (img.id === draggedImageId) {
           return {
             ...img,
             position: {
-              x: event.clientX - startImageOffset.x,
-              y: event.clientY - startImageOffset.y,
+              x: event.clientX - positions.startImageOffset.x,
+              y: event.clientY - positions.startImageOffset.y,
             },
           };
         }
@@ -473,91 +536,20 @@ const EditorPage: React.FC = () => {
   };
 
   const handleImageMouseUp = () => {
-    setIsDraggingImage(false);
+    handleDraggingChange("image", false);
     setDraggedImageId(null);
   };
 
   const handleImageClick = (position: any) => {
-    setImageModal({ x: position.x, y: position.y - 100 });
+    handlePositionChange("imageModal", position.x, position.y - 100);
     openContextModal("image");
   };
 
-  const [colors, setColors] = useState({
-    server: "#000000",
-    id: "#000000",
-    account: "#000000",
-    nickname: "#000000",
-  });
-
-  const handleColorChange = (key: any) => (event: any) => {
-    setColors((prevColors) => ({
-      ...prevColors,
-      [key]: event.target.value
-    }));
-  };
-
-  const [alignments, setAlignments] = useState({
-    nickname: "left",
-    id: "left",
-    gameAccount: "left",
-    server: "left",
-    sAlign: "left",
-    ssAlign: "left",
-    aAlign: "left",
-    assAlign: "left",
-  });
-
-  const updateAlignment = (key: any, alignment: any) => {
-    setAlignments((prevAlignments) => ({
-      ...prevAlignments,
-      [key]: alignment,
-    }));
-  };
-
-  const [fonts, setFonts] = useState({
-    nickname: "Arial",
-    id: "Arial",
-    gameAccount: "Arial",
-    server: "Arial",
-  });
-
-  const updateFont = (key: any, font: any) => {
-    setFonts((prevFonts) => ({
-      ...prevFonts,
-      [key]: font,
-    }));
-  };
+  //! return
 
   return (
     <div className="list">
-      <div
-        className="profile-header"
-        style={{
-          width: "1500px",
-          justifyContent: "space-between",
-        }}
-      >
-        <div className="profile-left">
-          <img src={logo} alt="" style={{ width: "70px" }} />
-          <Link
-            to={`/${idUser}/profile`}
-            style={{ fontSize: "18px", color: "#6232ff" }}
-          >
-            Мои аккаунты
-          </Link>
-        </div>
-        <h2>
-          Визуальная карточка аккаунта -{" "}
-          <span className="blue-text">
-            {account?.gameAccount || "Ошибка сети"}
-          </span>
-        </h2>
-        <img
-          src={userIcon}
-          alt="userIcon"
-          style={{ width: "70px", cursor: "pointer" }}
-        />
-      </div>
+      <ProfileHeader />
       <hr />
       <div className="options">
         <div className="container">
@@ -586,17 +578,9 @@ const EditorPage: React.FC = () => {
             <div className="canva-size">
               <span>Размер холста:</span>
               <div className="down-block">
-                <button
-                  onClick={() => updateSize("canvas", sizes.canvas + 100)}
-                >
-                  +
-                </button>
-                <div className="fz">{sizes.canvas}px</div>
-                <button
-                  onClick={() => updateSize("canvas", sizes.canvas - 100)}
-                >
-                  -
-                </button>
+                <button onClick={increaseCanvasSize}>+</button>
+                <div className="fz">{canvasSize}</div>
+                <button onClick={decreaseCanvasSize}>-</button>
               </div>
             </div>
           </div>
@@ -663,7 +647,7 @@ const EditorPage: React.FC = () => {
                   Никнэйм
                   <span>{account?.gameNickname}</span>
                 </button>
-                <button onClick={() => openCostumes("ga,eAccount")}>
+                <button onClick={() => openCostumes("gameAccount")}>
                   Имя акканута
                   <span>{account?.gameAccount}</span>
                 </button>
@@ -693,14 +677,14 @@ const EditorPage: React.FC = () => {
           className="canva"
           ref={canvasRef}
           style={{
-            width: sizes.canvas,
+            width: canvasSize,
             backgroundColor: backgroundColor,
             backgroundImage: backgroundImage
               ? `url(${backgroundImage})`
               : undefined,
             backgroundSize: "cover",
             position: "absolute",
-            right: `calc(70% - ${sizes.canvas}px)`,
+            right: `calc(70% - ${canvasSize}px)`,
           }}
           onMouseMove={handleMouseMove}
           onMouseUp={handleMouseUp}
@@ -710,15 +694,15 @@ const EditorPage: React.FC = () => {
               className="display-costumes"
               style={{
                 position: "absolute",
-                left: costumeSPosition.x,
-                top: costumeSPosition.y,
-                cursor: isDraggingCostumeS ? "grabbing" : "default",
+                left: positions.costumeS.x,
+                top: positions.costumeS.y,
+                cursor: draggingStates.costumeS ? "grabbing" : "default",
                 justifyItems: alignments.sAlign,
                 width: "200px",
               }}
               onMouseDown={(e) => handleMouseDown(1, e)}
             >
-              {isDraggingCostumeS && (
+              {draggingStates.costumeS && (
                 <div
                   style={{
                     position: "absolute",
@@ -788,7 +772,15 @@ const EditorPage: React.FC = () => {
 
                           <select name="" id="">
                             <option value="">Добавить в группу</option>
-                            <option value="">Костюмы SS</option>
+                            <option
+                              value=""
+                              onClick={() => {
+                                openCostumes("groupedSSandS");
+                                closeCostumes("costumeS");
+                              }}
+                            >
+                              Костюмы SS
+                            </option>
                             <option value="">Костюмы A</option>
                           </select>
 
@@ -838,15 +830,15 @@ const EditorPage: React.FC = () => {
               className="display-costumes"
               style={{
                 position: "absolute",
-                left: costumeSSPosition.x,
-                top: costumeSSPosition.y,
-                cursor: isDraggingCostumeSS ? "grabbing" : "default",
+                left: positions.costumeSS.x,
+                top: positions.costumeSS.y,
+                cursor: draggingStates.costumeSS ? "grabbing" : "default",
                 justifyItems: alignments.ssAlign,
                 width: "300px",
               }}
               onMouseDown={(e) => handleMouseDown(2, e)}
             >
-              {isDraggingCostumeSS && (
+              {draggingStates.costumeSS && (
                 <div
                   style={{
                     position: "absolute",
@@ -967,14 +959,14 @@ const EditorPage: React.FC = () => {
               className="display-costumes"
               style={{
                 position: "absolute",
-                left: costumeAPosition.x,
-                top: costumeAPosition.y,
-                cursor: isDraggingCostumeA ? "grabbing" : "default",
+                left: positions.costumeA.x,
+                top: positions.costumeA.y,
+                cursor: draggingStates.costumeA ? "grabbing" : "default",
                 justifyItems: alignments.aAlign,
               }}
               onMouseDown={(e) => handleMouseDown(3, e)}
             >
-              {isDraggingCostumeA && (
+              {draggingStates.costumeA && (
                 <div
                   style={{
                     position: "absolute",
@@ -1093,14 +1085,14 @@ const EditorPage: React.FC = () => {
               className="display-costumes"
               style={{
                 position: "absolute",
-                left: assPosition.x,
-                top: assPosition.y,
-                cursor: isDraggingAss ? "grabbing" : "default",
+                left: positions.ass.x,
+                top: positions.ass.y,
+                cursor: draggingStates.ass ? "grabbing" : "default",
                 justifyItems: alignments.assAlign,
               }}
               onMouseDown={(e) => handleMouseDown(4, e)}
             >
-              {isDraggingAss && (
+              {draggingStates.ass && (
                 <div
                   style={{
                     position: "absolute",
@@ -1218,11 +1210,11 @@ const EditorPage: React.FC = () => {
               className="account-details"
               style={{
                 position: "absolute",
-                left: gameAccountPosition.x,
-                top: gameAccountPosition.y,
+                left: positions.gameAccount.x,
+                top: positions.gameAccount.y,
                 fontSize: sizes.gameAccount,
                 justifyItems: alignments.gameAccount,
-                cursor: isDraggingAccount ? "grabbing" : "default",
+                cursor: draggingStates.account ? "grabbing" : "default",
               }}
               onMouseDown={(e) => {
                 handleAccountMouseDown("gameAccount", e);
@@ -1230,7 +1222,7 @@ const EditorPage: React.FC = () => {
               onMouseMove={handleAccountMouseMove}
               onMouseUp={handleMouseUpAccount}
             >
-              {isDraggingAccount && (
+              {draggingStates.account && (
                 <div
                   style={{
                     position: "absolute",
@@ -1289,7 +1281,7 @@ const EditorPage: React.FC = () => {
                     <input
                       type="color"
                       value={colors.account}
-                      onChange={() => handleColorChange('account')}
+                      onChange={() => handleColorChange("account")}
                       style={{ width: "20px" }}
                     />
                   </div>
@@ -1367,10 +1359,10 @@ const EditorPage: React.FC = () => {
               className="account-details"
               style={{
                 position: "absolute",
-                left: nicknamePosition.x,
-                top: nicknamePosition.y,
+                left: positions.nickname.x,
+                top: positions.nickname.y,
                 fontSize: sizes.nickname,
-                cursor: isDraggingAccount ? "grabbing" : "default",
+                cursor: draggingStates.nickname ? "grabbing" : "default",
               }}
               onMouseDown={(e) => {
                 handleAccountMouseDown("nickname", e);
@@ -1378,7 +1370,7 @@ const EditorPage: React.FC = () => {
               onMouseMove={handleAccountMouseMove}
               onMouseUp={handleMouseUpAccount}
             >
-              {isDraggingNickname && (
+              {draggingStates.nickname && (
                 <div
                   style={{
                     position: "absolute",
@@ -1433,7 +1425,7 @@ const EditorPage: React.FC = () => {
                     <input
                       type="color"
                       value={colors.nickname}
-                      onChange={() => handleColorChange('nickname')}
+                      onChange={() => handleColorChange("nickname")}
                       style={{ width: "20px" }}
                     />
                   </div>
@@ -1512,10 +1504,10 @@ const EditorPage: React.FC = () => {
               className="account-details"
               style={{
                 position: "absolute",
-                left: idPosition.x,
-                top: idPosition.y,
+                left: positions.id.x,
+                top: positions.id.y,
                 fontSize: sizes.id,
-                cursor: isDraggingAccount ? "grabbing" : "default",
+                cursor: draggingStates.id ? "grabbing" : "default",
               }}
               onMouseDown={(e) => {
                 handleAccountMouseDown("id", e);
@@ -1523,7 +1515,7 @@ const EditorPage: React.FC = () => {
               onMouseMove={handleAccountMouseMove}
               onMouseUp={handleMouseUpAccount}
             >
-              {isDraggingId && (
+              {draggingStates.id && (
                 <div
                   style={{
                     position: "absolute",
@@ -1574,7 +1566,7 @@ const EditorPage: React.FC = () => {
                     <input
                       type="color"
                       value={colors.id}
-                      onChange={() => handleColorChange('id')}
+                      onChange={() => handleColorChange("id")}
                       style={{ width: "20px" }}
                     />
                   </div>
@@ -1653,10 +1645,10 @@ const EditorPage: React.FC = () => {
               className="account-details"
               style={{
                 position: "absolute",
-                left: serverPosition.x,
-                top: serverPosition.y,
+                left: positions.server.x,
+                top: positions.server.y,
                 fontSize: sizes.server,
-                cursor: isDraggingAccount ? "grabbing" : "default",
+                cursor: draggingStates.server ? "grabbing" : "default",
               }}
               onMouseDown={(e) => {
                 handleAccountMouseDown("server", e);
@@ -1664,7 +1656,7 @@ const EditorPage: React.FC = () => {
               onMouseMove={handleAccountMouseMove}
               onMouseUp={handleMouseUpAccount}
             >
-              {isDraggingServer && (
+              {draggingStates.server && (
                 <div
                   style={{
                     position: "absolute",
@@ -1719,7 +1711,7 @@ const EditorPage: React.FC = () => {
                     <input
                       type="color"
                       value={colors.server}
-                      onChange={() => handleColorChange('server')}
+                      onChange={() => handleColorChange("server")}
                       style={{ width: "20px" }}
                     />
                   </div>
@@ -1818,8 +1810,8 @@ const EditorPage: React.FC = () => {
               className="context-modal"
               style={{
                 position: "absolute",
-                left: modalPosition.x,
-                top: modalPosition.y,
+                left: positions.modal.x,
+                top: positions.modal.y,
                 width: "250px",
               }}
             >
@@ -1835,7 +1827,7 @@ const EditorPage: React.FC = () => {
                   </button>
                 </div>
               </div>
-              <div className="deleteCostume">
+              <div className="del">
                 <h6>Удалить</h6>
                 <img src={deleteIcon} alt="" />
               </div>
@@ -1847,6 +1839,7 @@ const EditorPage: React.FC = () => {
                   right: "5px",
                   top: "5px",
                   width: "10px",
+                  height: "10px",
                   cursor: "pointer",
                 }}
                 onClick={() => closeContextModal("image")}
@@ -1870,7 +1863,6 @@ const EditorPage: React.FC = () => {
               onMouseDown={(e) => handleMouseDownText(element.id, e)}
               onMouseMove={handleMouseMoveText}
               onMouseUp={handleMouseUpText}
-              // onMouseEnter={() => handleTextClick(element.x && element.y)}
             >
               {editingTextElementId === element.id ? (
                 <input
