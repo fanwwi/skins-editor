@@ -26,34 +26,6 @@ interface TextElement {
   fontSize: number;
 }
 
-interface CostumesType {
-  costume: string;
-  author: string;
-  category: string;
-  bigAuthor: string;
-  id: string;
-  x?: number;
-  y?: number;
-}
-
-interface AssessoirsType {
-  assessoir: string;
-  character: string;
-  bigAuthor: string;
-  id: string;
-  x?: number;
-  y?: number;
-}
-
-interface IconType {
-  id: string | null;
-  src: string;
-  position: {
-    x: number;
-    y: number;
-  };
-}
-
 const EditorPage: React.FC = () => {
   const accountId = localStorage.getItem("currentAccount");
   const { userCostumes } = useAppSelector((state) => state.accounts);
