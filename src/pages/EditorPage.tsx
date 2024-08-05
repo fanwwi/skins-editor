@@ -16,6 +16,7 @@ import alignCenter from "../img/alignCenter.png";
 import close from "../img/close.png";
 import reset from "../img/reset.png";
 import ProfileHeader from "../components/ProfileHeader";
+import { Gap } from "../types";
 
 interface TextElement {
   id: number;
@@ -139,10 +140,17 @@ const EditorPage: React.FC = () => {
     id: "left",
     gameAccount: "left",
     server: "left",
-    sAlign: "left",
-    ssAlign: "left",
-    aAlign: "left",
-    assAlign: "left",
+    sAlign: "flex-start",
+    ssAlign: "flex-start",
+    aAlign: "flex-start",
+    assAlign: "flex-start",
+  });
+
+  const [gap, setGap] = useState<Gap>({
+    sGap: 0,
+    ssGap: 0,
+    aGap: 0,
+    assGap: 0,
   });
 
   const [fonts, setFonts] = useState({
@@ -153,6 +161,13 @@ const EditorPage: React.FC = () => {
   });
 
   //! Handlers
+
+  const adjustGap = (key: any, newGap: number) => {
+    setGap((prevSizes: any) => ({
+      ...prevSizes,
+      [key]: newGap,
+    }));
+  };
 
   const openCostumes = (modalName: any) => {
     setIsShownState((prevState) => ({
@@ -669,8 +684,9 @@ const EditorPage: React.FC = () => {
                 left: positions.costumeS.x,
                 top: positions.costumeS.y,
                 cursor: draggingStates.costumeS ? "grabbing" : "default",
-                justifyItems: alignments.sAlign,
-                width: "200px",
+                justifyContent: alignments.sAlign,
+                gap: gap.sGap,
+                width: "400px",
               }}
               onMouseDown={(e) => handleMouseDown(1, e)}
             >
@@ -699,7 +715,6 @@ const EditorPage: React.FC = () => {
                         left: costume.x || 0,
                         top: costume.y || 0,
                         height: sizes.costumeS,
-                        justifyItems: alignments.sAlign,
                       }}
                     >
                       {contextModals.costumeS && (
@@ -708,7 +723,7 @@ const EditorPage: React.FC = () => {
                             <div className="btns">
                               <button
                                 onClick={() =>
-                                  updateSize("costumeS", sizes.costumeS++)
+                                  updateSize("costumeS", sizes.costumeS + 1)
                                 }
                               >
                                 +
@@ -716,7 +731,7 @@ const EditorPage: React.FC = () => {
                               <span>{sizes.costumeS}</span>
                               <button
                                 onClick={() =>
-                                  updateSize("costumeS", sizes.costumeS--)
+                                  updateSize("costumeS", sizes.costumeS - 1)
                                 }
                               >
                                 -
@@ -742,6 +757,23 @@ const EditorPage: React.FC = () => {
                             <img src={deleteIcon} alt="" />
                           </div>
 
+                          <div className="fz">
+                            <h6>Отступы между элементами</h6>
+                            <div className="btns">
+                              <button
+                                onClick={() => adjustGap("sGap", gap.sGap + 1)}
+                              >
+                                +
+                              </button>
+                              <span>{gap.sGap}</span>
+                              <button
+                                onClick={() => adjustGap("sGap", gap.sGap - 1)}
+                              >
+                                -
+                              </button>
+                            </div>
+                          </div>
+
                           <select name="" id="">
                             <option value="">Добавить в группу</option>
                             <option
@@ -760,7 +792,9 @@ const EditorPage: React.FC = () => {
                             <img
                               src={alignLeft}
                               alt=""
-                              onClick={() => updateAlignment("sAlign", "left")}
+                              onClick={() =>
+                                updateAlignment("sAlign", "flex-start")
+                              }
                             />
                             <img
                               src={alignCenter}
@@ -772,7 +806,9 @@ const EditorPage: React.FC = () => {
                             <img
                               src={alignRight}
                               alt=""
-                              onClick={() => updateAlignment("sAlign", "right")}
+                              onClick={() =>
+                                updateAlignment("sAlign", "flex-end")
+                              }
                             />
                           </div>
 
@@ -805,8 +841,9 @@ const EditorPage: React.FC = () => {
                 left: positions.costumeSS.x,
                 top: positions.costumeSS.y,
                 cursor: draggingStates.costumeSS ? "grabbing" : "default",
-                justifyItems: alignments.ssAlign,
-                width: "300px",
+                justifyContent: alignments.ssAlign,
+                gap: gap.ssGap,
+                width: "500px",
               }}
               onMouseDown={(e) => handleMouseDown(2, e)}
             >
@@ -842,7 +879,7 @@ const EditorPage: React.FC = () => {
                             <div className="btns">
                               <button
                                 onClick={() =>
-                                  updateSize("costumeSS", sizes.costumeSS++)
+                                  updateSize("costumeSS", sizes.costumeSS + 1)
                                 }
                               >
                                 +
@@ -850,7 +887,7 @@ const EditorPage: React.FC = () => {
                               <span>{sizes.costumeSS}</span>
                               <button
                                 onClick={() =>
-                                  updateSize("costumeSS", sizes.costumeSS--)
+                                  updateSize("costumeSS", sizes.costumeSS - 1)
                                 }
                               >
                                 -
@@ -876,6 +913,27 @@ const EditorPage: React.FC = () => {
                             <img src={deleteIcon} alt="" />
                           </div>
 
+                          <div className="fz">
+                            <h6>Отступы между элементами</h6>
+                            <div className="btns">
+                              <button
+                                onClick={() =>
+                                  adjustGap("ssGap", gap.ssGap + 1)
+                                }
+                              >
+                                +
+                              </button>
+                              <span>{gap.ssGap}</span>
+                              <button
+                                onClick={() =>
+                                  adjustGap("ssGap", gap.ssGap - 1)
+                                }
+                              >
+                                -
+                              </button>
+                            </div>
+                          </div>
+
                           <select name="" id="">
                             <option value="">Добавить в группу</option>
                             <option value="">Костюмы S</option>
@@ -886,7 +944,9 @@ const EditorPage: React.FC = () => {
                             <img
                               src={alignLeft}
                               alt=""
-                              onClick={() => updateAlignment("ssAlign", "left")}
+                              onClick={() =>
+                                updateAlignment("ssAlign", "flex-start")
+                              }
                             />
                             <img
                               src={alignCenter}
@@ -899,7 +959,7 @@ const EditorPage: React.FC = () => {
                               src={alignRight}
                               alt=""
                               onClick={() =>
-                                updateAlignment("ssAlign", "right")
+                                updateAlignment("ssAlign", "flex-end")
                               }
                             />
                           </div>
@@ -934,7 +994,9 @@ const EditorPage: React.FC = () => {
                 left: positions.costumeA.x,
                 top: positions.costumeA.y,
                 cursor: draggingStates.costumeA ? "grabbing" : "default",
-                justifyItems: alignments.aAlign,
+                justifyContent: alignments.aAlign,
+                gap: gap.aGap,
+                width: "400px",
               }}
               onMouseDown={(e) => handleMouseDown(3, e)}
             >
@@ -970,15 +1032,15 @@ const EditorPage: React.FC = () => {
                             <div className="btns">
                               <button
                                 onClick={() =>
-                                  updateSize("costumeA", sizes.costumeA++)
+                                  updateSize("costumeA", sizes.costumeA + 1)
                                 }
                               >
                                 +
                               </button>
-                              <span>{sizes.costumeA}</span>
+                              <span>{sizes.costumeA}px</span>
                               <button
                                 onClick={() =>
-                                  updateSize("costumeA", sizes.costumeA--)
+                                  updateSize("costumeA", sizes.costumeA - 1)
                                 }
                               >
                                 -
@@ -1004,6 +1066,23 @@ const EditorPage: React.FC = () => {
                             <img src={deleteIcon} alt="" />
                           </div>
 
+                          <div className="fz">
+                            <h6>Отступы между элементами</h6>
+                            <div className="btns">
+                              <button
+                                onClick={() => adjustGap("aGap", gap.aGap + 1)}
+                              >
+                                +
+                              </button>
+                              <span>{gap.aGap}</span>
+                              <button
+                                onClick={() => adjustGap("aGap", gap.aGap - 1)}
+                              >
+                                -
+                              </button>
+                            </div>
+                          </div>
+
                           <select name="" id="">
                             <option value="">Добавить в группу</option>
                             <option value="">Костюмы SS</option>
@@ -1014,19 +1093,23 @@ const EditorPage: React.FC = () => {
                             <img
                               src={alignLeft}
                               alt=""
-                              onClick={() => updateAlignment("aAlign", "left")}
+                              onClick={() =>
+                                updateAlignment("aAlign", "flex-start")
+                              }
                             />
                             <img
                               src={alignCenter}
                               alt=""
                               onClick={() =>
-                                updateAlignment("aAling", "center")
+                                updateAlignment("aAlign", "center")
                               }
                             />
                             <img
                               src={alignRight}
                               alt=""
-                              onClick={() => updateAlignment("aAlign", "right")}
+                              onClick={() =>
+                                updateAlignment("aAlign", "flex-end")
+                              }
                             />
                           </div>
 
@@ -1045,9 +1128,6 @@ const EditorPage: React.FC = () => {
                         onClick={() => {
                           openContextModal("costumeA");
                         }}
-                        style={{
-                          height: sizes.costumeA,
-                        }}
                       />
                     </div>
                   ))}
@@ -1060,7 +1140,9 @@ const EditorPage: React.FC = () => {
                 left: positions.ass.x,
                 top: positions.ass.y,
                 cursor: draggingStates.ass ? "grabbing" : "default",
-                justifyItems: alignments.assAlign,
+                justifyContent: alignments.assAlign,
+                gap: gap.assGap,
+                width: "400px",
               }}
               onMouseDown={(e) => handleMouseDown(4, e)}
             >
@@ -1093,13 +1175,13 @@ const EditorPage: React.FC = () => {
                         <div className="fz">
                           <div className="btns">
                             <button
-                              onClick={() => updateSize("ass", sizes.ass++)}
+                              onClick={() => updateSize("ass", sizes.ass + 1)}
                             >
                               +
                             </button>
                             <span>{sizes.ass}</span>
                             <button
-                              onClick={() => updateSize("ass", sizes.ass--)}
+                              onClick={() => updateSize("ass", sizes.ass - 1)}
                             >
                               -
                             </button>
@@ -1122,6 +1204,27 @@ const EditorPage: React.FC = () => {
                         >
                           <h6>Удалить</h6>
                           <img src={deleteIcon} alt="" />
+                        </div>
+
+                        <div className="fz">
+                          <h6>Отступы между элементами</h6>
+                          <div className="btns">
+                            <button
+                              onClick={() =>
+                                adjustGap("assGap", gap.assGap + 1)
+                              }
+                            >
+                              +
+                            </button>
+                            <span>{gap.assGap}</span>
+                            <button
+                              onClick={() =>
+                                adjustGap("assGap", gap.assGap - 1)
+                              }
+                            >
+                              -
+                            </button>
+                          </div>
                         </div>
 
                         <select name="" id="">
@@ -1185,7 +1288,7 @@ const EditorPage: React.FC = () => {
                 left: positions.gameAccount.x,
                 top: positions.gameAccount.y,
                 fontSize: sizes.gameAccount,
-                justifyItems: alignments.gameAccount,
+                justifyContent: alignments.gameAccount,
                 cursor: draggingStates.account ? "grabbing" : "default",
               }}
               onMouseDown={(e) => {
@@ -1463,7 +1566,7 @@ const EditorPage: React.FC = () => {
                   style={{
                     fontSize: `${sizes.nickname}px`,
                     color: colors.nickname,
-                    justifyItems: alignments.nickname,
+                    justifyContent: alignments.nickname,
                     fontFamily: fonts.nickname,
                   }}
                 >
@@ -1605,7 +1708,7 @@ const EditorPage: React.FC = () => {
                     fontSize: `${sizes.id}px`,
                     color: colors.id,
                     fontFamily: fonts.id,
-                    justifyItems: alignments.id,
+                    justifyContent: alignments.id,
                   }}
                 >
                   ID: {account?.gameId}
@@ -1750,7 +1853,7 @@ const EditorPage: React.FC = () => {
                     fontSize: `${sizes.server}px`,
                     color: colors.server,
                     fontFamily: fonts.server,
-                    justifyItems: alignments.server,
+                    justifyContent: alignments.server,
                   }}
                 >
                   Сервер: {account?.gameServer}

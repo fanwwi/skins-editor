@@ -90,3 +90,10 @@ export type IconsType = {
   author: string;
   id: string;
 };
+
+export type Gap = {
+  sGap: number;
+  ssGap: number;
+  aGap: number;
+  assGap: number;
+};

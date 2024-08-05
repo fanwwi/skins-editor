@@ -1525,7 +1525,7 @@ select {
 .context-modal {
   z-index: 2;
   display: flex;
-  width: 600px;
+  width: 700px;
   height: 80px;
   padding: 20px;
   justify-content: space-between;
@@ -1543,6 +1543,8 @@ select {
 }
 
 .fz {
+  width: 100px;
+  text-align: center;
   display: flex;
   flex-direction: column;
   gap: 7px;
