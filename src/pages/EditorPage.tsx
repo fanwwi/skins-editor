@@ -153,6 +153,13 @@ const EditorPage: React.FC = () => {
     assGap: 0,
   });
 
+  const [string, setString] = useState<any>({
+    sString: 400,
+    ssString: 400,
+    aString: 400,
+    assString: 400,
+  });
+
   const [fonts, setFonts] = useState({
     nickname: "Arial",
     id: "Arial",
@@ -164,6 +171,13 @@ const EditorPage: React.FC = () => {
 
   const adjustGap = (key: any, newGap: number) => {
     setGap((prevSizes: any) => ({
+      ...prevSizes,
+      [key]: newGap,
+    }));
+  };
+
+  const adjustString = (key: any, newGap: number) => {
+    setString((prevSizes: any) => ({
       ...prevSizes,
       [key]: newGap,
     }));
@@ -686,7 +700,7 @@ const EditorPage: React.FC = () => {
                 cursor: draggingStates.costumeS ? "grabbing" : "default",
                 justifyContent: alignments.sAlign,
                 gap: gap.sGap,
-                width: "400px",
+                width: string.sString,
               }}
               onMouseDown={(e) => handleMouseDown(1, e)}
             >
@@ -774,6 +788,27 @@ const EditorPage: React.FC = () => {
                             </div>
                           </div>
 
+                          <div className="fz">
+                            <h6>Ширина блока костюмов</h6>
+                            <div className="btns">
+                              <button
+                                onClick={() =>
+                                  adjustString("sString", string.sString + 10)
+                                }
+                              >
+                                +
+                              </button>
+                              <span>{string.sString}</span>
+                              <button
+                                onClick={() =>
+                                  adjustString("sString", string.sString - 10)
+                                }
+                              >
+                                -
+                              </button>
+                            </div>
+                          </div>
+
                           <select name="" id="">
                             <option value="">Добавить в группу</option>
                             <option
@@ -843,7 +878,7 @@ const EditorPage: React.FC = () => {
                 cursor: draggingStates.costumeSS ? "grabbing" : "default",
                 justifyContent: alignments.ssAlign,
                 gap: gap.ssGap,
-                width: "500px",
+                width: string.ssString,
               }}
               onMouseDown={(e) => handleMouseDown(2, e)}
             >
@@ -934,6 +969,33 @@ const EditorPage: React.FC = () => {
                             </div>
                           </div>
 
+                          <div className="fz">
+                            <h6>Ширина блока костюмов</h6>
+                            <div className="btns">
+                              <button
+                                onClick={() =>
+                                  adjustString(
+                                    "ssString",
+                                    string.ssString + 10
+                                  )
+                                }
+                              >
+                                +
+                              </button>
+                              <span>{string.ssString}</span>
+                              <button
+                                onClick={() =>
+                                  adjustString(
+                                    "ssString",
+                                    string.ssString - 10
+                                  )
+                                }
+                              >
+                                -
+                              </button>
+                            </div>
+                          </div>
+
                           <select name="" id="">
                             <option value="">Добавить в группу</option>
                             <option value="">Костюмы S</option>
@@ -996,7 +1058,7 @@ const EditorPage: React.FC = () => {
                 cursor: draggingStates.costumeA ? "grabbing" : "default",
                 justifyContent: alignments.aAlign,
                 gap: gap.aGap,
-                width: "400px",
+                width: string.aString,
               }}
               onMouseDown={(e) => handleMouseDown(3, e)}
             >
@@ -1083,6 +1145,27 @@ const EditorPage: React.FC = () => {
                             </div>
                           </div>
 
+                          <div className="fz">
+                            <h6>Ширина блока костюмов</h6>
+                            <div className="btns">
+                              <button
+                                onClick={() =>
+                                  adjustString("aString", string.aString + 10)
+                                }
+                              >
+                                +
+                              </button>
+                              <span>{string.aString}</span>
+                              <button
+                                onClick={() =>
+                                  adjustString("aString", string.aString - 10)
+                                }
+                              >
+                                -
+                              </button>
+                            </div>
+                          </div>
+
                           <select name="" id="">
                             <option value="">Добавить в группу</option>
                             <option value="">Костюмы SS</option>
@@ -1142,7 +1225,7 @@ const EditorPage: React.FC = () => {
                 cursor: draggingStates.ass ? "grabbing" : "default",
                 justifyContent: alignments.assAlign,
                 gap: gap.assGap,
-                width: "400px",
+                width: string.assString,
               }}
               onMouseDown={(e) => handleMouseDown(4, e)}
             >
@@ -1220,6 +1303,27 @@ const EditorPage: React.FC = () => {
                             <button
                               onClick={() =>
                                 adjustGap("assGap", gap.assGap - 1)
+                              }
+                            >
+                              -
+                            </button>
+                          </div>
+                        </div>
+
+                        <div className="fz">
+                          <h6>Ширина блока костюмов</h6>
+                          <div className="btns">
+                            <button
+                              onClick={() =>
+                                adjustString("assString", string.assString + 10)
+                              }
+                            >
+                              +
+                            </button>
+                            <span>{string.assString}</span>
+                            <button
+                              onClick={() =>
+                                adjustString("assString", string.assString - 10)
                               }
                             >
                               -
