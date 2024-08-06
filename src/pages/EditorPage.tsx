@@ -171,7 +171,20 @@ const EditorPage: React.FC = () => {
     server: "Arial",
   });
 
+  const [groupedCategories, setGroupedCategories] = useState({
+    S: null,
+    SS: null,
+    A: null,
+  });
+
   //! Handlers
+
+  const handleGroupSelection = (baseCategory: any, targetCategory: any) => {
+    setGroupedCategories((prev: any) => ({
+      ...prev,
+      [baseCategory]: targetCategory,
+    }));
+  };
 
   const adjustGap = (key: any, newGap: number) => {
     setGap((prevSizes: any) => ({
@@ -840,7 +853,12 @@ const EditorPage: React.FC = () => {
               )}
               {isShownState.costumeS &&
                 userCostumes
-                  ?.filter((cost) => cost.category === "S")
+                  ?.filter(
+                    (cost) =>
+                      cost.category === "S" ||
+                      cost.category === groupedCategories.S ||
+                      cost.category === groupedCategories.A
+                  )
                   ?.map((costume) => (
                     <div
                       key={costume.id}
@@ -930,18 +948,16 @@ const EditorPage: React.FC = () => {
                             </div>
                           </div>
 
-                          <select name="" id="">
+                          <select
+                            name="groupS"
+                            id="groupS"
+                            onChange={(e) => {
+                              handleGroupSelection("S", e.target.value);
+                            }}
+                          >
                             <option value="">Добавить в группу</option>
-                            <option
-                              value=""
-                              onClick={() => {
-                                openCostumes("groupedSSandS");
-                                closeCostumes("costumeS");
-                              }}
-                            >
-                              Костюмы SS
-                            </option>
-                            <option value="">Костюмы A</option>
+                            <option value="SS">Костюмы SS</option>
+                            <option value="A">Костюмы A</option>
                           </select>
 
                           <div className="btns">
@@ -1018,7 +1034,12 @@ const EditorPage: React.FC = () => {
               )}
               {isShownState.costumeSS &&
                 userCostumes
-                  ?.filter((cost) => cost.category === "SS")
+                  ?.filter(
+                    (cost) =>
+                      cost.category === "SS" ||
+                      cost.category === groupedCategories.SS ||
+                      cost.category === groupedCategories.A
+                  )
                   ?.map((costume) => (
                     <div
                       key={costume.id}
@@ -1111,10 +1132,16 @@ const EditorPage: React.FC = () => {
                             </div>
                           </div>
 
-                          <select name="" id="">
+                          <select
+                            name="groupSS"
+                            id="groupSS"
+                            onChange={(e) => {
+                              handleGroupSelection("SS", e.target.value);
+                            }}
+                          >
                             <option value="">Добавить в группу</option>
-                            <option value="">Костюмы S</option>
-                            <option value="">Костюмы A</option>
+                            <option value="S">Костюмы S</option>
+                            <option value="A">Костюмы A</option>
                           </select>
 
                           <div className="btns">
@@ -1192,7 +1219,12 @@ const EditorPage: React.FC = () => {
               )}
               {isShownState.costumeA &&
                 userCostumes
-                  ?.filter((cost) => cost.category === "A")
+                  ?.filter(
+                    (cost) =>
+                      cost.category === "A" ||
+                      cost.category === groupedCategories.A ||
+                      cost.category === groupedCategories.SS
+                  )
                   ?.map((costume) => (
                     <div
                       key={costume.id}
@@ -1281,10 +1313,16 @@ const EditorPage: React.FC = () => {
                             </div>
                           </div>
 
-                          <select name="" id="">
+                          <select
+                            name="groupA"
+                            id="groupA"
+                            onChange={(e) => {
+                              handleGroupSelection("A", e.target.value);
+                            }}
+                          >
                             <option value="">Добавить в группу</option>
-                            <option value="">Костюмы SS</option>
-                            <option value="">Костюмы S</option>
+                            <option value="SS">Костюмы SS</option>
+                            <option value="S">Костюмы S</option>
                           </select>
 
                           <div className="btns">
