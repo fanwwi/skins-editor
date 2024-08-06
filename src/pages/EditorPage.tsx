@@ -15,8 +15,10 @@ import alignRight from "../img/alignRight.png";
 import alignCenter from "../img/alignCenter.png";
 import close from "../img/close.png";
 import reset from "../img/reset.png";
+import open from "../img/open.png";
+import closeIc from "../img/closeIc.png";
 import ProfileHeader from "../components/ProfileHeader";
-import { Gap } from "../types";
+import { Gap, Layer } from "../types";
 
 interface TextElement {
   id: number;
@@ -60,6 +62,8 @@ const EditorPage: React.FC = () => {
   const [modal, setModal] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [canvasSize, setCanvasSize] = useState(700);
+  const [layers, setLayers] = useState<Layer[]>([]);
+  const [isOpen, setIsOpen] = useState(false);
 
   //! State Objects
 
@@ -181,6 +185,56 @@ const EditorPage: React.FC = () => {
       ...prevSizes,
       [key]: newGap,
     }));
+  };
+
+  const addLayer = (name: string, type: string, data: any) => {
+    const newLayer: Layer = {
+      id: Date.now(),
+      name,
+      type,
+      data,
+    };
+
+    setLayers([...layers, newLayer]);
+  };
+
+  const removeLayer = (name: string) => {
+    switch (name) {
+      case "Костюмы SS":
+        setLayers(layers.filter((layer) => layer.name !== "Костюмы SS"));
+        closeCostumes("costumeSS");
+        break;
+      case "Костюмы S":
+        setLayers(layers.filter((layer) => layer.name !== "Костюмы S"));
+        closeCostumes("costumeS");
+        break;
+      case "Костюмы A":
+        setLayers(layers.filter((layer) => layer.name !== "Костюмы A"));
+        closeCostumes("costumeA");
+        break;
+      case "Аксессуары":
+        setLayers(layers.filter((layer) => layer.name !== "Аксессуары"));
+        closeCostumes("ass");
+        break;
+      case "Никнэйм":
+        setLayers(layers.filter((layer) => layer.name !== "Никнэйм"));
+        closeCostumes("nickname");
+        break;
+      case "Сервер":
+        setLayers(layers.filter((layer) => layer.name !== "Сервер"));
+        closeCostumes("server");
+        break;
+      case "Имя Аккаунта":
+        setLayers(layers.filter((layer) => layer.name !== "Имя Аккаунта"));
+        closeCostumes("gameAccount");
+        break;
+      case "ID аккаунта":
+        setLayers(layers.filter((layer) => layer.name !== "ID аккаунта"));
+        closeCostumes("id");
+        break;
+      default:
+        break;
+    }
   };
 
   const openCostumes = (modalName: any) => {
@@ -630,33 +684,75 @@ const EditorPage: React.FC = () => {
           <div className="tab-content">
             {activeTab === "content" && (
               <div className="costumes-block">
-                <button onClick={() => openCostumes("costumeS")}>
+                <button
+                  onClick={() => {
+                    openCostumes("costumeS");
+                    addLayer("Костюмы S", "costume", { type: "S" });
+                  }}
+                >
                   Костюмы S
                 </button>
-                <button onClick={() => openCostumes("costumeSS")}>
+                <button
+                  onClick={() => {
+                    openCostumes("costumeSS");
+                    addLayer("Костюмы SS", "costume", { type: "SS" });
+                  }}
+                >
                   Костюмы SS
                 </button>
-                <button onClick={() => openCostumes("costumeA")}>
+                <button
+                  onClick={() => {
+                    openCostumes("costumeA");
+                    addLayer("Костюмы A", "costume", { type: "A" });
+                  }}
+                >
                   Костюмы A
                 </button>
-                <button onClick={() => openCostumes("ass")}>Аксессуары</button>
+                <button
+                  onClick={() => {
+                    openCostumes("ass");
+                    addLayer("Аксессуары", "ass", { type: "ass" });
+                  }}
+                >
+                  Аксессуары
+                </button>
               </div>
             )}
             {activeTab === "account-data" && (
               <div className="costumes-block">
-                <button onClick={() => openCostumes("nickname")}>
+                <button
+                  onClick={() => {
+                    openCostumes("nickname");
+                    addLayer("Никнэйм", "nickname", { type: "nickname" });
+                  }}
+                >
                   Никнэйм
                   <span>{account?.gameNickname}</span>
                 </button>
-                <button onClick={() => openCostumes("gameAccount")}>
+                <button
+                  onClick={() => {
+                    openCostumes("gameAccount");
+                    addLayer("Имя Аккаунта", "account", { type: "account" });
+                  }}
+                >
                   Имя акканута
                   <span>{account?.gameAccount}</span>
                 </button>
-                <button onClick={() => openCostumes("server")}>
+                <button
+                  onClick={() => {
+                    openCostumes("server");
+                    addLayer("Сервер", "server", { type: "server" });
+                  }}
+                >
                   Сервер
                   <span>{account?.gameServer}</span>
                 </button>
-                <button onClick={() => openCostumes("id")}>
+                <button
+                  onClick={() => {
+                    openCostumes("id");
+                    addLayer("ID аккаунта", "id", { type: "id" });
+                  }}
+                >
                   ID
                   <span>{account?.gameId}</span>
                 </button>
@@ -690,6 +786,31 @@ const EditorPage: React.FC = () => {
           onMouseMove={handleMouseMove}
           onMouseUp={handleMouseUp}
         >
+          {layers.length > 0 && (
+            <>
+              <div className="toggle-buttons">
+                <img
+                  src={isOpen ? open : closeIc}
+                  alt="Toggle"
+                  onClick={() => setIsOpen(!isOpen)}
+                />
+              </div>
+              {isOpen && (
+                <ul className="layer-list">
+                  {layers.map((layer) => (
+                    <li key={layer.id} className="layer-item">
+                      <span>{layer.name}</span>
+                      <img
+                        src={deleteIcon}
+                        alt="Удалить"
+                        onClick={() => removeLayer(layer.name)}
+                      />
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </>
+          )}
           <div className="costumes-container" style={{ position: "relative" }}>
             <div
               className="display-costumes"
@@ -974,10 +1095,7 @@ const EditorPage: React.FC = () => {
                             <div className="btns">
                               <button
                                 onClick={() =>
-                                  adjustString(
-                                    "ssString",
-                                    string.ssString + 10
-                                  )
+                                  adjustString("ssString", string.ssString + 10)
                                 }
                               >
                                 +
@@ -985,10 +1103,7 @@ const EditorPage: React.FC = () => {
                               <span>{string.ssString}</span>
                               <button
                                 onClick={() =>
-                                  adjustString(
-                                    "ssString",
-                                    string.ssString - 10
-                                  )
+                                  adjustString("ssString", string.ssString - 10)
                                 }
                               >
                                 -

@@ -97,3 +97,10 @@ export type Gap = {
   aGap: number;
   assGap: number;
 };
+
+export type Layer = {
+  id: number;
+  name: string;
+  type: string;
+  data: any;
+};
